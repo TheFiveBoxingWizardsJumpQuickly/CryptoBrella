@@ -4,8 +4,14 @@ import app.secret.cryptobrella as cryptobrella
 
 from app.prosaic import prose
 from flask import Flask, render_template, request, send_from_directory, url_for, jsonify
+from line_bot_blueprint import bp as line_bp
 
-app = Flask(__name__)
+def create_app():
+    app = Flask(__name__)
+    app.register_blueprint(line_bp)
+    return app
+
+app = create_app()
 app.config['IMAGE_UPLOAD_FOLDER'] = os.path.join(
     app.root_path, 'temporary', 'upload')
 app.config['IMAGE_RESULT_FOLDER'] = os.path.join(
