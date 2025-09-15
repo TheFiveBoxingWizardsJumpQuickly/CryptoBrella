@@ -4,7 +4,7 @@ import app.secret.cryptobrella as cryptobrella
 
 from app.prosaic import prose
 from flask import Flask, render_template, request, send_from_directory, url_for, jsonify
-from line_bot_blueprint import bp as line_bp
+from app.line_bot_blueprint import bp as line_bp
 
 def create_app():
     app = Flask(__name__)
