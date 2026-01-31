@@ -1239,3 +1239,67 @@ def vanity_gen(request):
         results[22] = vanity_d(input_text, 'number_rept')
         results[23] = '\n'
     return results
+
+
+def kakushi_gen(request):
+    input_text = request.json['input_text']
+    key = request.json['key']
+    mode = request.json['mode']
+    debug_mode = request.json['debug_mode']
+
+    results = {}
+    if mode == 'Decode':
+        if debug_mode == "OFF":
+            kakushi=kakushi_decode(input_text, key,False)
+            results[0] = '---KAKUSHI DECIPHERED---'
+            results[1] = kakushi.decoded
+            results[2] = '\n'
+        elif debug_mode == "ON":
+            kakushi=kakushi_decode(input_text, key,True)
+            results[0] = '---INPUT---'
+            results[1] = input_text
+            results[2] = '\n'
+            results[3] = '---KEY---'
+            results[4] = key
+            results[5] = '\n'
+            results[6] = '---INPUT (Binary)---'
+            results[7] = kakushi.input_binary
+            results[8] = '\n'
+            results[9] = '---KEY STREAM (Binary)---'
+            results[10] = kakushi.key_binary
+            results[11] = '\n'
+            results[12] = '---KAKUSHI DECIPHERED (Binary)---'
+            results[13] = kakushi.xor_binary
+            results[14] = '\n'
+            results[15] = '---KAKUSHI DECIPHERED---'
+            results[16] = kakushi.decoded
+            results[17] = '\n'
+
+    elif mode == 'Encode':
+        if debug_mode == "OFF":
+            kakushi=kakushi_encode(input_text, key,False)
+            results[0] = '---KAKUSHI CIPHERED---'
+            results[1] = kakushi.encoded
+            results[2] = '\n'
+        elif debug_mode == "ON":
+            kakushi=kakushi_encode(input_text, key,True)
+            results[0] = '---INPUT---'
+            results[1] = input_text
+            results[2] = '\n'
+            results[3] = '---KEY---'
+            results[4] = key
+            results[5] = '\n'
+            results[6] = '---INPUT (Binary)---'
+            results[7] = kakushi.input_binary
+            results[8] = '\n'
+            results[9] = '---KEY STREAM (Binary)---'
+            results[10] = kakushi.key_binary
+            results[11] = '\n'
+            results[12] = '---KAKUSHI CIPHERED (Binary)---'
+            results[13] = kakushi.xor_binary
+            results[14] = '\n'
+            results[15] = '---KAKUSHI CIPHERED---'
+            results[16] = kakushi.encoded
+            results[17] = '\n'
+
+    return results

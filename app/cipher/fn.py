@@ -10,6 +10,7 @@ from .base_conversion import *
 from .math_functions import *
 from .enigma import enigma, plugboard_gen
 from .purple import purple_decode, purple_encode
+from .kakushi import kakushi_encode, kakushi_decode
 from .misc import *
 
 
