@@ -1,0 +1,7173 @@
+{
+  "version": 1,
+  "generated_on": "2026-03-07",
+  "case_count": 725,
+  "note": "Additional baseline vectors for functions used by gear.py (excluding what3words converters).",
+  "cases": [
+    {
+      "id": "playfair_e_0001",
+      "function": "playfair_e",
+      "args": {
+        "c": ""
+      },
+      "expected": ""
+    },
+    {
+      "id": "playfair_d_0002",
+      "function": "playfair_d",
+      "args": {
+        "c": ""
+      },
+      "expected": ""
+    },
+    {
+      "id": "playfair_e_0003",
+      "function": "playfair_e",
+      "args": {
+        "c": "A"
+      },
+      "expected": "CV"
+    },
+    {
+      "id": "playfair_d_0004",
+      "function": "playfair_d",
+      "args": {
+        "c": "A"
+      },
+      "expected": "CV"
+    },
+    {
+      "id": "playfair_e_0005",
+      "function": "playfair_e",
+      "args": {
+        "c": "AB"
+      },
+      "expected": "BC"
+    },
+    {
+      "id": "playfair_d_0006",
+      "function": "playfair_d",
+      "args": {
+        "c": "AB"
+      },
+      "expected": "EA"
+    },
+    {
+      "id": "playfair_e_0007",
+      "function": "playfair_e",
+      "args": {
+        "c": "HELLO"
+      },
+      "expected": "KCRRNY"
+    },
+    {
+      "id": "playfair_d_0008",
+      "function": "playfair_d",
+      "args": {
+        "c": "HELLO"
+      },
+      "expected": "KCKKNY"
+    },
+    {
+      "id": "playfair_e_0009",
+      "function": "playfair_e",
+      "args": {
+        "c": "JIGGLE"
+      },
+      "expected": "PPNNPA"
+    },
+    {
+      "id": "playfair_d_0010",
+      "function": "playfair_d",
+      "args": {
+        "c": "JIGGLE"
+      },
+      "expected": "CCAAPA"
+    },
+    {
+      "id": "playfair_e_0011",
+      "function": "playfair_e",
+      "args": {
+        "c": "THEQUICKBROWNFOX"
+      },
+      "expected": "SIAUTKEHGWMYLHNY"
+    },
+    {
+      "id": "playfair_d_0012",
+      "function": "playfair_d",
+      "args": {
+        "c": "THEQUICKBROWNFOX"
+      },
+      "expected": "SIAUTKEHWMMYLHNY"
+    },
+    {
+      "id": "playfair_e_0013",
+      "function": "playfair_e",
+      "args": {
+        "c": "attackatdawn"
+      },
+      "expected": "DQQDEHDQEBXM"
+    },
+    {
+      "id": "playfair_d_0014",
+      "function": "playfair_d",
+      "args": {
+        "c": "attackatdawn"
+      },
+      "expected": "DQQDEHDQCEXM"
+    },
+    {
+      "id": "playfair_e_0015",
+      "function": "playfair_e",
+      "args": {
+        "c": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      },
+      "expected": "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGCV"
+    },
+    {
+      "id": "playfair_d_0016",
+      "function": "playfair_d",
+      "args": {
+        "c": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      },
+      "expected": "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZCV"
+    },
+    {
+      "id": "polybius_e_0017",
+      "function": "polybius_e",
+      "args": {
+        "text": "A",
+        "table_keyword": ""
+      },
+      "expected": "11"
+    },
+    {
+      "id": "polybius_e_0018",
+      "function": "polybius_e",
+      "args": {
+        "text": "A",
+        "table_keyword": "KEY"
+      },
+      "expected": "14"
+    },
+    {
+      "id": "bifid_e_0019",
+      "function": "bifid_e",
+      "args": {
+        "text": "A",
+        "table_keyword": ""
+      },
+      "expected": "A"
+    },
+    {
+      "id": "bifid_e_0020",
+      "function": "bifid_e",
+      "args": {
+        "text": "A",
+        "table_keyword": "KEY"
+      },
+      "expected": "A"
+    },
+    {
+      "id": "polybius_e_0021",
+      "function": "polybius_e",
+      "args": {
+        "text": "HELLO",
+        "table_keyword": ""
+      },
+      "expected": "2315313134"
+    },
+    {
+      "id": "polybius_e_0022",
+      "function": "polybius_e",
+      "args": {
+        "text": "HELLO",
+        "table_keyword": "KEY"
+      },
+      "expected": "2512323235"
+    },
+    {
+      "id": "bifid_e_0023",
+      "function": "bifid_e",
+      "args": {
+        "text": "HELLO",
+        "table_keyword": ""
+      },
+      "expected": "FNNVD"
+    },
+    {
+      "id": "bifid_e_0024",
+      "function": "bifid_e",
+      "args": {
+        "text": "HELLO",
+        "table_keyword": "KEY"
+      },
+      "expected": "CMODH"
+    },
+    {
+      "id": "polybius_e_0025",
+      "function": "polybius_e",
+      "args": {
+        "text": "JIG",
+        "table_keyword": ""
+      },
+      "expected": "242422"
+    },
+    {
+      "id": "polybius_e_0026",
+      "function": "polybius_e",
+      "args": {
+        "text": "JIG",
+        "table_keyword": "KEY"
+      },
+      "expected": "313124"
+    },
+    {
+      "id": "bifid_e_0027",
+      "function": "bifid_e",
+      "args": {
+        "text": "JIG",
+        "table_keyword": ""
+      },
+      "expected": "GIR"
+    },
+    {
+      "id": "bifid_e_0028",
+      "function": "bifid_e",
+      "args": {
+        "text": "JIG",
+        "table_keyword": "KEY"
+      },
+      "expected": "MCA"
+    },
+    {
+      "id": "polybius_e_0029",
+      "function": "polybius_e",
+      "args": {
+        "text": "CRYPTOGRAPHY",
+        "table_keyword": ""
+      },
+      "expected": "134254354434224211352354"
+    },
+    {
+      "id": "polybius_e_0030",
+      "function": "polybius_e",
+      "args": {
+        "text": "CRYPTOGRAPHY",
+        "table_keyword": "KEY"
+      },
+      "expected": "214313414535244314412513"
+    },
+    {
+      "id": "bifid_e_0031",
+      "function": "bifid_e",
+      "args": {
+        "text": "CRYPTOGRAPHY",
+        "table_keyword": ""
+      },
+      "expected": "DXSICKMUTGEO"
+    },
+    {
+      "id": "bifid_e_0032",
+      "function": "bifid_e",
+      "args": {
+        "text": "CRYPTOGRAPHY",
+        "table_keyword": "KEY"
+      },
+      "expected": "GARGACYIZRPW"
+    },
+    {
+      "id": "polybius_e_0033",
+      "function": "polybius_e",
+      "args": {
+        "text": "ZZZZ",
+        "table_keyword": ""
+      },
+      "expected": "55555555"
+    },
+    {
+      "id": "polybius_e_0034",
+      "function": "polybius_e",
+      "args": {
+        "text": "ZZZZ",
+        "table_keyword": "KEY"
+      },
+      "expected": "55555555"
+    },
+    {
+      "id": "bifid_e_0035",
+      "function": "bifid_e",
+      "args": {
+        "text": "ZZZZ",
+        "table_keyword": ""
+      },
+      "expected": "ZZZZ"
+    },
+    {
+      "id": "bifid_e_0036",
+      "function": "bifid_e",
+      "args": {
+        "text": "ZZZZ",
+        "table_keyword": "KEY"
+      },
+      "expected": "ZZZZ"
+    },
+    {
+      "id": "polybius_e_0037",
+      "function": "polybius_e",
+      "args": {
+        "text": "ATTACKATDAWN",
+        "table_keyword": ""
+      },
+      "expected": "114444111325114414115233"
+    },
+    {
+      "id": "polybius_e_0038",
+      "function": "polybius_e",
+      "args": {
+        "text": "ATTACKATDAWN",
+        "table_keyword": "KEY"
+      },
+      "expected": "144545142111144522145334"
+    },
+    {
+      "id": "bifid_e_0039",
+      "function": "bifid_e",
+      "args": {
+        "text": "ATTACKATDAWN",
+        "table_keyword": ""
+      },
+      "expected": "DQBDAXDQPDQH"
+    },
+    {
+      "id": "bifid_e_0040",
+      "function": "bifid_e",
+      "args": {
+        "text": "ATTACKATDAWN",
+        "table_keyword": "KEY"
+      },
+      "expected": "APCACWTXKTGN"
+    },
+    {
+      "id": "polybius_e_0041",
+      "function": "polybius_e",
+      "args": {
+        "text": "CODEX",
+        "table_keyword": ""
+      },
+      "expected": "1334141553"
+    },
+    {
+      "id": "polybius_e_0042",
+      "function": "polybius_e",
+      "args": {
+        "text": "CODEX",
+        "table_keyword": "KEY"
+      },
+      "expected": "2135221254"
+    },
+    {
+      "id": "bifid_e_0043",
+      "function": "bifid_e",
+      "args": {
+        "text": "CODEX",
+        "table_keyword": ""
+      },
+      "expected": "CAXTX"
+    },
+    {
+      "id": "bifid_e_0044",
+      "function": "bifid_e",
+      "args": {
+        "text": "CODEX",
+        "table_keyword": "KEY"
+      },
+      "expected": "FCUVG"
+    },
+    {
+      "id": "polybius_d_0045",
+      "function": "polybius_d",
+      "args": {
+        "text": "11",
+        "table_keyword": ""
+      },
+      "expected": "A"
+    },
+    {
+      "id": "polybius_d_0046",
+      "function": "polybius_d",
+      "args": {
+        "text": "11",
+        "table_keyword": "KEY"
+      },
+      "expected": "K"
+    },
+    {
+      "id": "polybius_d_0047",
+      "function": "polybius_d",
+      "args": {
+        "text": "2315313134",
+        "table_keyword": ""
+      },
+      "expected": "HELLO"
+    },
+    {
+      "id": "polybius_d_0048",
+      "function": "polybius_d",
+      "args": {
+        "text": "2315313134",
+        "table_keyword": "KEY"
+      },
+      "expected": "FBIIN"
+    },
+    {
+      "id": "polybius_d_0049",
+      "function": "polybius_d",
+      "args": {
+        "text": "5555",
+        "table_keyword": ""
+      },
+      "expected": "ZZ"
+    },
+    {
+      "id": "polybius_d_0050",
+      "function": "polybius_d",
+      "args": {
+        "text": "5555",
+        "table_keyword": "KEY"
+      },
+      "expected": "ZZ"
+    },
+    {
+      "id": "polybius_d_0051",
+      "function": "polybius_d",
+      "args": {
+        "text": "12345",
+        "table_keyword": ""
+      },
+      "expected": "BO[5]"
+    },
+    {
+      "id": "polybius_d_0052",
+      "function": "polybius_d",
+      "args": {
+        "text": "12345",
+        "table_keyword": "KEY"
+      },
+      "expected": "EN[5]"
+    },
+    {
+      "id": "polybius_d_0053",
+      "function": "polybius_d",
+      "args": {
+        "text": "1112131415",
+        "table_keyword": ""
+      },
+      "expected": "ABCDE"
+    },
+    {
+      "id": "polybius_d_0054",
+      "function": "polybius_d",
+      "args": {
+        "text": "1112131415",
+        "table_keyword": "KEY"
+      },
+      "expected": "KEYAB"
+    },
+    {
+      "id": "bifid_d_0055",
+      "function": "bifid_d",
+      "args": {
+        "text": "FNNVD",
+        "table_keyword": ""
+      },
+      "expected": "HELLO"
+    },
+    {
+      "id": "bifid_d_0056",
+      "function": "bifid_d",
+      "args": {
+        "text": "FNNVD",
+        "table_keyword": "KEY"
+      },
+      "expected": "GOLQL"
+    },
+    {
+      "id": "bifid_d_0057",
+      "function": "bifid_d",
+      "args": {
+        "text": "ABCDE",
+        "table_keyword": ""
+      },
+      "expected": "CADFE"
+    },
+    {
+      "id": "bifid_d_0058",
+      "function": "bifid_d",
+      "args": {
+        "text": "ABCDE",
+        "table_keyword": "KEY"
+      },
+      "expected": "KQEUD"
+    },
+    {
+      "id": "bifid_d_0059",
+      "function": "bifid_d",
+      "args": {
+        "text": "QWERTY",
+        "table_keyword": ""
+      },
+      "expected": "TBYIEY"
+    },
+    {
+      "id": "bifid_d_0060",
+      "function": "bifid_d",
+      "args": {
+        "text": "QWERTY",
+        "table_keyword": "KEY"
+      },
+      "expected": "SFXOKF"
+    },
+    {
+      "id": "bifid_d_0061",
+      "function": "bifid_d",
+      "args": {
+        "text": "A",
+        "table_keyword": ""
+      },
+      "expected": "A"
+    },
+    {
+      "id": "bifid_d_0062",
+      "function": "bifid_d",
+      "args": {
+        "text": "A",
+        "table_keyword": "KEY"
+      },
+      "expected": "A"
+    },
+    {
+      "id": "bifid_d_0063",
+      "function": "bifid_d",
+      "args": {
+        "text": "",
+        "table_keyword": ""
+      },
+      "expected": ""
+    },
+    {
+      "id": "bifid_d_0064",
+      "function": "bifid_d",
+      "args": {
+        "text": "",
+        "table_keyword": "KEY"
+      },
+      "expected": ""
+    },
+    {
+      "id": "morse_e_0066",
+      "function": "morse_e",
+      "args": {
+        "text": "SOS",
+        "bin_code": false,
+        "delimiter": " "
+      },
+      "expected": "... --- ... "
+    },
+    {
+      "id": "morse_e_0068",
+      "function": "morse_e",
+      "args": {
+        "text": "SOS",
+        "bin_code": false,
+        "delimiter": "/"
+      },
+      "expected": ".../---/.../"
+    },
+    {
+      "id": "morse_e_0070",
+      "function": "morse_e",
+      "args": {
+        "text": "SOS",
+        "bin_code": false,
+        "delimiter": "|"
+      },
+      "expected": "...|---|...|"
+    },
+    {
+      "id": "morse_e_0072",
+      "function": "morse_e",
+      "args": {
+        "text": "SOS",
+        "bin_code": true,
+        "delimiter": " "
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_e_0074",
+      "function": "morse_e",
+      "args": {
+        "text": "SOS",
+        "bin_code": true,
+        "delimiter": "/"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_e_0076",
+      "function": "morse_e",
+      "args": {
+        "text": "SOS",
+        "bin_code": true,
+        "delimiter": "|"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_e_0078",
+      "function": "morse_e",
+      "args": {
+        "text": "HELLO WORLD",
+        "bin_code": false,
+        "delimiter": " "
+      },
+      "expected": ".... . .-.. .-.. --- / .-- --- .-. .-.. -.. "
+    },
+    {
+      "id": "morse_e_0080",
+      "function": "morse_e",
+      "args": {
+        "text": "HELLO WORLD",
+        "bin_code": false,
+        "delimiter": "/"
+      },
+      "expected": "...././.-../.-../---///.--/---/.-./.-../-../"
+    },
+    {
+      "id": "morse_e_0082",
+      "function": "morse_e",
+      "args": {
+        "text": "HELLO WORLD",
+        "bin_code": false,
+        "delimiter": "|"
+      },
+      "expected": "....|.|.-..|.-..|---|/|.--|---|.-.|.-..|-..|"
+    },
+    {
+      "id": "morse_e_0084",
+      "function": "morse_e",
+      "args": {
+        "text": "HELLO WORLD",
+        "bin_code": true,
+        "delimiter": " "
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_e_0086",
+      "function": "morse_e",
+      "args": {
+        "text": "HELLO WORLD",
+        "bin_code": true,
+        "delimiter": "/"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_e_0088",
+      "function": "morse_e",
+      "args": {
+        "text": "HELLO WORLD",
+        "bin_code": true,
+        "delimiter": "|"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_e_0090",
+      "function": "morse_e",
+      "args": {
+        "text": "CODEX 123",
+        "bin_code": false,
+        "delimiter": " "
+      },
+      "expected": "-.-. --- -.. . -..- / .---- ..--- ...-- "
+    },
+    {
+      "id": "morse_e_0092",
+      "function": "morse_e",
+      "args": {
+        "text": "CODEX 123",
+        "bin_code": false,
+        "delimiter": "/"
+      },
+      "expected": "-.-./---/-.././-..-///.----/..---/...--/"
+    },
+    {
+      "id": "morse_e_0094",
+      "function": "morse_e",
+      "args": {
+        "text": "CODEX 123",
+        "bin_code": false,
+        "delimiter": "|"
+      },
+      "expected": "-.-.|---|-..|.|-..-|/|.----|..---|...--|"
+    },
+    {
+      "id": "morse_e_0096",
+      "function": "morse_e",
+      "args": {
+        "text": "CODEX 123",
+        "bin_code": true,
+        "delimiter": " "
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_e_0098",
+      "function": "morse_e",
+      "args": {
+        "text": "CODEX 123",
+        "bin_code": true,
+        "delimiter": "/"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_e_0100",
+      "function": "morse_e",
+      "args": {
+        "text": "CODEX 123",
+        "bin_code": true,
+        "delimiter": "|"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_e_0102",
+      "function": "morse_e",
+      "args": {
+        "text": "A-B.C",
+        "bin_code": false,
+        "delimiter": " "
+      },
+      "expected": ".- -....- -... .-.-.- -.-. "
+    },
+    {
+      "id": "morse_e_0104",
+      "function": "morse_e",
+      "args": {
+        "text": "A-B.C",
+        "bin_code": false,
+        "delimiter": "/"
+      },
+      "expected": ".-/-....-/-.../.-.-.-/-.-./"
+    },
+    {
+      "id": "morse_e_0106",
+      "function": "morse_e",
+      "args": {
+        "text": "A-B.C",
+        "bin_code": false,
+        "delimiter": "|"
+      },
+      "expected": ".-|-....-|-...|.-.-.-|-.-.|"
+    },
+    {
+      "id": "morse_e_0108",
+      "function": "morse_e",
+      "args": {
+        "text": "A-B.C",
+        "bin_code": true,
+        "delimiter": " "
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_e_0110",
+      "function": "morse_e",
+      "args": {
+        "text": "A-B.C",
+        "bin_code": true,
+        "delimiter": "/"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_e_0112",
+      "function": "morse_e",
+      "args": {
+        "text": "A-B.C",
+        "bin_code": true,
+        "delimiter": "|"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_e_0114",
+      "function": "morse_e",
+      "args": {
+        "text": "",
+        "bin_code": false,
+        "delimiter": " "
+      },
+      "expected": ""
+    },
+    {
+      "id": "morse_e_0116",
+      "function": "morse_e",
+      "args": {
+        "text": "",
+        "bin_code": false,
+        "delimiter": "/"
+      },
+      "expected": ""
+    },
+    {
+      "id": "morse_e_0118",
+      "function": "morse_e",
+      "args": {
+        "text": "",
+        "bin_code": false,
+        "delimiter": "|"
+      },
+      "expected": ""
+    },
+    {
+      "id": "morse_e_0120",
+      "function": "morse_e",
+      "args": {
+        "text": "",
+        "bin_code": true,
+        "delimiter": " "
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_e_0122",
+      "function": "morse_e",
+      "args": {
+        "text": "",
+        "bin_code": true,
+        "delimiter": "/"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_e_0124",
+      "function": "morse_e",
+      "args": {
+        "text": "",
+        "bin_code": true,
+        "delimiter": "|"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_e_0126",
+      "function": "morse_e",
+      "args": {
+        "text": "NINJA",
+        "bin_code": false,
+        "delimiter": " "
+      },
+      "expected": "-. .. -. .--- .- "
+    },
+    {
+      "id": "morse_e_0128",
+      "function": "morse_e",
+      "args": {
+        "text": "NINJA",
+        "bin_code": false,
+        "delimiter": "/"
+      },
+      "expected": "-./../-./.---/.-/"
+    },
+    {
+      "id": "morse_e_0130",
+      "function": "morse_e",
+      "args": {
+        "text": "NINJA",
+        "bin_code": false,
+        "delimiter": "|"
+      },
+      "expected": "-.|..|-.|.---|.-|"
+    },
+    {
+      "id": "morse_e_0132",
+      "function": "morse_e",
+      "args": {
+        "text": "NINJA",
+        "bin_code": true,
+        "delimiter": " "
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_e_0134",
+      "function": "morse_e",
+      "args": {
+        "text": "NINJA",
+        "bin_code": true,
+        "delimiter": "/"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_e_0136",
+      "function": "morse_e",
+      "args": {
+        "text": "NINJA",
+        "bin_code": true,
+        "delimiter": "|"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_d_0138",
+      "function": "morse_d",
+      "args": {
+        "text": "... --- ...",
+        "bin_code": false,
+        "delimiter": " "
+      },
+      "expected": "SOS"
+    },
+    {
+      "id": "morse_d_0140",
+      "function": "morse_d",
+      "args": {
+        "text": "... --- ...",
+        "bin_code": false,
+        "delimiter": "/"
+      },
+      "expected": "[... --- ...]"
+    },
+    {
+      "id": "morse_d_0142",
+      "function": "morse_d",
+      "args": {
+        "text": "... --- ...",
+        "bin_code": false,
+        "delimiter": "|"
+      },
+      "expected": "[... --- ...]"
+    },
+    {
+      "id": "morse_d_0144",
+      "function": "morse_d",
+      "args": {
+        "text": "... --- ...",
+        "bin_code": true,
+        "delimiter": " "
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_d_0146",
+      "function": "morse_d",
+      "args": {
+        "text": "... --- ...",
+        "bin_code": true,
+        "delimiter": "/"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_d_0148",
+      "function": "morse_d",
+      "args": {
+        "text": "... --- ...",
+        "bin_code": true,
+        "delimiter": "|"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_d_0150",
+      "function": "morse_d",
+      "args": {
+        "text": ".-/-.../-.-.",
+        "bin_code": false,
+        "delimiter": " "
+      },
+      "expected": "[.-/-.../-.-.]"
+    },
+    {
+      "id": "morse_d_0152",
+      "function": "morse_d",
+      "args": {
+        "text": ".-/-.../-.-.",
+        "bin_code": false,
+        "delimiter": "/"
+      },
+      "expected": "ABC"
+    },
+    {
+      "id": "morse_d_0154",
+      "function": "morse_d",
+      "args": {
+        "text": ".-/-.../-.-.",
+        "bin_code": false,
+        "delimiter": "|"
+      },
+      "expected": "[.-/-.../-.-.]"
+    },
+    {
+      "id": "morse_d_0156",
+      "function": "morse_d",
+      "args": {
+        "text": ".-/-.../-.-.",
+        "bin_code": true,
+        "delimiter": " "
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_d_0158",
+      "function": "morse_d",
+      "args": {
+        "text": ".-/-.../-.-.",
+        "bin_code": true,
+        "delimiter": "/"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_d_0160",
+      "function": "morse_d",
+      "args": {
+        "text": ".-/-.../-.-.",
+        "bin_code": true,
+        "delimiter": "|"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_d_0162",
+      "function": "morse_d",
+      "args": {
+        "text": "101 0 111",
+        "bin_code": false,
+        "delimiter": " "
+      },
+      "expected": "[101][0][111]"
+    },
+    {
+      "id": "morse_d_0164",
+      "function": "morse_d",
+      "args": {
+        "text": "101 0 111",
+        "bin_code": false,
+        "delimiter": "/"
+      },
+      "expected": "[101 0 111]"
+    },
+    {
+      "id": "morse_d_0166",
+      "function": "morse_d",
+      "args": {
+        "text": "101 0 111",
+        "bin_code": false,
+        "delimiter": "|"
+      },
+      "expected": "[101 0 111]"
+    },
+    {
+      "id": "morse_d_0168",
+      "function": "morse_d",
+      "args": {
+        "text": "101 0 111",
+        "bin_code": true,
+        "delimiter": " "
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_d_0170",
+      "function": "morse_d",
+      "args": {
+        "text": "101 0 111",
+        "bin_code": true,
+        "delimiter": "/"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_d_0172",
+      "function": "morse_d",
+      "args": {
+        "text": "101 0 111",
+        "bin_code": true,
+        "delimiter": "|"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_d_0174",
+      "function": "morse_d",
+      "args": {
+        "text": "",
+        "bin_code": false,
+        "delimiter": " "
+      },
+      "expected": ""
+    },
+    {
+      "id": "morse_d_0176",
+      "function": "morse_d",
+      "args": {
+        "text": "",
+        "bin_code": false,
+        "delimiter": "/"
+      },
+      "expected": ""
+    },
+    {
+      "id": "morse_d_0178",
+      "function": "morse_d",
+      "args": {
+        "text": "",
+        "bin_code": false,
+        "delimiter": "|"
+      },
+      "expected": ""
+    },
+    {
+      "id": "morse_d_0180",
+      "function": "morse_d",
+      "args": {
+        "text": "",
+        "bin_code": true,
+        "delimiter": " "
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_d_0182",
+      "function": "morse_d",
+      "args": {
+        "text": "",
+        "bin_code": true,
+        "delimiter": "/"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_d_0184",
+      "function": "morse_d",
+      "args": {
+        "text": "",
+        "bin_code": true,
+        "delimiter": "|"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_d_0186",
+      "function": "morse_d",
+      "args": {
+        "text": ".-|-...|.-.",
+        "bin_code": false,
+        "delimiter": " "
+      },
+      "expected": "[.-|-...|.-.]"
+    },
+    {
+      "id": "morse_d_0188",
+      "function": "morse_d",
+      "args": {
+        "text": ".-|-...|.-.",
+        "bin_code": false,
+        "delimiter": "/"
+      },
+      "expected": "[.-|-...|.-.]"
+    },
+    {
+      "id": "morse_d_0190",
+      "function": "morse_d",
+      "args": {
+        "text": ".-|-...|.-.",
+        "bin_code": false,
+        "delimiter": "|"
+      },
+      "expected": "ABR"
+    },
+    {
+      "id": "morse_d_0192",
+      "function": "morse_d",
+      "args": {
+        "text": ".-|-...|.-.",
+        "bin_code": true,
+        "delimiter": " "
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_d_0194",
+      "function": "morse_d",
+      "args": {
+        "text": ".-|-...|.-.",
+        "bin_code": true,
+        "delimiter": "/"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_d_0196",
+      "function": "morse_d",
+      "args": {
+        "text": ".-|-...|.-.",
+        "bin_code": true,
+        "delimiter": "|"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_wabun_e_0198",
+      "function": "morse_wabun_e",
+      "args": {
+        "text": "アイウエオ",
+        "bin_code": false,
+        "delimiter": " "
+      },
+      "expected": "--.-- .- ..- -.--- .-... "
+    },
+    {
+      "id": "morse_wabun_e_0200",
+      "function": "morse_wabun_e",
+      "args": {
+        "text": "アイウエオ",
+        "bin_code": false,
+        "delimiter": "/"
+      },
+      "expected": "--.--/.-/..-/-.---/.-.../"
+    },
+    {
+      "id": "morse_wabun_e_0202",
+      "function": "morse_wabun_e",
+      "args": {
+        "text": "アイウエオ",
+        "bin_code": true,
+        "delimiter": " "
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_wabun_e_0204",
+      "function": "morse_wabun_e",
+      "args": {
+        "text": "アイウエオ",
+        "bin_code": true,
+        "delimiter": "/"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_wabun_e_0206",
+      "function": "morse_wabun_e",
+      "args": {
+        "text": "ガギグ",
+        "bin_code": false,
+        "delimiter": " "
+      },
+      "expected": ".-.. .. -.-.. .. ...- .. "
+    },
+    {
+      "id": "morse_wabun_e_0208",
+      "function": "morse_wabun_e",
+      "args": {
+        "text": "ガギグ",
+        "bin_code": false,
+        "delimiter": "/"
+      },
+      "expected": ".-../../-.-../../...-/../"
+    },
+    {
+      "id": "morse_wabun_e_0210",
+      "function": "morse_wabun_e",
+      "args": {
+        "text": "ガギグ",
+        "bin_code": true,
+        "delimiter": " "
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_wabun_e_0212",
+      "function": "morse_wabun_e",
+      "args": {
+        "text": "ガギグ",
+        "bin_code": true,
+        "delimiter": "/"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_wabun_e_0214",
+      "function": "morse_wabun_e",
+      "args": {
+        "text": "テスト",
+        "bin_code": false,
+        "delimiter": " "
+      },
+      "expected": ".-.-- ---.- ..-.. "
+    },
+    {
+      "id": "morse_wabun_e_0216",
+      "function": "morse_wabun_e",
+      "args": {
+        "text": "テスト",
+        "bin_code": false,
+        "delimiter": "/"
+      },
+      "expected": ".-.--/---.-/..-../"
+    },
+    {
+      "id": "morse_wabun_e_0218",
+      "function": "morse_wabun_e",
+      "args": {
+        "text": "テスト",
+        "bin_code": true,
+        "delimiter": " "
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_wabun_e_0220",
+      "function": "morse_wabun_e",
+      "args": {
+        "text": "テスト",
+        "bin_code": true,
+        "delimiter": "/"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_wabun_e_0222",
+      "function": "morse_wabun_e",
+      "args": {
+        "text": "かなカナ",
+        "bin_code": false,
+        "delimiter": " "
+      },
+      "expected": ".-.. .-. .-.. .-. "
+    },
+    {
+      "id": "morse_wabun_e_0224",
+      "function": "morse_wabun_e",
+      "args": {
+        "text": "かなカナ",
+        "bin_code": false,
+        "delimiter": "/"
+      },
+      "expected": ".-../.-./.-../.-./"
+    },
+    {
+      "id": "morse_wabun_e_0226",
+      "function": "morse_wabun_e",
+      "args": {
+        "text": "かなカナ",
+        "bin_code": true,
+        "delimiter": " "
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_wabun_e_0228",
+      "function": "morse_wabun_e",
+      "args": {
+        "text": "かなカナ",
+        "bin_code": true,
+        "delimiter": "/"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_wabun_e_0230",
+      "function": "morse_wabun_e",
+      "args": {
+        "text": "",
+        "bin_code": false,
+        "delimiter": " "
+      },
+      "expected": ""
+    },
+    {
+      "id": "morse_wabun_e_0232",
+      "function": "morse_wabun_e",
+      "args": {
+        "text": "",
+        "bin_code": false,
+        "delimiter": "/"
+      },
+      "expected": ""
+    },
+    {
+      "id": "morse_wabun_e_0234",
+      "function": "morse_wabun_e",
+      "args": {
+        "text": "",
+        "bin_code": true,
+        "delimiter": " "
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_wabun_e_0236",
+      "function": "morse_wabun_e",
+      "args": {
+        "text": "",
+        "bin_code": true,
+        "delimiter": "/"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_wabun_d_0238",
+      "function": "morse_wabun_d",
+      "args": {
+        "text": "・－",
+        "bin_code": false,
+        "delimiter": " "
+      },
+      "expected": "[・－]"
+    },
+    {
+      "id": "morse_wabun_d_0240",
+      "function": "morse_wabun_d",
+      "args": {
+        "text": "・－",
+        "bin_code": false,
+        "delimiter": "/"
+      },
+      "expected": "[・－]"
+    },
+    {
+      "id": "morse_wabun_d_0242",
+      "function": "morse_wabun_d",
+      "args": {
+        "text": "・－",
+        "bin_code": true,
+        "delimiter": " "
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_wabun_d_0244",
+      "function": "morse_wabun_d",
+      "args": {
+        "text": "・－",
+        "bin_code": true,
+        "delimiter": "/"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_wabun_d_0246",
+      "function": "morse_wabun_d",
+      "args": {
+        "text": ".- / -...",
+        "bin_code": false,
+        "delimiter": " "
+      },
+      "expected": "イ[/]ハ"
+    },
+    {
+      "id": "morse_wabun_d_0248",
+      "function": "morse_wabun_d",
+      "args": {
+        "text": ".- / -...",
+        "bin_code": false,
+        "delimiter": "/"
+      },
+      "expected": "[.- ][ -...]"
+    },
+    {
+      "id": "morse_wabun_d_0250",
+      "function": "morse_wabun_d",
+      "args": {
+        "text": ".- / -...",
+        "bin_code": true,
+        "delimiter": " "
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_wabun_d_0252",
+      "function": "morse_wabun_d",
+      "args": {
+        "text": ".- / -...",
+        "bin_code": true,
+        "delimiter": "/"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_wabun_d_0254",
+      "function": "morse_wabun_d",
+      "args": {
+        "text": "101/010",
+        "bin_code": false,
+        "delimiter": " "
+      },
+      "expected": "[101/010]"
+    },
+    {
+      "id": "morse_wabun_d_0256",
+      "function": "morse_wabun_d",
+      "args": {
+        "text": "101/010",
+        "bin_code": false,
+        "delimiter": "/"
+      },
+      "expected": "[101][010]"
+    },
+    {
+      "id": "morse_wabun_d_0258",
+      "function": "morse_wabun_d",
+      "args": {
+        "text": "101/010",
+        "bin_code": true,
+        "delimiter": " "
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_wabun_d_0260",
+      "function": "morse_wabun_d",
+      "args": {
+        "text": "101/010",
+        "bin_code": true,
+        "delimiter": "/"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_wabun_d_0262",
+      "function": "morse_wabun_d",
+      "args": {
+        "text": "",
+        "bin_code": false,
+        "delimiter": " "
+      },
+      "expected": ""
+    },
+    {
+      "id": "morse_wabun_d_0264",
+      "function": "morse_wabun_d",
+      "args": {
+        "text": "",
+        "bin_code": false,
+        "delimiter": "/"
+      },
+      "expected": ""
+    },
+    {
+      "id": "morse_wabun_d_0266",
+      "function": "morse_wabun_d",
+      "args": {
+        "text": "",
+        "bin_code": true,
+        "delimiter": " "
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_wabun_d_0268",
+      "function": "morse_wabun_d",
+      "args": {
+        "text": "",
+        "bin_code": true,
+        "delimiter": "/"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_wabun_d_0270",
+      "function": "morse_wabun_d",
+      "args": {
+        "text": ".- .- .-",
+        "bin_code": false,
+        "delimiter": " "
+      },
+      "expected": "イイイ"
+    },
+    {
+      "id": "morse_wabun_d_0272",
+      "function": "morse_wabun_d",
+      "args": {
+        "text": ".- .- .-",
+        "bin_code": false,
+        "delimiter": "/"
+      },
+      "expected": "[.- .- .-]"
+    },
+    {
+      "id": "morse_wabun_d_0274",
+      "function": "morse_wabun_d",
+      "args": {
+        "text": ".- .- .-",
+        "bin_code": true,
+        "delimiter": " "
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "morse_wabun_d_0276",
+      "function": "morse_wabun_d",
+      "args": {
+        "text": ".- .- .-",
+        "bin_code": true,
+        "delimiter": "/"
+      },
+      "expected_exception": "TypeError"
+    },
+    {
+      "id": "return_phonetic_alphabet_values_0277",
+      "function": "return_phonetic_alphabet_values",
+      "args": {
+        "table": "icao_2008"
+      },
+      "expected": "Code table = [alfa bravo charlie delta echo foxtrot golf hotel india juliett kilo lima mike november oscar papa quebec romeo sierra tango uniform victor whiskey x-ray yankee zulu]"
+    },
+    {
+      "id": "phonetic_alphabet_e_0278",
+      "function": "phonetic_alphabet_e",
+      "args": {
+        "text": "attack",
+        "table": "icao_2008"
+      },
+      "expected": "ALFATANGOTANGOALFACHARLIEKILO"
+    },
+    {
+      "id": "phonetic_alphabet_d_0279",
+      "function": "phonetic_alphabet_d",
+      "args": {
+        "text": "attack",
+        "table": "icao_2008"
+      },
+      "expected": "attack"
+    },
+    {
+      "id": "phonetic_alphabet_e_0280",
+      "function": "phonetic_alphabet_e",
+      "args": {
+        "text": "alpha bravo",
+        "table": "icao_2008"
+      },
+      "expected": "ALFALIMAPAPAHOTELALFA BRAVOROMEOALFAVICTOROSCAR"
+    },
+    {
+      "id": "phonetic_alphabet_d_0281",
+      "function": "phonetic_alphabet_d",
+      "args": {
+        "text": "alpha bravo",
+        "table": "icao_2008"
+      },
+      "expected": "alpha B"
+    },
+    {
+      "id": "phonetic_alphabet_e_0282",
+      "function": "phonetic_alphabet_e",
+      "args": {
+        "text": "xyz",
+        "table": "icao_2008"
+      },
+      "expected": "X-RAYYANKEEZULU"
+    },
+    {
+      "id": "phonetic_alphabet_d_0283",
+      "function": "phonetic_alphabet_d",
+      "args": {
+        "text": "xyz",
+        "table": "icao_2008"
+      },
+      "expected": "xyz"
+    },
+    {
+      "id": "phonetic_alphabet_e_0284",
+      "function": "phonetic_alphabet_e",
+      "args": {
+        "text": "",
+        "table": "icao_2008"
+      },
+      "expected": ""
+    },
+    {
+      "id": "phonetic_alphabet_d_0285",
+      "function": "phonetic_alphabet_d",
+      "args": {
+        "text": "",
+        "table": "icao_2008"
+      },
+      "expected": ""
+    },
+    {
+      "id": "phonetic_alphabet_e_0286",
+      "function": "phonetic_alphabet_e",
+      "args": {
+        "text": "code42",
+        "table": "icao_2008"
+      },
+      "expected": "CHARLIEOSCARDELTAECHO42"
+    },
+    {
+      "id": "phonetic_alphabet_d_0287",
+      "function": "phonetic_alphabet_d",
+      "args": {
+        "text": "code42",
+        "table": "icao_2008"
+      },
+      "expected": "code42"
+    },
+    {
+      "id": "return_phonetic_alphabet_values_0288",
+      "function": "return_phonetic_alphabet_values",
+      "args": {
+        "table": "icao_1951"
+      },
+      "expected": "Code table = [alfa bravo coca delta echo foxtrot gold hotel india juliett kilo lima metro nectar oscar papa quebec romeo sierra tango union victor whiskey extra yankee zulu]"
+    },
+    {
+      "id": "phonetic_alphabet_e_0289",
+      "function": "phonetic_alphabet_e",
+      "args": {
+        "text": "attack",
+        "table": "icao_1951"
+      },
+      "expected": "ALFATANGOTANGOALFACOCAKILO"
+    },
+    {
+      "id": "phonetic_alphabet_d_0290",
+      "function": "phonetic_alphabet_d",
+      "args": {
+        "text": "attack",
+        "table": "icao_1951"
+      },
+      "expected": "attack"
+    },
+    {
+      "id": "phonetic_alphabet_e_0291",
+      "function": "phonetic_alphabet_e",
+      "args": {
+        "text": "alpha bravo",
+        "table": "icao_1951"
+      },
+      "expected": "ALFALIMAPAPAHOTELALFA BRAVOROMEOALFAVICTOROSCAR"
+    },
+    {
+      "id": "phonetic_alphabet_d_0292",
+      "function": "phonetic_alphabet_d",
+      "args": {
+        "text": "alpha bravo",
+        "table": "icao_1951"
+      },
+      "expected": "alpha B"
+    },
+    {
+      "id": "phonetic_alphabet_e_0293",
+      "function": "phonetic_alphabet_e",
+      "args": {
+        "text": "xyz",
+        "table": "icao_1951"
+      },
+      "expected": "EXTRAYANKEEZULU"
+    },
+    {
+      "id": "phonetic_alphabet_d_0294",
+      "function": "phonetic_alphabet_d",
+      "args": {
+        "text": "xyz",
+        "table": "icao_1951"
+      },
+      "expected": "xyz"
+    },
+    {
+      "id": "phonetic_alphabet_e_0295",
+      "function": "phonetic_alphabet_e",
+      "args": {
+        "text": "",
+        "table": "icao_1951"
+      },
+      "expected": ""
+    },
+    {
+      "id": "phonetic_alphabet_d_0296",
+      "function": "phonetic_alphabet_d",
+      "args": {
+        "text": "",
+        "table": "icao_1951"
+      },
+      "expected": ""
+    },
+    {
+      "id": "phonetic_alphabet_e_0297",
+      "function": "phonetic_alphabet_e",
+      "args": {
+        "text": "code42",
+        "table": "icao_1951"
+      },
+      "expected": "COCAOSCARDELTAECHO42"
+    },
+    {
+      "id": "phonetic_alphabet_d_0298",
+      "function": "phonetic_alphabet_d",
+      "args": {
+        "text": "code42",
+        "table": "icao_1951"
+      },
+      "expected": "code42"
+    },
+    {
+      "id": "return_phonetic_alphabet_values_0299",
+      "function": "return_phonetic_alphabet_values",
+      "args": {
+        "table": "icao_1949"
+      },
+      "expected": "Code table = [alfa beta coca delta echo foxtrot golf hotel india julietta kilo lima metro nectar oscar papa quebec romeo sierra tango union victor whiskey x-ray yankee zebra]"
+    },
+    {
+      "id": "phonetic_alphabet_e_0300",
+      "function": "phonetic_alphabet_e",
+      "args": {
+        "text": "attack",
+        "table": "icao_1949"
+      },
+      "expected": "ALFATANGOTANGOALFACOCAKILO"
+    },
+    {
+      "id": "phonetic_alphabet_d_0301",
+      "function": "phonetic_alphabet_d",
+      "args": {
+        "text": "attack",
+        "table": "icao_1949"
+      },
+      "expected": "attack"
+    },
+    {
+      "id": "phonetic_alphabet_e_0302",
+      "function": "phonetic_alphabet_e",
+      "args": {
+        "text": "alpha bravo",
+        "table": "icao_1949"
+      },
+      "expected": "ALFALIMAPAPAHOTELALFA BETAROMEOALFAVICTOROSCAR"
+    },
+    {
+      "id": "phonetic_alphabet_d_0303",
+      "function": "phonetic_alphabet_d",
+      "args": {
+        "text": "alpha bravo",
+        "table": "icao_1949"
+      },
+      "expected": "alpha bravo"
+    },
+    {
+      "id": "phonetic_alphabet_e_0304",
+      "function": "phonetic_alphabet_e",
+      "args": {
+        "text": "xyz",
+        "table": "icao_1949"
+      },
+      "expected": "X-RAYYANKEEZEBRA"
+    },
+    {
+      "id": "phonetic_alphabet_d_0305",
+      "function": "phonetic_alphabet_d",
+      "args": {
+        "text": "xyz",
+        "table": "icao_1949"
+      },
+      "expected": "xyz"
+    },
+    {
+      "id": "phonetic_alphabet_e_0306",
+      "function": "phonetic_alphabet_e",
+      "args": {
+        "text": "",
+        "table": "icao_1949"
+      },
+      "expected": ""
+    },
+    {
+      "id": "phonetic_alphabet_d_0307",
+      "function": "phonetic_alphabet_d",
+      "args": {
+        "text": "",
+        "table": "icao_1949"
+      },
+      "expected": ""
+    },
+    {
+      "id": "phonetic_alphabet_e_0308",
+      "function": "phonetic_alphabet_e",
+      "args": {
+        "text": "code42",
+        "table": "icao_1949"
+      },
+      "expected": "COCAOSCARDELTAECHO42"
+    },
+    {
+      "id": "phonetic_alphabet_d_0309",
+      "function": "phonetic_alphabet_d",
+      "args": {
+        "text": "code42",
+        "table": "icao_1949"
+      },
+      "expected": "code42"
+    },
+    {
+      "id": "return_phonetic_alphabet_values_0310",
+      "function": "return_phonetic_alphabet_values",
+      "args": {
+        "table": "icao_1947_1"
+      },
+      "expected": "Code table = [ana brazil coco dado elsa fiesta gato hombre india julio kilo luis mama norma opera peru quebec rosa sara tomas uruguay victor whiskey equis yolanda zeta]"
+    },
+    {
+      "id": "phonetic_alphabet_e_0311",
+      "function": "phonetic_alphabet_e",
+      "args": {
+        "text": "attack",
+        "table": "icao_1947_1"
+      },
+      "expected": "ANATOMASTOMASANACOCOKILO"
+    },
+    {
+      "id": "phonetic_alphabet_d_0312",
+      "function": "phonetic_alphabet_d",
+      "args": {
+        "text": "attack",
+        "table": "icao_1947_1"
+      },
+      "expected": "attack"
+    },
+    {
+      "id": "phonetic_alphabet_e_0313",
+      "function": "phonetic_alphabet_e",
+      "args": {
+        "text": "alpha bravo",
+        "table": "icao_1947_1"
+      },
+      "expected": "ANALUISPERUHOMBREANA BRAZILROSAANAVICTOROPERA"
+    },
+    {
+      "id": "phonetic_alphabet_d_0314",
+      "function": "phonetic_alphabet_d",
+      "args": {
+        "text": "alpha bravo",
+        "table": "icao_1947_1"
+      },
+      "expected": "alpha bravo"
+    },
+    {
+      "id": "phonetic_alphabet_e_0315",
+      "function": "phonetic_alphabet_e",
+      "args": {
+        "text": "xyz",
+        "table": "icao_1947_1"
+      },
+      "expected": "EQUISYOLANDAZETA"
+    },
+    {
+      "id": "phonetic_alphabet_d_0316",
+      "function": "phonetic_alphabet_d",
+      "args": {
+        "text": "xyz",
+        "table": "icao_1947_1"
+      },
+      "expected": "xyz"
+    },
+    {
+      "id": "phonetic_alphabet_e_0317",
+      "function": "phonetic_alphabet_e",
+      "args": {
+        "text": "",
+        "table": "icao_1947_1"
+      },
+      "expected": ""
+    },
+    {
+      "id": "phonetic_alphabet_d_0318",
+      "function": "phonetic_alphabet_d",
+      "args": {
+        "text": "",
+        "table": "icao_1947_1"
+      },
+      "expected": ""
+    },
+    {
+      "id": "phonetic_alphabet_e_0319",
+      "function": "phonetic_alphabet_e",
+      "args": {
+        "text": "code42",
+        "table": "icao_1947_1"
+      },
+      "expected": "COCOOPERADADOELSA42"
+    },
+    {
+      "id": "phonetic_alphabet_d_0320",
+      "function": "phonetic_alphabet_d",
+      "args": {
+        "text": "code42",
+        "table": "icao_1947_1"
+      },
+      "expected": "code42"
+    },
+    {
+      "id": "return_phonetic_alphabet_values_0321",
+      "function": "return_phonetic_alphabet_values",
+      "args": {
+        "table": "icao_1947_2"
+      },
+      "expected": "Code table = [adam baker charlie david edward freddie george harry ida john king luis mama norma opera peru quebec rosa sara tomas uruguay victor whiskey equis yolanda zeta]"
+    },
+    {
+      "id": "phonetic_alphabet_e_0322",
+      "function": "phonetic_alphabet_e",
+      "args": {
+        "text": "attack",
+        "table": "icao_1947_2"
+      },
+      "expected": "ADAMTOMASTOMASADAMCHARLIEKING"
+    },
+    {
+      "id": "phonetic_alphabet_d_0323",
+      "function": "phonetic_alphabet_d",
+      "args": {
+        "text": "attack",
+        "table": "icao_1947_2"
+      },
+      "expected": "attack"
+    },
+    {
+      "id": "phonetic_alphabet_e_0324",
+      "function": "phonetic_alphabet_e",
+      "args": {
+        "text": "alpha bravo",
+        "table": "icao_1947_2"
+      },
+      "expected": "ADAMLUISPERUHARRYADAM BAKERROSAADAMVICTOROPERA"
+    },
+    {
+      "id": "phonetic_alphabet_d_0325",
+      "function": "phonetic_alphabet_d",
+      "args": {
+        "text": "alpha bravo",
+        "table": "icao_1947_2"
+      },
+      "expected": "alpha bravo"
+    },
+    {
+      "id": "phonetic_alphabet_e_0326",
+      "function": "phonetic_alphabet_e",
+      "args": {
+        "text": "xyz",
+        "table": "icao_1947_2"
+      },
+      "expected": "EQUISYOLANDAZETA"
+    },
+    {
+      "id": "phonetic_alphabet_d_0327",
+      "function": "phonetic_alphabet_d",
+      "args": {
+        "text": "xyz",
+        "table": "icao_1947_2"
+      },
+      "expected": "xyz"
+    },
+    {
+      "id": "phonetic_alphabet_e_0328",
+      "function": "phonetic_alphabet_e",
+      "args": {
+        "text": "",
+        "table": "icao_1947_2"
+      },
+      "expected": ""
+    },
+    {
+      "id": "phonetic_alphabet_d_0329",
+      "function": "phonetic_alphabet_d",
+      "args": {
+        "text": "",
+        "table": "icao_1947_2"
+      },
+      "expected": ""
+    },
+    {
+      "id": "phonetic_alphabet_e_0330",
+      "function": "phonetic_alphabet_e",
+      "args": {
+        "text": "code42",
+        "table": "icao_1947_2"
+      },
+      "expected": "CHARLIEOPERADAVIDEDWARD42"
+    },
+    {
+      "id": "phonetic_alphabet_d_0331",
+      "function": "phonetic_alphabet_d",
+      "args": {
+        "text": "code42",
+        "table": "icao_1947_2"
+      },
+      "expected": "code42"
+    },
+    {
+      "id": "letter_frequency_0333",
+      "function": "letter_frequency",
+      "args": {
+        "text": "HELLO",
+        "sortkey": 0,
+        "reverse_flag": false
+      },
+      "expected": [
+        [
+          "E",
+          1
+        ],
+        [
+          "H",
+          1
+        ],
+        [
+          "L",
+          2
+        ],
+        [
+          "O",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "letter_frequency_0335",
+      "function": "letter_frequency",
+      "args": {
+        "text": "HELLO",
+        "sortkey": 0,
+        "reverse_flag": true
+      },
+      "expected": [
+        [
+          "O",
+          1
+        ],
+        [
+          "L",
+          2
+        ],
+        [
+          "H",
+          1
+        ],
+        [
+          "E",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "letter_frequency_0337",
+      "function": "letter_frequency",
+      "args": {
+        "text": "HELLO",
+        "sortkey": 1,
+        "reverse_flag": false
+      },
+      "expected": [
+        [
+          "H",
+          1
+        ],
+        [
+          "E",
+          1
+        ],
+        [
+          "O",
+          1
+        ],
+        [
+          "L",
+          2
+        ]
+      ]
+    },
+    {
+      "id": "letter_frequency_0339",
+      "function": "letter_frequency",
+      "args": {
+        "text": "HELLO",
+        "sortkey": 1,
+        "reverse_flag": true
+      },
+      "expected": [
+        [
+          "L",
+          2
+        ],
+        [
+          "H",
+          1
+        ],
+        [
+          "E",
+          1
+        ],
+        [
+          "O",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "bigram_frequency_0340",
+      "function": "bigram_frequency",
+      "args": {
+        "text": "HELLO"
+      },
+      "expected": [
+        [
+          "HE",
+          1
+        ],
+        [
+          "EL",
+          1
+        ],
+        [
+          "LL",
+          1
+        ],
+        [
+          "LO",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "letter_frequency_0342",
+      "function": "letter_frequency",
+      "args": {
+        "text": "HELLO HELLO",
+        "sortkey": 0,
+        "reverse_flag": false
+      },
+      "expected": [
+        [
+          " ",
+          1
+        ],
+        [
+          "E",
+          2
+        ],
+        [
+          "H",
+          2
+        ],
+        [
+          "L",
+          4
+        ],
+        [
+          "O",
+          2
+        ]
+      ]
+    },
+    {
+      "id": "letter_frequency_0344",
+      "function": "letter_frequency",
+      "args": {
+        "text": "HELLO HELLO",
+        "sortkey": 0,
+        "reverse_flag": true
+      },
+      "expected": [
+        [
+          "O",
+          2
+        ],
+        [
+          "L",
+          4
+        ],
+        [
+          "H",
+          2
+        ],
+        [
+          "E",
+          2
+        ],
+        [
+          " ",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "letter_frequency_0346",
+      "function": "letter_frequency",
+      "args": {
+        "text": "HELLO HELLO",
+        "sortkey": 1,
+        "reverse_flag": false
+      },
+      "expected": [
+        [
+          " ",
+          1
+        ],
+        [
+          "H",
+          2
+        ],
+        [
+          "E",
+          2
+        ],
+        [
+          "O",
+          2
+        ],
+        [
+          "L",
+          4
+        ]
+      ]
+    },
+    {
+      "id": "letter_frequency_0348",
+      "function": "letter_frequency",
+      "args": {
+        "text": "HELLO HELLO",
+        "sortkey": 1,
+        "reverse_flag": true
+      },
+      "expected": [
+        [
+          "L",
+          4
+        ],
+        [
+          "H",
+          2
+        ],
+        [
+          "E",
+          2
+        ],
+        [
+          "O",
+          2
+        ],
+        [
+          " ",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "bigram_frequency_0349",
+      "function": "bigram_frequency",
+      "args": {
+        "text": "HELLO HELLO"
+      },
+      "expected": [
+        [
+          "HE",
+          2
+        ],
+        [
+          "EL",
+          2
+        ],
+        [
+          "LL",
+          2
+        ],
+        [
+          "LO",
+          2
+        ]
+      ]
+    },
+    {
+      "id": "letter_frequency_0351",
+      "function": "letter_frequency",
+      "args": {
+        "text": "AaBbCc",
+        "sortkey": 0,
+        "reverse_flag": false
+      },
+      "expected": [
+        [
+          "A",
+          1
+        ],
+        [
+          "B",
+          1
+        ],
+        [
+          "C",
+          1
+        ],
+        [
+          "a",
+          1
+        ],
+        [
+          "b",
+          1
+        ],
+        [
+          "c",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "letter_frequency_0353",
+      "function": "letter_frequency",
+      "args": {
+        "text": "AaBbCc",
+        "sortkey": 0,
+        "reverse_flag": true
+      },
+      "expected": [
+        [
+          "c",
+          1
+        ],
+        [
+          "b",
+          1
+        ],
+        [
+          "a",
+          1
+        ],
+        [
+          "C",
+          1
+        ],
+        [
+          "B",
+          1
+        ],
+        [
+          "A",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "letter_frequency_0355",
+      "function": "letter_frequency",
+      "args": {
+        "text": "AaBbCc",
+        "sortkey": 1,
+        "reverse_flag": false
+      },
+      "expected": [
+        [
+          "A",
+          1
+        ],
+        [
+          "a",
+          1
+        ],
+        [
+          "B",
+          1
+        ],
+        [
+          "b",
+          1
+        ],
+        [
+          "C",
+          1
+        ],
+        [
+          "c",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "letter_frequency_0357",
+      "function": "letter_frequency",
+      "args": {
+        "text": "AaBbCc",
+        "sortkey": 1,
+        "reverse_flag": true
+      },
+      "expected": [
+        [
+          "A",
+          1
+        ],
+        [
+          "a",
+          1
+        ],
+        [
+          "B",
+          1
+        ],
+        [
+          "b",
+          1
+        ],
+        [
+          "C",
+          1
+        ],
+        [
+          "c",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "bigram_frequency_0358",
+      "function": "bigram_frequency",
+      "args": {
+        "text": "AaBbCc"
+      },
+      "expected": [
+        [
+          "Aa",
+          1
+        ],
+        [
+          "aB",
+          1
+        ],
+        [
+          "Bb",
+          1
+        ],
+        [
+          "bC",
+          1
+        ],
+        [
+          "Cc",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "letter_frequency_0360",
+      "function": "letter_frequency",
+      "args": {
+        "text": "",
+        "sortkey": 0,
+        "reverse_flag": false
+      },
+      "expected": []
+    },
+    {
+      "id": "letter_frequency_0362",
+      "function": "letter_frequency",
+      "args": {
+        "text": "",
+        "sortkey": 0,
+        "reverse_flag": true
+      },
+      "expected": []
+    },
+    {
+      "id": "letter_frequency_0364",
+      "function": "letter_frequency",
+      "args": {
+        "text": "",
+        "sortkey": 1,
+        "reverse_flag": false
+      },
+      "expected": []
+    },
+    {
+      "id": "letter_frequency_0366",
+      "function": "letter_frequency",
+      "args": {
+        "text": "",
+        "sortkey": 1,
+        "reverse_flag": true
+      },
+      "expected": []
+    },
+    {
+      "id": "bigram_frequency_0367",
+      "function": "bigram_frequency",
+      "args": {
+        "text": ""
+      },
+      "expected": []
+    },
+    {
+      "id": "letter_frequency_0369",
+      "function": "letter_frequency",
+      "args": {
+        "text": "AAAABBBCCXYZ",
+        "sortkey": 0,
+        "reverse_flag": false
+      },
+      "expected": [
+        [
+          "A",
+          4
+        ],
+        [
+          "B",
+          3
+        ],
+        [
+          "C",
+          2
+        ],
+        [
+          "X",
+          1
+        ],
+        [
+          "Y",
+          1
+        ],
+        [
+          "Z",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "letter_frequency_0371",
+      "function": "letter_frequency",
+      "args": {
+        "text": "AAAABBBCCXYZ",
+        "sortkey": 0,
+        "reverse_flag": true
+      },
+      "expected": [
+        [
+          "Z",
+          1
+        ],
+        [
+          "Y",
+          1
+        ],
+        [
+          "X",
+          1
+        ],
+        [
+          "C",
+          2
+        ],
+        [
+          "B",
+          3
+        ],
+        [
+          "A",
+          4
+        ]
+      ]
+    },
+    {
+      "id": "letter_frequency_0373",
+      "function": "letter_frequency",
+      "args": {
+        "text": "AAAABBBCCXYZ",
+        "sortkey": 1,
+        "reverse_flag": false
+      },
+      "expected": [
+        [
+          "X",
+          1
+        ],
+        [
+          "Y",
+          1
+        ],
+        [
+          "Z",
+          1
+        ],
+        [
+          "C",
+          2
+        ],
+        [
+          "B",
+          3
+        ],
+        [
+          "A",
+          4
+        ]
+      ]
+    },
+    {
+      "id": "letter_frequency_0375",
+      "function": "letter_frequency",
+      "args": {
+        "text": "AAAABBBCCXYZ",
+        "sortkey": 1,
+        "reverse_flag": true
+      },
+      "expected": [
+        [
+          "A",
+          4
+        ],
+        [
+          "B",
+          3
+        ],
+        [
+          "C",
+          2
+        ],
+        [
+          "X",
+          1
+        ],
+        [
+          "Y",
+          1
+        ],
+        [
+          "Z",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "bigram_frequency_0376",
+      "function": "bigram_frequency",
+      "args": {
+        "text": "AAAABBBCCXYZ"
+      },
+      "expected": [
+        [
+          "AA",
+          3
+        ],
+        [
+          "BB",
+          2
+        ],
+        [
+          "AB",
+          1
+        ],
+        [
+          "BC",
+          1
+        ],
+        [
+          "CC",
+          1
+        ],
+        [
+          "CX",
+          1
+        ],
+        [
+          "XY",
+          1
+        ],
+        [
+          "YZ",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "letter_frequency_0378",
+      "function": "letter_frequency",
+      "args": {
+        "text": "one two three",
+        "sortkey": 0,
+        "reverse_flag": false
+      },
+      "expected": [
+        [
+          " ",
+          2
+        ],
+        [
+          "e",
+          3
+        ],
+        [
+          "h",
+          1
+        ],
+        [
+          "n",
+          1
+        ],
+        [
+          "o",
+          2
+        ],
+        [
+          "r",
+          1
+        ],
+        [
+          "t",
+          2
+        ],
+        [
+          "w",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "letter_frequency_0380",
+      "function": "letter_frequency",
+      "args": {
+        "text": "one two three",
+        "sortkey": 0,
+        "reverse_flag": true
+      },
+      "expected": [
+        [
+          "w",
+          1
+        ],
+        [
+          "t",
+          2
+        ],
+        [
+          "r",
+          1
+        ],
+        [
+          "o",
+          2
+        ],
+        [
+          "n",
+          1
+        ],
+        [
+          "h",
+          1
+        ],
+        [
+          "e",
+          3
+        ],
+        [
+          " ",
+          2
+        ]
+      ]
+    },
+    {
+      "id": "letter_frequency_0382",
+      "function": "letter_frequency",
+      "args": {
+        "text": "one two three",
+        "sortkey": 1,
+        "reverse_flag": false
+      },
+      "expected": [
+        [
+          "n",
+          1
+        ],
+        [
+          "w",
+          1
+        ],
+        [
+          "h",
+          1
+        ],
+        [
+          "r",
+          1
+        ],
+        [
+          "o",
+          2
+        ],
+        [
+          " ",
+          2
+        ],
+        [
+          "t",
+          2
+        ],
+        [
+          "e",
+          3
+        ]
+      ]
+    },
+    {
+      "id": "letter_frequency_0384",
+      "function": "letter_frequency",
+      "args": {
+        "text": "one two three",
+        "sortkey": 1,
+        "reverse_flag": true
+      },
+      "expected": [
+        [
+          "e",
+          3
+        ],
+        [
+          "o",
+          2
+        ],
+        [
+          " ",
+          2
+        ],
+        [
+          "t",
+          2
+        ],
+        [
+          "n",
+          1
+        ],
+        [
+          "w",
+          1
+        ],
+        [
+          "h",
+          1
+        ],
+        [
+          "r",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "bigram_frequency_0385",
+      "function": "bigram_frequency",
+      "args": {
+        "text": "one two three"
+      },
+      "expected": [
+        [
+          "on",
+          1
+        ],
+        [
+          "ne",
+          1
+        ],
+        [
+          "tw",
+          1
+        ],
+        [
+          "wo",
+          1
+        ],
+        [
+          "th",
+          1
+        ],
+        [
+          "hr",
+          1
+        ],
+        [
+          "re",
+          1
+        ],
+        [
+          "ee",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "text_split_0387",
+      "function": "text_split",
+      "args": {
+        "text": "ABCDEFGHIJ",
+        "step": 1,
+        "sep": " "
+      },
+      "expected": "A B C D E F G H I J"
+    },
+    {
+      "id": "text_split_0389",
+      "function": "text_split",
+      "args": {
+        "text": "ABCDEFGHIJ",
+        "step": 1,
+        "sep": ","
+      },
+      "expected": "A,B,C,D,E,F,G,H,I,J"
+    },
+    {
+      "id": "text_split_0391",
+      "function": "text_split",
+      "args": {
+        "text": "ABCDEFGHIJ",
+        "step": 1,
+        "sep": "\n"
+      },
+      "expected": "A\nB\nC\nD\nE\nF\nG\nH\nI\nJ"
+    },
+    {
+      "id": "text_split_0393",
+      "function": "text_split",
+      "args": {
+        "text": "ABCDEFGHIJ",
+        "step": 1,
+        "sep": "|"
+      },
+      "expected": "A|B|C|D|E|F|G|H|I|J"
+    },
+    {
+      "id": "text_split_0395",
+      "function": "text_split",
+      "args": {
+        "text": "ABCDEFGHIJ",
+        "step": 2,
+        "sep": " "
+      },
+      "expected": "AB CD EF GH IJ"
+    },
+    {
+      "id": "text_split_0397",
+      "function": "text_split",
+      "args": {
+        "text": "ABCDEFGHIJ",
+        "step": 2,
+        "sep": ","
+      },
+      "expected": "AB,CD,EF,GH,IJ"
+    },
+    {
+      "id": "text_split_0399",
+      "function": "text_split",
+      "args": {
+        "text": "ABCDEFGHIJ",
+        "step": 2,
+        "sep": "\n"
+      },
+      "expected": "AB\nCD\nEF\nGH\nIJ"
+    },
+    {
+      "id": "text_split_0401",
+      "function": "text_split",
+      "args": {
+        "text": "ABCDEFGHIJ",
+        "step": 2,
+        "sep": "|"
+      },
+      "expected": "AB|CD|EF|GH|IJ"
+    },
+    {
+      "id": "text_split_0403",
+      "function": "text_split",
+      "args": {
+        "text": "ABCDEFGHIJ",
+        "step": 3,
+        "sep": " "
+      },
+      "expected": "ABC DEF GHI J"
+    },
+    {
+      "id": "text_split_0405",
+      "function": "text_split",
+      "args": {
+        "text": "ABCDEFGHIJ",
+        "step": 3,
+        "sep": ","
+      },
+      "expected": "ABC,DEF,GHI,J"
+    },
+    {
+      "id": "text_split_0407",
+      "function": "text_split",
+      "args": {
+        "text": "ABCDEFGHIJ",
+        "step": 3,
+        "sep": "\n"
+      },
+      "expected": "ABC\nDEF\nGHI\nJ"
+    },
+    {
+      "id": "text_split_0409",
+      "function": "text_split",
+      "args": {
+        "text": "ABCDEFGHIJ",
+        "step": 3,
+        "sep": "|"
+      },
+      "expected": "ABC|DEF|GHI|J"
+    },
+    {
+      "id": "text_split_0411",
+      "function": "text_split",
+      "args": {
+        "text": "ABCDEFGHIJ",
+        "step": 5,
+        "sep": " "
+      },
+      "expected": "ABCDE FGHIJ"
+    },
+    {
+      "id": "text_split_0413",
+      "function": "text_split",
+      "args": {
+        "text": "ABCDEFGHIJ",
+        "step": 5,
+        "sep": ","
+      },
+      "expected": "ABCDE,FGHIJ"
+    },
+    {
+      "id": "text_split_0415",
+      "function": "text_split",
+      "args": {
+        "text": "ABCDEFGHIJ",
+        "step": 5,
+        "sep": "\n"
+      },
+      "expected": "ABCDE\nFGHIJ"
+    },
+    {
+      "id": "text_split_0417",
+      "function": "text_split",
+      "args": {
+        "text": "ABCDEFGHIJ",
+        "step": 5,
+        "sep": "|"
+      },
+      "expected": "ABCDE|FGHIJ"
+    },
+    {
+      "id": "text_split_0419",
+      "function": "text_split",
+      "args": {
+        "text": "A",
+        "step": 1,
+        "sep": " "
+      },
+      "expected": "A"
+    },
+    {
+      "id": "text_split_0421",
+      "function": "text_split",
+      "args": {
+        "text": "A",
+        "step": 1,
+        "sep": ","
+      },
+      "expected": "A"
+    },
+    {
+      "id": "text_split_0423",
+      "function": "text_split",
+      "args": {
+        "text": "A",
+        "step": 1,
+        "sep": "\n"
+      },
+      "expected": "A"
+    },
+    {
+      "id": "text_split_0425",
+      "function": "text_split",
+      "args": {
+        "text": "A",
+        "step": 1,
+        "sep": "|"
+      },
+      "expected": "A"
+    },
+    {
+      "id": "text_split_0427",
+      "function": "text_split",
+      "args": {
+        "text": "A",
+        "step": 2,
+        "sep": " "
+      },
+      "expected": "A"
+    },
+    {
+      "id": "text_split_0429",
+      "function": "text_split",
+      "args": {
+        "text": "A",
+        "step": 2,
+        "sep": ","
+      },
+      "expected": "A"
+    },
+    {
+      "id": "text_split_0431",
+      "function": "text_split",
+      "args": {
+        "text": "A",
+        "step": 2,
+        "sep": "\n"
+      },
+      "expected": "A"
+    },
+    {
+      "id": "text_split_0433",
+      "function": "text_split",
+      "args": {
+        "text": "A",
+        "step": 2,
+        "sep": "|"
+      },
+      "expected": "A"
+    },
+    {
+      "id": "text_split_0435",
+      "function": "text_split",
+      "args": {
+        "text": "A",
+        "step": 3,
+        "sep": " "
+      },
+      "expected": "A"
+    },
+    {
+      "id": "text_split_0437",
+      "function": "text_split",
+      "args": {
+        "text": "A",
+        "step": 3,
+        "sep": ","
+      },
+      "expected": "A"
+    },
+    {
+      "id": "text_split_0439",
+      "function": "text_split",
+      "args": {
+        "text": "A",
+        "step": 3,
+        "sep": "\n"
+      },
+      "expected": "A"
+    },
+    {
+      "id": "text_split_0441",
+      "function": "text_split",
+      "args": {
+        "text": "A",
+        "step": 3,
+        "sep": "|"
+      },
+      "expected": "A"
+    },
+    {
+      "id": "text_split_0443",
+      "function": "text_split",
+      "args": {
+        "text": "A",
+        "step": 5,
+        "sep": " "
+      },
+      "expected": "A"
+    },
+    {
+      "id": "text_split_0445",
+      "function": "text_split",
+      "args": {
+        "text": "A",
+        "step": 5,
+        "sep": ","
+      },
+      "expected": "A"
+    },
+    {
+      "id": "text_split_0447",
+      "function": "text_split",
+      "args": {
+        "text": "A",
+        "step": 5,
+        "sep": "\n"
+      },
+      "expected": "A"
+    },
+    {
+      "id": "text_split_0449",
+      "function": "text_split",
+      "args": {
+        "text": "A",
+        "step": 5,
+        "sep": "|"
+      },
+      "expected": "A"
+    },
+    {
+      "id": "text_split_0451",
+      "function": "text_split",
+      "args": {
+        "text": "",
+        "step": 1,
+        "sep": " "
+      },
+      "expected": ""
+    },
+    {
+      "id": "text_split_0453",
+      "function": "text_split",
+      "args": {
+        "text": "",
+        "step": 1,
+        "sep": ","
+      },
+      "expected": ""
+    },
+    {
+      "id": "text_split_0455",
+      "function": "text_split",
+      "args": {
+        "text": "",
+        "step": 1,
+        "sep": "\n"
+      },
+      "expected": ""
+    },
+    {
+      "id": "text_split_0457",
+      "function": "text_split",
+      "args": {
+        "text": "",
+        "step": 1,
+        "sep": "|"
+      },
+      "expected": ""
+    },
+    {
+      "id": "text_split_0459",
+      "function": "text_split",
+      "args": {
+        "text": "",
+        "step": 2,
+        "sep": " "
+      },
+      "expected": ""
+    },
+    {
+      "id": "text_split_0461",
+      "function": "text_split",
+      "args": {
+        "text": "",
+        "step": 2,
+        "sep": ","
+      },
+      "expected": ""
+    },
+    {
+      "id": "text_split_0463",
+      "function": "text_split",
+      "args": {
+        "text": "",
+        "step": 2,
+        "sep": "\n"
+      },
+      "expected": ""
+    },
+    {
+      "id": "text_split_0465",
+      "function": "text_split",
+      "args": {
+        "text": "",
+        "step": 2,
+        "sep": "|"
+      },
+      "expected": ""
+    },
+    {
+      "id": "text_split_0467",
+      "function": "text_split",
+      "args": {
+        "text": "",
+        "step": 3,
+        "sep": " "
+      },
+      "expected": ""
+    },
+    {
+      "id": "text_split_0469",
+      "function": "text_split",
+      "args": {
+        "text": "",
+        "step": 3,
+        "sep": ","
+      },
+      "expected": ""
+    },
+    {
+      "id": "text_split_0471",
+      "function": "text_split",
+      "args": {
+        "text": "",
+        "step": 3,
+        "sep": "\n"
+      },
+      "expected": ""
+    },
+    {
+      "id": "text_split_0473",
+      "function": "text_split",
+      "args": {
+        "text": "",
+        "step": 3,
+        "sep": "|"
+      },
+      "expected": ""
+    },
+    {
+      "id": "text_split_0475",
+      "function": "text_split",
+      "args": {
+        "text": "",
+        "step": 5,
+        "sep": " "
+      },
+      "expected": ""
+    },
+    {
+      "id": "text_split_0477",
+      "function": "text_split",
+      "args": {
+        "text": "",
+        "step": 5,
+        "sep": ","
+      },
+      "expected": ""
+    },
+    {
+      "id": "text_split_0479",
+      "function": "text_split",
+      "args": {
+        "text": "",
+        "step": 5,
+        "sep": "\n"
+      },
+      "expected": ""
+    },
+    {
+      "id": "text_split_0481",
+      "function": "text_split",
+      "args": {
+        "text": "",
+        "step": 5,
+        "sep": "|"
+      },
+      "expected": ""
+    },
+    {
+      "id": "text_split_0483",
+      "function": "text_split",
+      "args": {
+        "text": "1234567890",
+        "step": 1,
+        "sep": " "
+      },
+      "expected": "1 2 3 4 5 6 7 8 9 0"
+    },
+    {
+      "id": "text_split_0485",
+      "function": "text_split",
+      "args": {
+        "text": "1234567890",
+        "step": 1,
+        "sep": ","
+      },
+      "expected": "1,2,3,4,5,6,7,8,9,0"
+    },
+    {
+      "id": "text_split_0487",
+      "function": "text_split",
+      "args": {
+        "text": "1234567890",
+        "step": 1,
+        "sep": "\n"
+      },
+      "expected": "1\n2\n3\n4\n5\n6\n7\n8\n9\n0"
+    },
+    {
+      "id": "text_split_0489",
+      "function": "text_split",
+      "args": {
+        "text": "1234567890",
+        "step": 1,
+        "sep": "|"
+      },
+      "expected": "1|2|3|4|5|6|7|8|9|0"
+    },
+    {
+      "id": "text_split_0491",
+      "function": "text_split",
+      "args": {
+        "text": "1234567890",
+        "step": 2,
+        "sep": " "
+      },
+      "expected": "12 34 56 78 90"
+    },
+    {
+      "id": "text_split_0493",
+      "function": "text_split",
+      "args": {
+        "text": "1234567890",
+        "step": 2,
+        "sep": ","
+      },
+      "expected": "12,34,56,78,90"
+    },
+    {
+      "id": "text_split_0495",
+      "function": "text_split",
+      "args": {
+        "text": "1234567890",
+        "step": 2,
+        "sep": "\n"
+      },
+      "expected": "12\n34\n56\n78\n90"
+    },
+    {
+      "id": "text_split_0497",
+      "function": "text_split",
+      "args": {
+        "text": "1234567890",
+        "step": 2,
+        "sep": "|"
+      },
+      "expected": "12|34|56|78|90"
+    },
+    {
+      "id": "text_split_0499",
+      "function": "text_split",
+      "args": {
+        "text": "1234567890",
+        "step": 3,
+        "sep": " "
+      },
+      "expected": "123 456 789 0"
+    },
+    {
+      "id": "text_split_0501",
+      "function": "text_split",
+      "args": {
+        "text": "1234567890",
+        "step": 3,
+        "sep": ","
+      },
+      "expected": "123,456,789,0"
+    },
+    {
+      "id": "text_split_0503",
+      "function": "text_split",
+      "args": {
+        "text": "1234567890",
+        "step": 3,
+        "sep": "\n"
+      },
+      "expected": "123\n456\n789\n0"
+    },
+    {
+      "id": "text_split_0505",
+      "function": "text_split",
+      "args": {
+        "text": "1234567890",
+        "step": 3,
+        "sep": "|"
+      },
+      "expected": "123|456|789|0"
+    },
+    {
+      "id": "text_split_0507",
+      "function": "text_split",
+      "args": {
+        "text": "1234567890",
+        "step": 5,
+        "sep": " "
+      },
+      "expected": "12345 67890"
+    },
+    {
+      "id": "text_split_0509",
+      "function": "text_split",
+      "args": {
+        "text": "1234567890",
+        "step": 5,
+        "sep": ","
+      },
+      "expected": "12345,67890"
+    },
+    {
+      "id": "text_split_0511",
+      "function": "text_split",
+      "args": {
+        "text": "1234567890",
+        "step": 5,
+        "sep": "\n"
+      },
+      "expected": "12345\n67890"
+    },
+    {
+      "id": "text_split_0513",
+      "function": "text_split",
+      "args": {
+        "text": "1234567890",
+        "step": 5,
+        "sep": "|"
+      },
+      "expected": "12345|67890"
+    },
+    {
+      "id": "text_split_0515",
+      "function": "text_split",
+      "args": {
+        "text": "日本語abc",
+        "step": 1,
+        "sep": " "
+      },
+      "expected": "日 本 語 a b c"
+    },
+    {
+      "id": "text_split_0517",
+      "function": "text_split",
+      "args": {
+        "text": "日本語abc",
+        "step": 1,
+        "sep": ","
+      },
+      "expected": "日,本,語,a,b,c"
+    },
+    {
+      "id": "text_split_0519",
+      "function": "text_split",
+      "args": {
+        "text": "日本語abc",
+        "step": 1,
+        "sep": "\n"
+      },
+      "expected": "日\n本\n語\na\nb\nc"
+    },
+    {
+      "id": "text_split_0521",
+      "function": "text_split",
+      "args": {
+        "text": "日本語abc",
+        "step": 1,
+        "sep": "|"
+      },
+      "expected": "日|本|語|a|b|c"
+    },
+    {
+      "id": "text_split_0523",
+      "function": "text_split",
+      "args": {
+        "text": "日本語abc",
+        "step": 2,
+        "sep": " "
+      },
+      "expected": "日本 語a bc"
+    },
+    {
+      "id": "text_split_0525",
+      "function": "text_split",
+      "args": {
+        "text": "日本語abc",
+        "step": 2,
+        "sep": ","
+      },
+      "expected": "日本,語a,bc"
+    },
+    {
+      "id": "text_split_0527",
+      "function": "text_split",
+      "args": {
+        "text": "日本語abc",
+        "step": 2,
+        "sep": "\n"
+      },
+      "expected": "日本\n語a\nbc"
+    },
+    {
+      "id": "text_split_0529",
+      "function": "text_split",
+      "args": {
+        "text": "日本語abc",
+        "step": 2,
+        "sep": "|"
+      },
+      "expected": "日本|語a|bc"
+    },
+    {
+      "id": "text_split_0531",
+      "function": "text_split",
+      "args": {
+        "text": "日本語abc",
+        "step": 3,
+        "sep": " "
+      },
+      "expected": "日本語 abc"
+    },
+    {
+      "id": "text_split_0533",
+      "function": "text_split",
+      "args": {
+        "text": "日本語abc",
+        "step": 3,
+        "sep": ","
+      },
+      "expected": "日本語,abc"
+    },
+    {
+      "id": "text_split_0535",
+      "function": "text_split",
+      "args": {
+        "text": "日本語abc",
+        "step": 3,
+        "sep": "\n"
+      },
+      "expected": "日本語\nabc"
+    },
+    {
+      "id": "text_split_0537",
+      "function": "text_split",
+      "args": {
+        "text": "日本語abc",
+        "step": 3,
+        "sep": "|"
+      },
+      "expected": "日本語|abc"
+    },
+    {
+      "id": "text_split_0539",
+      "function": "text_split",
+      "args": {
+        "text": "日本語abc",
+        "step": 5,
+        "sep": " "
+      },
+      "expected": "日本語ab c"
+    },
+    {
+      "id": "text_split_0541",
+      "function": "text_split",
+      "args": {
+        "text": "日本語abc",
+        "step": 5,
+        "sep": ","
+      },
+      "expected": "日本語ab,c"
+    },
+    {
+      "id": "text_split_0543",
+      "function": "text_split",
+      "args": {
+        "text": "日本語abc",
+        "step": 5,
+        "sep": "\n"
+      },
+      "expected": "日本語ab\nc"
+    },
+    {
+      "id": "text_split_0545",
+      "function": "text_split",
+      "args": {
+        "text": "日本語abc",
+        "step": 5,
+        "sep": "|"
+      },
+      "expected": "日本語ab|c"
+    },
+    {
+      "id": "text_split_0546",
+      "function": "text_split",
+      "args": {
+        "text": "ABCDE",
+        "step": 0,
+        "sep": " "
+      },
+      "expected_exception": "ValueError"
+    },
+    {
+      "id": "braille_d_0547",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "000000"
+      },
+      "expected": " "
+    },
+    {
+      "id": "braille_d_0548",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "000001"
+      },
+      "expected": ","
+    },
+    {
+      "id": "braille_d_0549",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "000010"
+      },
+      "expected": "\""
+    },
+    {
+      "id": "braille_d_0550",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "000011"
+      },
+      "expected": ";"
+    },
+    {
+      "id": "braille_d_0551",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "000100"
+      },
+      "expected": "@"
+    },
+    {
+      "id": "braille_d_0552",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "000101"
+      },
+      "expected": "."
+    },
+    {
+      "id": "braille_d_0553",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "000110"
+      },
+      "expected": "^"
+    },
+    {
+      "id": "braille_d_0554",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "000111"
+      },
+      "expected": "_"
+    },
+    {
+      "id": "braille_d_0555",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "001000"
+      },
+      "expected": "'"
+    },
+    {
+      "id": "braille_d_0556",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "001001"
+      },
+      "expected": "-"
+    },
+    {
+      "id": "braille_d_0557",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "001010"
+      },
+      "expected": "9"
+    },
+    {
+      "id": "braille_d_0558",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "001011"
+      },
+      "expected": "0"
+    },
+    {
+      "id": "braille_d_0559",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "001100"
+      },
+      "expected": "/"
+    },
+    {
+      "id": "braille_d_0560",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "001101"
+      },
+      "expected": "+"
+    },
+    {
+      "id": "braille_d_0561",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "001110"
+      },
+      "expected": ">"
+    },
+    {
+      "id": "braille_d_0562",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "001111"
+      },
+      "expected": "#"
+    },
+    {
+      "id": "braille_d_0563",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "010000"
+      },
+      "expected": "1"
+    },
+    {
+      "id": "braille_d_0564",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "010001"
+      },
+      "expected": "5"
+    },
+    {
+      "id": "braille_d_0565",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "010010"
+      },
+      "expected": "3"
+    },
+    {
+      "id": "braille_d_0566",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "010011"
+      },
+      "expected": "4"
+    },
+    {
+      "id": "braille_d_0567",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "010100"
+      },
+      "expected": "I"
+    },
+    {
+      "id": "braille_d_0568",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "010101"
+      },
+      "expected": "["
+    },
+    {
+      "id": "braille_d_0569",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "010110"
+      },
+      "expected": "J"
+    },
+    {
+      "id": "braille_d_0570",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "010111"
+      },
+      "expected": "W"
+    },
+    {
+      "id": "braille_d_0571",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "011000"
+      },
+      "expected": "2"
+    },
+    {
+      "id": "braille_d_0572",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "011001"
+      },
+      "expected": "8"
+    },
+    {
+      "id": "braille_d_0573",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "011010"
+      },
+      "expected": "6"
+    },
+    {
+      "id": "braille_d_0574",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "011011"
+      },
+      "expected": "7"
+    },
+    {
+      "id": "braille_d_0575",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "011100"
+      },
+      "expected": "S"
+    },
+    {
+      "id": "braille_d_0576",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "011101"
+      },
+      "expected": "!"
+    },
+    {
+      "id": "braille_d_0577",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "011110"
+      },
+      "expected": "T"
+    },
+    {
+      "id": "braille_d_0578",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "011111"
+      },
+      "expected": ")"
+    },
+    {
+      "id": "braille_d_0579",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "100000"
+      },
+      "expected": "A"
+    },
+    {
+      "id": "braille_d_0580",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "100001"
+      },
+      "expected": "*"
+    },
+    {
+      "id": "braille_d_0581",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "100010"
+      },
+      "expected": "E"
+    },
+    {
+      "id": "braille_d_0582",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "100011"
+      },
+      "expected": ":"
+    },
+    {
+      "id": "braille_d_0583",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "100100"
+      },
+      "expected": "C"
+    },
+    {
+      "id": "braille_d_0584",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "100101"
+      },
+      "expected": "%"
+    },
+    {
+      "id": "braille_d_0585",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "100110"
+      },
+      "expected": "D"
+    },
+    {
+      "id": "braille_d_0586",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "100111"
+      },
+      "expected": "?"
+    },
+    {
+      "id": "braille_d_0587",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "101000"
+      },
+      "expected": "K"
+    },
+    {
+      "id": "braille_d_0588",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "101001"
+      },
+      "expected": "U"
+    },
+    {
+      "id": "braille_d_0589",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "101010"
+      },
+      "expected": "O"
+    },
+    {
+      "id": "braille_d_0590",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "101011"
+      },
+      "expected": "Z"
+    },
+    {
+      "id": "braille_d_0591",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "101100"
+      },
+      "expected": "M"
+    },
+    {
+      "id": "braille_d_0592",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "101101"
+      },
+      "expected": "X"
+    },
+    {
+      "id": "braille_d_0593",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "101110"
+      },
+      "expected": "N"
+    },
+    {
+      "id": "braille_d_0594",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "101111"
+      },
+      "expected": "Y"
+    },
+    {
+      "id": "braille_d_0595",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "110000"
+      },
+      "expected": "B"
+    },
+    {
+      "id": "braille_d_0596",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "110001"
+      },
+      "expected": "<"
+    },
+    {
+      "id": "braille_d_0597",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "110010"
+      },
+      "expected": "H"
+    },
+    {
+      "id": "braille_d_0598",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "110011"
+      },
+      "expected": "\\"
+    },
+    {
+      "id": "braille_d_0599",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "110100"
+      },
+      "expected": "F"
+    },
+    {
+      "id": "braille_d_0600",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "110101"
+      },
+      "expected": "$"
+    },
+    {
+      "id": "braille_d_0601",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "110110"
+      },
+      "expected": "G"
+    },
+    {
+      "id": "braille_d_0602",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "110111"
+      },
+      "expected": "]"
+    },
+    {
+      "id": "braille_d_0603",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "111000"
+      },
+      "expected": "L"
+    },
+    {
+      "id": "braille_d_0604",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "111001"
+      },
+      "expected": "V"
+    },
+    {
+      "id": "braille_d_0605",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "111010"
+      },
+      "expected": "R"
+    },
+    {
+      "id": "braille_d_0606",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "111011"
+      },
+      "expected": "("
+    },
+    {
+      "id": "braille_d_0607",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "111100"
+      },
+      "expected": "P"
+    },
+    {
+      "id": "braille_d_0608",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "111101"
+      },
+      "expected": "&"
+    },
+    {
+      "id": "braille_d_0609",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "111110"
+      },
+      "expected": "Q"
+    },
+    {
+      "id": "braille_d_0610",
+      "function": "braille_d",
+      "args": {
+        "braille_dots": "111111"
+      },
+      "expected": "="
+    },
+    {
+      "id": "braille_ja_d_0611",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000000000000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0612",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000000010001"
+      },
+      "expected": "？"
+    },
+    {
+      "id": "braille_ja_d_0613",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000000100010"
+      },
+      "expected": "ら"
+    },
+    {
+      "id": "braille_ja_d_0614",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000000110011"
+      },
+      "expected": "し"
+    },
+    {
+      "id": "braille_ja_d_0615",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000001000100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0616",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000001010101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0617",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000001100110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0618",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000001110111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0619",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000010001000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0620",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000010011001"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0621",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000010101010"
+      },
+      "expected": "だ"
+    },
+    {
+      "id": "braille_ja_d_0622",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000010111011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0623",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000011001100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0624",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000011011101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0625",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000011101110"
+      },
+      "expected": "N"
+    },
+    {
+      "id": "braille_ja_d_0626",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000011111111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0627",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000100010000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0628",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000100100001"
+      },
+      "expected": "きゃ"
+    },
+    {
+      "id": "braille_ja_d_0629",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000100110010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0630",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000101000011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0631",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000101010100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0632",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000101100101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0633",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000101110110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0634",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000110000111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0635",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000110011000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0636",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000110101001"
+      },
+      "expected": "びゃ"
+    },
+    {
+      "id": "braille_ja_d_0637",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000110111010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0638",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000111001011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0639",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000111011100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0640",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000111101101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0641",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "000111111110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0642",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001000001111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0643",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001000100000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0644",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001000110001"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0645",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001001000010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0646",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001001010011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0647",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001001100100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0648",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001001110101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0649",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001010000110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0650",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001010010111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0651",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001010101000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0652",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001010111001"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0653",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001011001010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0654",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001011011011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0655",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001011101100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0656",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001011111101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0657",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001100001110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0658",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001100011111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0659",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001100110000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0660",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001101000001"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0661",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001101010010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0662",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001101100011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0663",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001101110100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0664",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001110000101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0665",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001110010110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0666",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001110100111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0667",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001110111000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0668",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001111001001"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0669",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001111011010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0670",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001111101011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0671",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "001111111100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0672",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010000001101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0673",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010000011110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0674",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010000101111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0675",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010001000000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0676",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010001010001"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0677",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010001100010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0678",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010001110011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0679",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010010000100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0680",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010010010101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0681",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010010100110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0682",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010010110111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0683",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010011001000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0684",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010011011001"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0685",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010011101010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0686",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010011111011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0687",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010100001100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0688",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010100011101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0689",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010100101110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0690",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010100111111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0691",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010101010000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0692",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010101100001"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0693",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010101110010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0694",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010110000011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0695",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010110010100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0696",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010110100101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0697",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010110110110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0698",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010111000111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0699",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010111011000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0700",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010111101001"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0701",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "010111111010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0702",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011000001011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0703",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011000011100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0704",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011000101101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0705",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011000111110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0706",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011001001111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0707",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011001100000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0708",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011001110001"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0709",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011010000010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0710",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011010010011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0711",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011010100100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0712",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011010110101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0713",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011011000110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0714",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011011010111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0715",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011011101000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0716",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011011111001"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0717",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011100001010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0718",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011100011011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0719",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011100101100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0720",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011100111101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0721",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011101001110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0722",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011101011111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0723",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011101110000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0724",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011110000001"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0725",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011110010010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0726",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011110100011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0727",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011110110100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0728",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011111000101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0729",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011111010110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0730",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011111100111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0731",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "011111111000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0732",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100000001001"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0733",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100000011010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0734",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100000101011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0735",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100000111100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0736",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100001001101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0737",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100001011110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0738",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100001101111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0739",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100010000000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0740",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100010010001"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0741",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100010100010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0742",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100010110011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0743",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100011000100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0744",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100011010101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0745",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100011100110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0746",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100011110111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0747",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100100001000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0748",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100100011001"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0749",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100100101010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0750",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100100111011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0751",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100101001100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0752",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100101011101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0753",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100101101110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0754",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100101111111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0755",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100110010000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0756",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100110100001"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0757",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100110110010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0758",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100111000011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0759",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100111010100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0760",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100111100101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0761",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "100111110110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0762",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101000000111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0763",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101000011000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0764",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101000101001"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0765",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101000111010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0766",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101001001011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0767",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101001011100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0768",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101001101101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0769",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101001111110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0770",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101010001111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0771",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101010100000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0772",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101010110001"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0773",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101011000010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0774",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101011010011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0775",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101011100100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0776",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101011110101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0777",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101100000110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0778",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101100010111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0779",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101100101000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0780",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101100111001"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0781",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101101001010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0782",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101101011011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0783",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101101101100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0784",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101101111101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0785",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101110001110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0786",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101110011111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0787",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101110110000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0788",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101111000001"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0789",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101111010010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0790",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101111100011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0791",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "101111110100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0792",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110000000101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0793",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110000010110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0794",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110000100111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0795",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110000111000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0796",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110001001001"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0797",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110001011010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0798",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110001101011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0799",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110001111100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0800",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110010001101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0801",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110010011110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0802",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110010101111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0803",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110011000000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0804",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110011010001"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0805",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110011100010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0806",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110011110011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0807",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110100000100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0808",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110100010101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0809",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110100100110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0810",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110100110111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0811",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110101001000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0812",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110101011001"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0813",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110101101010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0814",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110101111011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0815",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110110001100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0816",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110110011101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0817",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110110101110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0818",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110110111111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0819",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110111010000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0820",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110111100001"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0821",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "110111110010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0822",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111000000011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0823",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111000010100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0824",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111000100101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0825",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111000110110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0826",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111001000111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0827",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111001011000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0828",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111001101001"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0829",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111001111010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0830",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111010001011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0831",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111010011100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0832",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111010101101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0833",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111010111110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0834",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111011001111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0835",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111011100000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0836",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111011110001"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0837",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111100000010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0838",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111100010011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0839",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111100100100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0840",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111100110101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0841",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111101000110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0842",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111101010111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0843",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111101101000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0844",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111101111001"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0845",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111110001010"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0846",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111110011011"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0847",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111110101100"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0848",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111110111101"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0849",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111111001110"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0850",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111111011111"
+      },
+      "expected": ""
+    },
+    {
+      "id": "braille_ja_d_0851",
+      "function": "braille_ja_d",
+      "args": {
+        "braille_dots": "111111110000"
+      },
+      "expected": ""
+    },
+    {
+      "id": "auto_split_number_string_0853",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "656667 414243",
+        "pattern": "DEC"
+      },
+      "expected": [
+        "65",
+        "66",
+        "67",
+        "41",
+        "42",
+        "43"
+      ]
+    },
+    {
+      "id": "auto_split_number_string_0855",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "656667 414243",
+        "pattern": "HEX"
+      },
+      "expected": [
+        "65",
+        "66",
+        "67",
+        "41",
+        "42",
+        "43"
+      ]
+    },
+    {
+      "id": "auto_split_number_string_0857",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "656667 414243",
+        "pattern": "OCT"
+      },
+      "expected": [
+        "65",
+        "66",
+        "67",
+        "41",
+        "42",
+        "43"
+      ]
+    },
+    {
+      "id": "auto_split_number_string_0859",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "656667 414243",
+        "pattern": "BIN"
+      },
+      "expected": []
+    },
+    {
+      "id": "auto_split_number_string_0861",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "656667 414243",
+        "pattern": "vanity_toggle"
+      },
+      "expected": [
+        "6",
+        "5",
+        "666",
+        "7",
+        "4",
+        "4",
+        "2",
+        "4",
+        "3"
+      ]
+    },
+    {
+      "id": "auto_split_number_string_0863",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "656667 414243",
+        "pattern": "vanity_rept_number"
+      },
+      "expected": [
+        "14",
+        "24"
+      ]
+    },
+    {
+      "id": "auto_split_number_string_0865",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "656667 414243",
+        "pattern": "vanity_number_rept"
+      },
+      "expected": [
+        "41",
+        "42",
+        "43"
+      ]
+    },
+    {
+      "id": "auto_split_number_string_0867",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "001000000110000101100010",
+        "pattern": "DEC"
+      },
+      "expected": [
+        "100",
+        "110",
+        "101",
+        "100"
+      ]
+    },
+    {
+      "id": "auto_split_number_string_0869",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "001000000110000101100010",
+        "pattern": "HEX"
+      },
+      "expected": []
+    },
+    {
+      "id": "auto_split_number_string_0871",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "001000000110000101100010",
+        "pattern": "OCT"
+      },
+      "expected": [
+        "100",
+        "110",
+        "101",
+        "100"
+      ]
+    },
+    {
+      "id": "auto_split_number_string_0873",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "001000000110000101100010",
+        "pattern": "BIN"
+      },
+      "expected": [
+        "00100000",
+        "01100001",
+        "01100010"
+      ]
+    },
+    {
+      "id": "auto_split_number_string_0875",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "001000000110000101100010",
+        "pattern": "vanity_toggle"
+      },
+      "expected": []
+    },
+    {
+      "id": "auto_split_number_string_0877",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "001000000110000101100010",
+        "pattern": "vanity_rept_number"
+      },
+      "expected": []
+    },
+    {
+      "id": "auto_split_number_string_0879",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "001000000110000101100010",
+        "pattern": "vanity_number_rept"
+      },
+      "expected": []
+    },
+    {
+      "id": "auto_split_number_string_0881",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "223334447777",
+        "pattern": "DEC"
+      },
+      "expected": [
+        "33",
+        "34",
+        "44",
+        "77",
+        "77"
+      ]
+    },
+    {
+      "id": "auto_split_number_string_0883",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "223334447777",
+        "pattern": "HEX"
+      },
+      "expected": [
+        "22",
+        "33",
+        "34",
+        "44",
+        "77",
+        "77"
+      ]
+    },
+    {
+      "id": "auto_split_number_string_0885",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "223334447777",
+        "pattern": "OCT"
+      },
+      "expected": [
+        "44",
+        "47",
+        "77"
+      ]
+    },
+    {
+      "id": "auto_split_number_string_0887",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "223334447777",
+        "pattern": "BIN"
+      },
+      "expected": []
+    },
+    {
+      "id": "auto_split_number_string_0889",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "223334447777",
+        "pattern": "vanity_toggle"
+      },
+      "expected": [
+        "22",
+        "333",
+        "444",
+        "7777"
+      ]
+    },
+    {
+      "id": "auto_split_number_string_0891",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "223334447777",
+        "pattern": "vanity_rept_number"
+      },
+      "expected": [
+        "22",
+        "33",
+        "34",
+        "47"
+      ]
+    },
+    {
+      "id": "auto_split_number_string_0893",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "223334447777",
+        "pattern": "vanity_number_rept"
+      },
+      "expected": [
+        "22",
+        "33"
+      ]
+    },
+    {
+      "id": "auto_split_number_string_0895",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "12 22 32 49 94",
+        "pattern": "DEC"
+      },
+      "expected": [
+        "32",
+        "49",
+        "94"
+      ]
+    },
+    {
+      "id": "auto_split_number_string_0897",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "12 22 32 49 94",
+        "pattern": "HEX"
+      },
+      "expected": [
+        "22",
+        "32",
+        "49"
+      ]
+    },
+    {
+      "id": "auto_split_number_string_0899",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "12 22 32 49 94",
+        "pattern": "OCT"
+      },
+      "expected": []
+    },
+    {
+      "id": "auto_split_number_string_0901",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "12 22 32 49 94",
+        "pattern": "BIN"
+      },
+      "expected": []
+    },
+    {
+      "id": "auto_split_number_string_0903",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "12 22 32 49 94",
+        "pattern": "vanity_toggle"
+      },
+      "expected": [
+        "2",
+        "22",
+        "3",
+        "2",
+        "4",
+        "9",
+        "9",
+        "4"
+      ]
+    },
+    {
+      "id": "auto_split_number_string_0905",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "12 22 32 49 94",
+        "pattern": "vanity_rept_number"
+      },
+      "expected": [
+        "12",
+        "22",
+        "32",
+        "49"
+      ]
+    },
+    {
+      "id": "auto_split_number_string_0907",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "12 22 32 49 94",
+        "pattern": "vanity_number_rept"
+      },
+      "expected": [
+        "22",
+        "32",
+        "94"
+      ]
+    },
+    {
+      "id": "auto_split_number_string_0909",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "abc123xyz456",
+        "pattern": "DEC"
+      },
+      "expected": [
+        "45"
+      ]
+    },
+    {
+      "id": "auto_split_number_string_0911",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "abc123xyz456",
+        "pattern": "HEX"
+      },
+      "expected": [
+        "23",
+        "45"
+      ]
+    },
+    {
+      "id": "auto_split_number_string_0913",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "abc123xyz456",
+        "pattern": "OCT"
+      },
+      "expected": [
+        "123",
+        "45"
+      ]
+    },
+    {
+      "id": "auto_split_number_string_0915",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "abc123xyz456",
+        "pattern": "BIN"
+      },
+      "expected": []
+    },
+    {
+      "id": "auto_split_number_string_0917",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "abc123xyz456",
+        "pattern": "vanity_toggle"
+      },
+      "expected": [
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ]
+    },
+    {
+      "id": "auto_split_number_string_0919",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "abc123xyz456",
+        "pattern": "vanity_rept_number"
+      },
+      "expected": [
+        "12"
+      ]
+    },
+    {
+      "id": "auto_split_number_string_0921",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "abc123xyz456",
+        "pattern": "vanity_number_rept"
+      },
+      "expected": [
+        "23"
+      ]
+    },
+    {
+      "id": "auto_split_number_string_0923",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "",
+        "pattern": "DEC"
+      },
+      "expected": []
+    },
+    {
+      "id": "auto_split_number_string_0925",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "",
+        "pattern": "HEX"
+      },
+      "expected": []
+    },
+    {
+      "id": "auto_split_number_string_0927",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "",
+        "pattern": "OCT"
+      },
+      "expected": []
+    },
+    {
+      "id": "auto_split_number_string_0929",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "",
+        "pattern": "BIN"
+      },
+      "expected": []
+    },
+    {
+      "id": "auto_split_number_string_0931",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "",
+        "pattern": "vanity_toggle"
+      },
+      "expected": []
+    },
+    {
+      "id": "auto_split_number_string_0933",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "",
+        "pattern": "vanity_rept_number"
+      },
+      "expected": []
+    },
+    {
+      "id": "auto_split_number_string_0935",
+      "function": "auto_split_number_string",
+      "args": {
+        "text": "",
+        "pattern": "vanity_number_rept"
+      },
+      "expected": []
+    },
+    {
+      "id": "vanity_e_0936",
+      "function": "vanity_e",
+      "args": {
+        "text": "HELLO",
+        "style": "toggle"
+      },
+      "expected": "44 33 555 555 666"
+    },
+    {
+      "id": "vanity_d_0937",
+      "function": "vanity_d",
+      "args": {
+        "text": "44 33 555 555 666",
+        "style": "toggle"
+      },
+      "expected": "HELLO"
+    },
+    {
+      "id": "vanity_e_0938",
+      "function": "vanity_e",
+      "args": {
+        "text": "HELLO",
+        "style": "rept_number"
+      },
+      "expected": "24 23 35 35 36"
+    },
+    {
+      "id": "vanity_d_0939",
+      "function": "vanity_d",
+      "args": {
+        "text": "24 23 35 35 36",
+        "style": "rept_number"
+      },
+      "expected": "HELLO"
+    },
+    {
+      "id": "vanity_e_0940",
+      "function": "vanity_e",
+      "args": {
+        "text": "HELLO",
+        "style": "number_rept"
+      },
+      "expected": "42 32 53 53 63"
+    },
+    {
+      "id": "vanity_d_0941",
+      "function": "vanity_d",
+      "args": {
+        "text": "42 32 53 53 63",
+        "style": "number_rept"
+      },
+      "expected": "HELLO"
+    },
+    {
+      "id": "vanity_e_0942",
+      "function": "vanity_e",
+      "args": {
+        "text": "WORLD",
+        "style": "toggle"
+      },
+      "expected": "9 666 777 555 3"
+    },
+    {
+      "id": "vanity_d_0943",
+      "function": "vanity_d",
+      "args": {
+        "text": "9 666 777 555 3",
+        "style": "toggle"
+      },
+      "expected": "WORLD"
+    },
+    {
+      "id": "vanity_e_0944",
+      "function": "vanity_e",
+      "args": {
+        "text": "WORLD",
+        "style": "rept_number"
+      },
+      "expected": "19 36 37 35 13"
+    },
+    {
+      "id": "vanity_d_0945",
+      "function": "vanity_d",
+      "args": {
+        "text": "19 36 37 35 13",
+        "style": "rept_number"
+      },
+      "expected": "WORLD"
+    },
+    {
+      "id": "vanity_e_0946",
+      "function": "vanity_e",
+      "args": {
+        "text": "WORLD",
+        "style": "number_rept"
+      },
+      "expected": "91 63 73 53 31"
+    },
+    {
+      "id": "vanity_d_0947",
+      "function": "vanity_d",
+      "args": {
+        "text": "91 63 73 53 31",
+        "style": "number_rept"
+      },
+      "expected": "WORLD"
+    },
+    {
+      "id": "vanity_e_0948",
+      "function": "vanity_e",
+      "args": {
+        "text": "CRYPTO",
+        "style": "toggle"
+      },
+      "expected": "222 777 999 7 8 666"
+    },
+    {
+      "id": "vanity_d_0949",
+      "function": "vanity_d",
+      "args": {
+        "text": "222 777 999 7 8 666",
+        "style": "toggle"
+      },
+      "expected": "CRYPTO"
+    },
+    {
+      "id": "vanity_e_0950",
+      "function": "vanity_e",
+      "args": {
+        "text": "CRYPTO",
+        "style": "rept_number"
+      },
+      "expected": "32 37 39 17 18 36"
+    },
+    {
+      "id": "vanity_d_0951",
+      "function": "vanity_d",
+      "args": {
+        "text": "32 37 39 17 18 36",
+        "style": "rept_number"
+      },
+      "expected": "CRYPTO"
+    },
+    {
+      "id": "vanity_e_0952",
+      "function": "vanity_e",
+      "args": {
+        "text": "CRYPTO",
+        "style": "number_rept"
+      },
+      "expected": "23 73 93 71 81 63"
+    },
+    {
+      "id": "vanity_d_0953",
+      "function": "vanity_d",
+      "args": {
+        "text": "23 73 93 71 81 63",
+        "style": "number_rept"
+      },
+      "expected": "CRYPTO"
+    },
+    {
+      "id": "vanity_e_0954",
+      "function": "vanity_e",
+      "args": {
+        "text": "A",
+        "style": "toggle"
+      },
+      "expected": "2"
+    },
+    {
+      "id": "vanity_d_0955",
+      "function": "vanity_d",
+      "args": {
+        "text": "2",
+        "style": "toggle"
+      },
+      "expected": "A"
+    },
+    {
+      "id": "vanity_e_0956",
+      "function": "vanity_e",
+      "args": {
+        "text": "A",
+        "style": "rept_number"
+      },
+      "expected": "12"
+    },
+    {
+      "id": "vanity_d_0957",
+      "function": "vanity_d",
+      "args": {
+        "text": "12",
+        "style": "rept_number"
+      },
+      "expected": "A"
+    },
+    {
+      "id": "vanity_e_0958",
+      "function": "vanity_e",
+      "args": {
+        "text": "A",
+        "style": "number_rept"
+      },
+      "expected": "21"
+    },
+    {
+      "id": "vanity_d_0959",
+      "function": "vanity_d",
+      "args": {
+        "text": "21",
+        "style": "number_rept"
+      },
+      "expected": "A"
+    },
+    {
+      "id": "vanity_e_0960",
+      "function": "vanity_e",
+      "args": {
+        "text": "",
+        "style": "toggle"
+      },
+      "expected": ""
+    },
+    {
+      "id": "vanity_d_0961",
+      "function": "vanity_d",
+      "args": {
+        "text": "",
+        "style": "toggle"
+      },
+      "expected": ""
+    },
+    {
+      "id": "vanity_e_0962",
+      "function": "vanity_e",
+      "args": {
+        "text": "",
+        "style": "rept_number"
+      },
+      "expected": ""
+    },
+    {
+      "id": "vanity_d_0963",
+      "function": "vanity_d",
+      "args": {
+        "text": "",
+        "style": "rept_number"
+      },
+      "expected": ""
+    },
+    {
+      "id": "vanity_e_0964",
+      "function": "vanity_e",
+      "args": {
+        "text": "",
+        "style": "number_rept"
+      },
+      "expected": ""
+    },
+    {
+      "id": "vanity_d_0965",
+      "function": "vanity_d",
+      "args": {
+        "text": "",
+        "style": "number_rept"
+      },
+      "expected": ""
+    },
+    {
+      "id": "vanity_e_0966",
+      "function": "vanity_e",
+      "args": {
+        "text": "INGRESS",
+        "style": "toggle"
+      },
+      "expected": "444 66 4 777 33 7777 7777"
+    },
+    {
+      "id": "vanity_d_0967",
+      "function": "vanity_d",
+      "args": {
+        "text": "444 66 4 777 33 7777 7777",
+        "style": "toggle"
+      },
+      "expected": "INGRESS"
+    },
+    {
+      "id": "vanity_e_0968",
+      "function": "vanity_e",
+      "args": {
+        "text": "INGRESS",
+        "style": "rept_number"
+      },
+      "expected": "34 26 14 37 23 47 47"
+    },
+    {
+      "id": "vanity_d_0969",
+      "function": "vanity_d",
+      "args": {
+        "text": "34 26 14 37 23 47 47",
+        "style": "rept_number"
+      },
+      "expected": "INGRESS"
+    },
+    {
+      "id": "vanity_e_0970",
+      "function": "vanity_e",
+      "args": {
+        "text": "INGRESS",
+        "style": "number_rept"
+      },
+      "expected": "43 62 41 73 32 74 74"
+    },
+    {
+      "id": "vanity_d_0971",
+      "function": "vanity_d",
+      "args": {
+        "text": "43 62 41 73 32 74 74",
+        "style": "number_rept"
+      },
+      "expected": "INGRESS"
+    },
+    {
+      "id": "vanity_d_0972",
+      "function": "vanity_d",
+      "args": {
+        "text": "999999999",
+        "style": "toggle"
+      },
+      "expected": "ZZW"
+    },
+    {
+      "id": "vanity_d_0973",
+      "function": "vanity_d",
+      "args": {
+        "text": "999999999",
+        "style": "rept_number"
+      },
+      "expected": ""
+    },
+    {
+      "id": "vanity_d_0974",
+      "function": "vanity_d",
+      "args": {
+        "text": "999999999",
+        "style": "number_rept"
+      },
+      "expected": ""
+    },
+    {
+      "id": "return_japan_traditional_month_names_list_0975",
+      "function": "return_japan_traditional_month_names_list",
+      "args": {},
+      "expected": [
+        "1月: 睦月 (むつき)",
+        "2月: 如月 (きさらぎ)",
+        "3月: 弥生 (やよい)",
+        "4月: 卯月 (うづき) ",
+        "5月: 皐月 (さつき)",
+        "6月: 水無月 (みなづき)",
+        "7月: 文月 (ふみつき)",
+        "8月: 葉月 (はづき)",
+        "9月: 長月 (ながつき)",
+        "10月: 神無月 (かんなづき)",
+        "11月: 霜月 (しもつき)",
+        "12月: 師走 (しわす)"
+      ]
+    },
+    {
+      "id": "return_zodiac_list_0976",
+      "function": "return_zodiac_list",
+      "args": {},
+      "expected": [
+        "Aries, 牡羊座, Ram, Κριός (Krios)",
+        "Taurus, 牡牛座, Bull, Ταῦρος (Tauros)",
+        "Gemini, 双子座, Twins, Δίδυμοι (Didymoi)",
+        "Cancer, 蟹座, Crab, Καρκίνος (Karkinos)",
+        "Leo, 獅子座, Lion, Λέων (Leōn) ",
+        "Virgo, 乙女座, Maiden, Παρθένος (Parthenos)",
+        "Libra, 天秤座, Scales, Ζυγός (Zygos)",
+        "Scorpio, 蠍座, Scorpion, Σκoρπίος (Skorpios)",
+        "Sagittarius, 射手座, Archer, Τοξότης (Toxotēs)",
+        "Capricorn, 山羊座, Mountain Goat, Αἰγόκερως (Aigokerōs)",
+        "Aquarius, 水瓶座, Water-Bearer, Ὑδροχόος (Hydrokhoos)",
+        "Pisces, 魚座, 2 Fish, Ἰχθύες (Ikhthyes)"
+      ]
+    },
+    {
+      "id": "return_japanese_zodiac_list_0977",
+      "function": "return_japanese_zodiac_list",
+      "args": {},
+      "expected": [
+        " 1. 子, Rat",
+        " 2. 丑, Cow",
+        " 3. 寅, Tiger",
+        " 4. 卯, Rabbit",
+        " 5. 辰, Dragon",
+        " 6. 巳, Snake",
+        " 7. 午, Horse",
+        " 8. 未, Goat",
+        " 9. 申, Monkey",
+        "10. 酉, Rooster",
+        "11. 戌, Dog",
+        "12. 亥, Wild boar"
+      ]
+    }
+  ]
+}

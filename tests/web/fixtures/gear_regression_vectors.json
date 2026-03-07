@@ -1,0 +1,1880 @@
+{
+  "version": 1,
+  "case_count": 82,
+  "cases": [
+    {
+      "id": "rot_gen_001",
+      "function": "rot_gen",
+      "json": {
+        "input_text": "Abc-123"
+      },
+      "expected": {
+        "0": "00: Abc-123\n01: Bcd-123\n02: Cde-123\n03: Def-123\n04: Efg-123\n05: Fgh-123\n06: Ghi-123\n07: Hij-123\n08: Ijk-123\n09: Jkl-123\n10: Klm-123\n11: Lmn-123\n12: Mno-123\n13: Nop-123\n14: Opq-123\n15: Pqr-123\n16: Qrs-123\n17: Rst-123\n18: Stu-123\n19: Tuv-123\n20: Uvw-123\n21: Vwx-123\n22: Wxy-123\n23: Xyz-123\n24: Yza-123\n25: Zab-123"
+      }
+    },
+    {
+      "id": "playfair_gen_002",
+      "function": "playfair_gen",
+      "json": {
+        "input_text": "hidethegold"
+      },
+      "expected": {
+        "0": "Decoded: GHCDSIBKNPCY\nEncoded: IKEASIBKPMCY"
+      }
+    },
+    {
+      "id": "vigenere_gen_003",
+      "function": "vigenere_gen",
+      "json": {
+        "input_text": "AttackAtDawn",
+        "key": "White Rabbit 42!"
+      },
+      "expected": {
+        "0": "Text: AttackAtDawn\nKey: WhiteRabbit42\nDecoded: EmlhytAsCsdj\nEncoded: WabtgbAuEipr\nBeaufort: WoptchAiYixr\nAuto key Decoded: EmlhytAsCsdj\nAuto key Encoded: WabtgbAuEipr"
+      }
+    },
+    {
+      "id": "enigma_gen_004",
+      "function": "enigma_gen",
+      "json": {
+        "input_text": "zuulpguxlkvjwmyrjbclxfoa",
+        "left_rotor": "1",
+        "mid_rotor": "2",
+        "right_rotor": "3",
+        "reflector": "B",
+        "rotor_key": "AMT",
+        "ring_key": "AAA",
+        "plug_board": ""
+      },
+      "expected": {
+        "0": "Text: ZUULPGUXLKVJWMYRJBCLXFOA\nRotor Set: 1 2 3\nReflector: B\nRotator key: AMT\nRing Setting Key: AAA\nPlug Board: \n",
+        "1": "------\nEnigma output: NINEOSNFIVEMTHREEPSEVENX\n"
+      }
+    },
+    {
+      "id": "purple_gen_005",
+      "function": "purple_gen",
+      "json": {
+        "input_text": "FOV TATAKIDASI",
+        "sixes_switch_position": "9",
+        "twenties_switch_1_position": "1",
+        "twenties_switch_2_position": "24",
+        "twenties_switch_3_position": "6",
+        "plugboard_full": "NOKTYUXEQLHBRMPDICJASVWGZF",
+        "rotor_motion_key": "231"
+      },
+      "expected": {
+        "0": "Text: FOV TATAKIDASI\n",
+        "1": "------\nPURPLE Decode: AYL KPNFKDJIJA\n------\nPURPLE Encode: ZTX ODNWKCCMAV\n"
+      }
+    },
+    {
+      "id": "prime_gen_006",
+      "function": "prime_gen",
+      "json": {
+        "input_text": "84"
+      },
+      "expected": {
+        "0": "84 = 2^2 * 3 * 7\n"
+      }
+    },
+    {
+      "id": "pwgen_gen_007",
+      "function": "pwgen_gen",
+      "json": {
+        "char_type": "0",
+        "length": "12"
+      },
+      "expected": {
+        "0": "ABCDEFGHIJKL"
+      }
+    },
+    {
+      "id": "charcode_gen_008",
+      "function": "charcode_gen",
+      "json": {
+        "input_text": "Ab!",
+        "base": "16",
+        "mode": "Char to Codepoint"
+      },
+      "expected": {
+        "0": "Unicode: 41 62 21",
+        "1": "UTF-8: 41 62 21",
+        "2": "Shift JIS: 41 62 21",
+        "3": "EUC JP: 41 62 21",
+        "4": "ISO-2022-JP: 41 62 21"
+      }
+    },
+    {
+      "id": "charcode_gen_009",
+      "function": "charcode_gen",
+      "json": {
+        "input_text": "41 62 21",
+        "base": "16",
+        "mode": "Codepoint to Char"
+      },
+      "expected": {
+        "0": "Unicode: Ab!",
+        "1": "UTF-8: Ab!",
+        "2": "Shift JIS: Ab!",
+        "3": "EUC JP: Ab!",
+        "4": "ISO-2022-JP: Ab!"
+      }
+    },
+    {
+      "id": "base64_gen_010",
+      "function": "base64_gen",
+      "json": {
+        "input_text": "hello",
+        "mode": "Encode"
+      },
+      "expected": {
+        "0": "Base32:\nNBSWY3DP\n\nBase64:\naGVsbG8=\n\nUUencode:\n%:&5L;&\\\\ \n\nASCII85:\nBOu!rDZ\n\nBase85:\nXk~0{Zv\n"
+      }
+    },
+    {
+      "id": "base64_gen_011",
+      "function": "base64_gen",
+      "json": {
+        "input_text": "aGVsbG8=",
+        "mode": "Decode"
+      },
+      "expected": {
+        "0": "---Base32---",
+        "1": "# input was not interpreted as Base32 encoding.",
+        "2": "\n",
+        "10": "---Base64---",
+        "11": "decoded: hello",
+        "12": "\n",
+        "20": "---UUencode---",
+        "21": "# input was not interpreted as UU encoding.",
+        "22": "\n",
+        "30": "---ASCII85---",
+        "31": "# input was not interpreted as ASCII85 encoding.",
+        "32": "\n",
+        "40": "---Base85---",
+        "41": "# input was not interpreted as BASE85 encoding.",
+        "42": "\n"
+      }
+    },
+    {
+      "id": "rectangle_gen_012",
+      "function": "rectangle_gen",
+      "json": {
+        "input_text": "ABCDEFGH",
+        "mode": "Divisors only"
+      },
+      "expected": {
+        "0": "Text length = 8",
+        "1": "-----",
+        "2": "Column count = 2",
+        "3": "AB",
+        "4": "CD",
+        "5": "EF",
+        "6": "GH",
+        "7": "-----",
+        "8": "Column count = 4",
+        "9": "ABCD",
+        "10": "EFGH"
+      }
+    },
+    {
+      "id": "rectangle_gen_013",
+      "function": "rectangle_gen",
+      "json": {
+        "input_text": "ABCDE",
+        "mode": "All pattern"
+      },
+      "expected": {
+        "0": "Text length = 5",
+        "1": "-----",
+        "2": "Column count = 2",
+        "3": "AB",
+        "4": "CD",
+        "5": "E",
+        "6": "-----",
+        "7": "Column count = 3",
+        "8": "ABC",
+        "9": "DE"
+      }
+    },
+    {
+      "id": "simplesub_gen_014",
+      "function": "simplesub_gen",
+      "json": {
+        "input_text": "Hello-World_123"
+      },
+      "expected": {
+        "0": "A-a swap: hELLO-wORLD_123",
+        "1": "Atbash: Svool-Dliow_123",
+        "2": "Morse .- swap: ?tyys-Dskyw_678",
+        "3": "Morse reverse: Heffo-Gorfu_987",
+        "4": "Morse .- swap and reverse: ?tqqs-Uskqg_432",
+        "5": "US keyboard left shift: Gwkki0Qieks)`12",
+        "6": "US keyboard right shift: Jr;;p=Ept;f+234",
+        "7": "US keyboard right <-> left: Gissw`Owusk~098",
+        "8": "US keyboard up <-> down: Ydool?Slfoe?zxc",
+        "9": "US keyboard to Dvorak keyboard: D.nnr[,rpne_123",
+        "10": "Dvorak keyboard to US keyboard: Jdpps',soph_123",
+        "11": "US keyboard to MALTRON keyboard: Dyooz?Pzcoi_123",
+        "12": "MALTRON keyboard to US keyboard: K?ppl>Ml;ph_123",
+        "13": "!@#_to_123: Hello-World_123",
+        "14": "ABC to 123: 85121215-231518124_123",
+        "15": "ABC to 012: 74111114-221417113_123"
+      }
+    },
+    {
+      "id": "frequency_gen_015",
+      "function": "frequency_gen",
+      "json": {
+        "input_text": "HELLO WORLD\nHELLO"
+      },
+      "expected": {
+        "0": "Text length = 16\nUsed characters (unique) =  DEHLORW\n-----\n",
+        "1": "Letter frequency(Sorted Alphabetically)\n : 1 (6.25%)\nD: 1 (6.25%)\nE: 2 (12.50%)\nH: 2 (12.50%)\nL: 5 (31.25%)\nO: 3 (18.75%)\nR: 1 (6.25%)\nW: 1 (6.25%)\n-----\n",
+        "2": "Letter frequency (Sorted by Frequency)\nL: 5 (31.25%)\nO: 3 (18.75%)\nH: 2 (12.50%)\nE: 2 (12.50%)\n : 1 (6.25%)\nW: 1 (6.25%)\nR: 1 (6.25%)\nD: 1 (6.25%)\n"
+      }
+    },
+    {
+      "id": "subs_handsolve_gen_016",
+      "function": "subs_handsolve_gen",
+      "json": {
+        "input_text": "ABCD-ABCD",
+        "subs_from": "ABCD",
+        "subs_to": "WXYZ"
+      },
+      "expected": {
+        "0": "Replace characters\n_del: \nfrom: ABCD\n__to: WXYZ\n-----\n[Before]\nABCD-ABCD\n\n[After]\nWXYZ-WXYZ\n\n",
+        "1": "-----\nLetter frequency\nA: 25.00%, B: 25.00%, C: 25.00%, D: 25.00%, ",
+        "2": "-----\nBigram frequency\nAB: 28.57%, BC: 28.57%, CD: 28.57%, DA: 14.29%, \n",
+        "3": "-----\nBasic English info.\nLetter frequency\nE: 12.49%, T: 9.28%, A: 8.04%, O: 7.64%, I: 7.57%, N: 7.23%, S: 6.51%, R: 6.28%, H: 5.05%\nL: 4.07%, D: 3.82%, C: 3.34%, U: 2.73%, M: 2.51%, F: 2.40%, P: 2.14%, G: 1.87%, W: 1.68%\nY: 1.66%, B: 1.48%, V: 1.05%, K: 0.54%, X: 0.23%, J: 0.16%, Q: 0.12%, Z: 0.09%\n\nBigram frequency\nTH: 3.56%, HE: 3.07%, IN: 2.43%, ER: 2.05%, AN: 1.99%, RE: 1.85%, ON: 1.76%, AT: 1.49%, EN: 1.45%\nND: 1.35%, TI: 1.34%, ES: 1.34%, OR: 1.28%, TE: 1.20%, OF: 1.17%, ED: 1.17%, IS: 1.13%, IT: 1.12%\n \n* This is based on below site's great work. \nhttps://norvig.com/mayzner.html\n"
+      }
+    },
+    {
+      "id": "railfence_gen_017",
+      "function": "railfence_gen",
+      "json": {
+        "input_text": "WEAREDISCOVEREDFLEEATONCE",
+        "mode": "Encode",
+        "offset": "0"
+      },
+      "expected": {
+        "0": "Offset = 0\nrails:\n02: WAEICVRDLETNEERDSOEEFEAOC\n03: WECRLTEERDSOEEFEAOCAIVDEN\n04: WIREEEDSEEEACAECVDLTNROFO\n05: WCLEESOFECAIVDENRDEEAOERT\n06: WVTEOEAOACRENRSEECEIDLEDF\n07: WREEEECAVDNROFOECLTDSEAIE\n08: WDEEFARLREEEVEEDOACICTNSO\n09: WLEFEADEREAERTDEOIVNSOCCE\n10: WEEEAALTRFOEDNDECIRESECVO\n11: WTEAOAENRECELEDFIDSECROEV\n12: WNEOCATERAEEDEILSFCDOEVRE\n13: WEECANROETDAIESECLOFVDEER\n14: WEAERCENDOITSACEOEVLEFRDE\n15: WEAREEDCINSOCTOAVEEERLEFD\n16: WEAREDIESCCNOOVTEAREEEDLF\n17: WEAREDISCEOCVNEORTEADEFEL\n18: WEAREDISCOVEECRNEODTFALEE\n19: WEAREDISCOVEREECDNFOLTEAE\n20: WEAREDISCOVEREDEFCLNEOETA\n21: WEAREDISCOVEREDFLEECENAOT\n22: WEAREDISCOVEREDFLEEEACTNO\n23: WEAREDISCOVEREDFLEEATEOCN\n24: WEAREDISCOVEREDFLEEATONEC\n"
+      }
+    },
+    {
+      "id": "railfence_gen_018",
+      "function": "railfence_gen",
+      "json": {
+        "input_text": "WECRLTEERDSOEEFEAOCAIVDEN",
+        "mode": "Decode",
+        "offset": "0"
+      },
+      "expected": {
+        "0": "Offset = 0\nrails:\n02: WEEFCERALOTCEAEIRVDDSEONE\n03: WEAREDISCOVEREDFLEEATONCE\n04: WTEVFEEEEDARCDOECSROANIEL\n05: WLSADOOTEEECEAEECRFINVEDR\n06: WRRECEAFDLETSEINVAOECEEOD\n07: WREOEAEIAERLETDEOVNDCFSEC\n08: WCTROEAEIAEDERELESEOVNDCF\n09: WCTROFOIEVCEEDERELESEAADN\n10: WCTROFOIDNEVCEEDERELESEAA\n11: WCTROFACIDNEVAOEEDERELESE\n12: WCTRSEFACIDNEVAOEEODERELE\n13: WCLERSEFACIDNEVAOEEODETRE\n14: WECLERSEFACIDNEVAOEEODETR\n15: WECRLERSEFACIDNEVAOEEODET\n16: WECRLTERSEFACIDNEVAOEEODE\n17: WECRLTEERSEFACIDNEVAOEEOD\n18: WECRLTEERDSEFACIDNEVAOEEO\n19: WECRLTEERDSOEFACIDNEVAOEE\n20: WECRLTEERDSOEEFACIDNEVAOE\n21: WECRLTEERDSOEEFEACIDNEVAO\n22: WECRLTEERDSOEEFEAOCIDNEVA\n23: WECRLTEERDSOEEFEAOCAIDNEV\n24: WECRLTEERDSOEEFEAOCAIVDNE\n"
+      }
+    },
+    {
+      "id": "railfence_gen_019",
+      "function": "railfence_gen",
+      "json": {
+        "input_text": "WEAREDISCOVEREDFLEEATONCE",
+        "mode": "Encode",
+        "offset": ""
+      },
+      "expected": {
+        "0": "Offset = 0\nrails:\n02: WAEICVRDLETNEERDSOEEFEAOC\n03: WECRLTEERDSOEEFEAOCAIVDEN\n04: WIREEEDSEEEACAECVDLTNROFO\n05: WCLEESOFECAIVDENRDEEAOERT\n06: WVTEOEAOACRENRSEECEIDLEDF\n07: WREEEECAVDNROFOECLTDSEAIE\n08: WDEEFARLREEEVEEDOACICTNSO\n09: WLEFEADEREAERTDEOIVNSOCCE\n10: WEEEAALTRFOEDNDECIRESECVO\n11: WTEAOAENRECELEDFIDSECROEV\n12: WNEOCATERAEEDEILSFCDOEVRE\n13: WEECANROETDAIESECLOFVDEER\n14: WEAERCENDOITSACEOEVLEFRDE\n15: WEAREEDCINSOCTOAVEEERLEFD\n16: WEAREDIESCCNOOVTEAREEEDLF\n17: WEAREDISCEOCVNEORTEADEFEL\n18: WEAREDISCOVEECRNEODTFALEE\n19: WEAREDISCOVEREECDNFOLTEAE\n20: WEAREDISCOVEREDEFCLNEOETA\n21: WEAREDISCOVEREDFLEECENAOT\n22: WEAREDISCOVEREDFLEEEACTNO\n23: WEAREDISCOVEREDFLEEATEOCN\n24: WEAREDISCOVEREDFLEEATONEC\n"
+      }
+    },
+    {
+      "id": "railfence_gen_020",
+      "function": "railfence_gen",
+      "json": {
+        "input_text": "WECRLTEERDSOEEFEAOCAIVDEN",
+        "mode": "Decode",
+        "offset": ""
+      },
+      "expected": {
+        "0": "Offset = 0\nrails:\n02: WEEFCERALOTCEAEIRVDDSEONE\n03: WEAREDISCOVEREDFLEEATONCE\n04: WTEVFEEEEDARCDOECSROANIEL\n05: WLSADOOTEEECEAEECRFINVEDR\n06: WRRECEAFDLETSEINVAOECEEOD\n07: WREOEAEIAERLETDEOVNDCFSEC\n08: WCTROEAEIAEDERELESEOVNDCF\n09: WCTROFOIEVCEEDERELESEAADN\n10: WCTROFOIDNEVCEEDERELESEAA\n11: WCTROFACIDNEVAOEEDERELESE\n12: WCTRSEFACIDNEVAOEEODERELE\n13: WCLERSEFACIDNEVAOEEODETRE\n14: WECLERSEFACIDNEVAOEEODETR\n15: WECRLERSEFACIDNEVAOEEODET\n16: WECRLTERSEFACIDNEVAOEEODE\n17: WECRLTEERSEFACIDNEVAOEEOD\n18: WECRLTEERDSEFACIDNEVAOEEO\n19: WECRLTEERDSOEFACIDNEVAOEE\n20: WECRLTEERDSOEEFACIDNEVAOE\n21: WECRLTEERDSOEEFEACIDNEVAO\n22: WECRLTEERDSOEEFEAOCIDNEVA\n23: WECRLTEERDSOEEFEAOCAIDNEV\n24: WECRLTEERDSOEEFEAOCAIVDNE\n"
+      }
+    },
+    {
+      "id": "morse_gen_021",
+      "function": "morse_gen",
+      "json": {
+        "input_text": "... --- ...",
+        "mode": "Decode"
+      },
+      "expected": {
+        "0": "Morse Decode:\nSOS\n\nWabun Morse Decode:\nラレラ\n"
+      }
+    },
+    {
+      "id": "morse_gen_022",
+      "function": "morse_gen",
+      "json": {
+        "input_text": "sos",
+        "mode": "Encode"
+      },
+      "expected": {
+        "0": "Morse Encode:\n... --- ... \n\nWabun Morse Encode:\ns o s \n"
+      }
+    },
+    {
+      "id": "charreplace_gen_023",
+      "function": "charreplace_gen",
+      "json": {
+        "input_text": "AABBCC",
+        "replace_from": "ABC",
+        "replace_to": "XYZ"
+      },
+      "expected": {
+        "0": "Replace characters\n del: \nfrom: ABC\n  to: XYZ\n\nXXYYZZ"
+      }
+    },
+    {
+      "id": "reverse_gen_024",
+      "function": "reverse_gen",
+      "json": {
+        "input_text": "stressed"
+      },
+      "expected": {
+        "0": "desserts"
+      }
+    },
+    {
+      "id": "columnar_gen_025",
+      "function": "columnar_gen",
+      "json": {
+        "input_text": "WEAREDISCOVERED",
+        "key": "ZEBRA"
+      },
+      "expected": {
+        "0": "Columnar decode with key: ZEBRA\nRIROWESEVEDCDEA\n\nColumnar encode with key: ZEBRA\nEODASREIERCEWDV"
+      }
+    },
+    {
+      "id": "hash_gen_026",
+      "function": "hash_gen",
+      "json": {
+        "input_text": "hash-target"
+      },
+      "expected": {
+        "0": "MD5    : 28c57e2f8669e56ffedffa4c9978279a\nSHA1   : 70677ef80840af159b48453f75f7bae6fe2ca63d\nSHA224 : 5ef479a2fc263111a7434e3974378d216a9a1d154852c30fccefbe83\nSHA256 : 08e4950b24f9002ebf0fa6fa66818e54dfef56a6883560d798e12bb5fc336437\nSHA384 : 03d7ecd8f8ebbdec16ef531cbd2e91211eda995e46622f02787642adf414c6350707089453216fb9bc77d42de786ce20\nSHA512 : 39e022cdd8fa37e769644b29a1ff5d55a82151c532e39985cb629377b5d8e9f0afd9794f1d99f627e94d12f15ec72b314c398ac5b46129c1dd77aff56053f565\nBLAKE2b: 3a5343018ff4b4f4e9fe5702fce252aaa41e77a2af9e756f382a50189e8f929e5ca5eaf3ba8d766ff60064a4ee6e87f9b043f1b3b0ca62746c44410296faffea\nBLAKE2s: 9335e353f48253fd7569a7836ff44bd21c6e1a12855dc83bb6f79716d8147a96"
+      }
+    },
+    {
+      "id": "to_what3words_gen_027",
+      "function": "to_what3words_gen",
+      "json": {
+        "latitude": "35.0",
+        "longitude": "139.0",
+        "language": "en"
+      },
+      "expected": {
+        "0": "Language: en\nWords: filled.count.soap\nCoordinates: Lat= 35.0, Lng= 139.0\nSouth West: Lat= 34.999, Lng= 138.999\nNorth East: Lat= 35.001, Lng= 139.001\nCountry: JP\nNearest Place: Tokyo\nMap: <a href=\"https://example.invalid/map\" target=\"_blank\" class=\"link\">https://example.invalid/map</a>"
+      }
+    },
+    {
+      "id": "to_coordinates_gen_028",
+      "function": "to_coordinates_gen",
+      "json": {
+        "words": "badformat"
+      },
+      "expected": {
+        "0": "badformat is not W3W format."
+      }
+    },
+    {
+      "id": "to_coordinates_gen_029",
+      "function": "to_coordinates_gen",
+      "json": {
+        "words": "apifail"
+      },
+      "expected": {
+        "0": "apifail",
+        "1": "simulated API error"
+      }
+    },
+    {
+      "id": "to_coordinates_gen_030",
+      "function": "to_coordinates_gen",
+      "json": {
+        "words": "filled.count.soap"
+      },
+      "expected": {
+        "0": "Language: en\nWords: filled.count.soap\nCoordinates: Lat= 35.0, Lng= 139.0\nSouth West: Lat= 34.999, Lng= 138.999\nNorth East: Lat= 35.001, Lng= 139.001\nCountry: JP\nNearest Place: Tokyo\nMap: <a href=\"https://example.invalid/map2\" target=\"_blank\" class=\"link\">https://example.invalid/map2</a>"
+      }
+    },
+    {
+      "id": "braille_gen_031",
+      "function": "braille_gen",
+      "json": {
+        "b1": true,
+        "b2": false,
+        "b3": false,
+        "b4": false,
+        "b5": false,
+        "b6": false
+      },
+      "expected": "A"
+    },
+    {
+      "id": "braille_ja_gen_032",
+      "function": "braille_ja_gen",
+      "json": {
+        "bl1": true,
+        "bl2": false,
+        "bl3": false,
+        "bl4": false,
+        "bl5": false,
+        "bl6": false,
+        "br1": true,
+        "br2": false,
+        "br3": false,
+        "br4": false,
+        "br5": false,
+        "br6": false
+      },
+      "expected": ""
+    },
+    {
+      "id": "rsa_gen_033",
+      "function": "rsa_gen",
+      "json": {
+        "m": "65",
+        "e": "17",
+        "n": "3233",
+        "p": "61",
+        "q": "53"
+      },
+      "expected": {
+        "0": "m = 65\ne = 17\nn = 3233\n",
+        "1": "\nRSA Encode: 2790",
+        "2": "\np = 61\nq = 53\ncheck: \np*q = 3233\nn   = 3233",
+        "3": "\ncalculated d = 2753",
+        "4": "RSA Decode: 588"
+      }
+    },
+    {
+      "id": "rsa_gen_034",
+      "function": "rsa_gen",
+      "json": {
+        "m": "65",
+        "e": "17",
+        "n": "3233",
+        "p": "",
+        "q": ""
+      },
+      "expected": {
+        "0": "m = 65\ne = 17\nn = 3233\n",
+        "1": "\nRSA Encode: 2790"
+      }
+    },
+    {
+      "id": "affine_gen_035",
+      "function": "affine_gen",
+      "json": {
+        "input_text": "AFFINECIPHER",
+        "mode": "Encode"
+      },
+      "expected": {
+        "0": "Affine Cipher Encode:",
+        "1": "a=01, b=00: AFFINECIPHER",
+        "2": "a=01, b=01: BGGJOFDJQIFS",
+        "3": "a=01, b=02: CHHKPGEKRJGT",
+        "4": "a=01, b=03: DIILQHFLSKHU",
+        "5": "a=01, b=04: EJJMRIGMTLIV",
+        "6": "a=01, b=05: FKKNSJHNUMJW",
+        "7": "a=01, b=06: GLLOTKIOVNKX",
+        "8": "a=01, b=07: HMMPULJPWOLY",
+        "9": "a=01, b=08: INNQVMKQXPMZ",
+        "10": "a=01, b=09: JOORWNLRYQNA",
+        "11": "a=01, b=10: KPPSXOMSZROB",
+        "12": "a=01, b=11: LQQTYPNTASPC",
+        "13": "a=01, b=12: MRRUZQOUBTQD",
+        "14": "a=01, b=13: NSSVARPVCURE",
+        "15": "a=01, b=14: OTTWBSQWDVSF",
+        "16": "a=01, b=15: PUUXCTRXEWTG",
+        "17": "a=01, b=16: QVVYDUSYFXUH",
+        "18": "a=01, b=17: RWWZEVTZGYVI",
+        "19": "a=01, b=18: SXXAFWUAHZWJ",
+        "20": "a=01, b=19: TYYBGXVBIAXK",
+        "21": "a=01, b=20: UZZCHYWCJBYL",
+        "22": "a=01, b=21: VAADIZXDKCZM",
+        "23": "a=01, b=22: WBBEJAYELDAN",
+        "24": "a=01, b=23: XCCFKBZFMEBO",
+        "25": "a=01, b=24: YDDGLCAGNFCP",
+        "26": "a=01, b=25: ZEEHMDBHOGDQ",
+        "27": "a=03, b=00: APPYNMGYTVMZ",
+        "28": "a=03, b=01: BQQZONHZUWNA",
+        "29": "a=03, b=02: CRRAPOIAVXOB",
+        "30": "a=03, b=03: DSSBQPJBWYPC",
+        "31": "a=03, b=04: ETTCRQKCXZQD",
+        "32": "a=03, b=05: FUUDSRLDYARE",
+        "33": "a=03, b=06: GVVETSMEZBSF",
+        "34": "a=03, b=07: HWWFUTNFACTG",
+        "35": "a=03, b=08: IXXGVUOGBDUH",
+        "36": "a=03, b=09: JYYHWVPHCEVI",
+        "37": "a=03, b=10: KZZIXWQIDFWJ",
+        "38": "a=03, b=11: LAAJYXRJEGXK",
+        "39": "a=03, b=12: MBBKZYSKFHYL",
+        "40": "a=03, b=13: NCCLAZTLGIZM",
+        "41": "a=03, b=14: ODDMBAUMHJAN",
+        "42": "a=03, b=15: PEENCBVNIKBO",
+        "43": "a=03, b=16: QFFODCWOJLCP",
+        "44": "a=03, b=17: RGGPEDXPKMDQ",
+        "45": "a=03, b=18: SHHQFEYQLNER",
+        "46": "a=03, b=19: TIIRGFZRMOFS",
+        "47": "a=03, b=20: UJJSHGASNPGT",
+        "48": "a=03, b=21: VKKTIHBTOQHU",
+        "49": "a=03, b=22: WLLUJICUPRIV",
+        "50": "a=03, b=23: XMMVKJDVQSJW",
+        "51": "a=03, b=24: YNNWLKEWRTKX",
+        "52": "a=03, b=25: ZOOXMLFXSULY",
+        "53": "a=05, b=00: AZZONUKOXJUH",
+        "54": "a=05, b=01: BAAPOVLPYKVI",
+        "55": "a=05, b=02: CBBQPWMQZLWJ",
+        "56": "a=05, b=03: DCCRQXNRAMXK",
+        "57": "a=05, b=04: EDDSRYOSBNYL",
+        "58": "a=05, b=05: FEETSZPTCOZM",
+        "59": "a=05, b=06: GFFUTAQUDPAN",
+        "60": "a=05, b=07: HGGVUBRVEQBO",
+        "61": "a=05, b=08: IHHWVCSWFRCP",
+        "62": "a=05, b=09: JIIXWDTXGSDQ",
+        "63": "a=05, b=10: KJJYXEUYHTER",
+        "64": "a=05, b=11: LKKZYFVZIUFS",
+        "65": "a=05, b=12: MLLAZGWAJVGT",
+        "66": "a=05, b=13: NMMBAHXBKWHU",
+        "67": "a=05, b=14: ONNCBIYCLXIV",
+        "68": "a=05, b=15: POODCJZDMYJW",
+        "69": "a=05, b=16: QPPEDKAENZKX",
+        "70": "a=05, b=17: RQQFELBFOALY",
+        "71": "a=05, b=18: SRRGFMCGPBMZ",
+        "72": "a=05, b=19: TSSHGNDHQCNA",
+        "73": "a=05, b=20: UTTIHOEIRDOB",
+        "74": "a=05, b=21: VUUJIPFJSEPC",
+        "75": "a=05, b=22: WVVKJQGKTFQD",
+        "76": "a=05, b=23: XWWLKRHLUGRE",
+        "77": "a=05, b=24: YXXMLSIMVHSF",
+        "78": "a=05, b=25: ZYYNMTJNWITG",
+        "79": "a=07, b=00: AJJENCOEBXCP",
+        "80": "a=07, b=01: BKKFODPFCYDQ",
+        "81": "a=07, b=02: CLLGPEQGDZER",
+        "82": "a=07, b=03: DMMHQFRHEAFS",
+        "83": "a=07, b=04: ENNIRGSIFBGT",
+        "84": "a=07, b=05: FOOJSHTJGCHU",
+        "85": "a=07, b=06: GPPKTIUKHDIV",
+        "86": "a=07, b=07: HQQLUJVLIEJW",
+        "87": "a=07, b=08: IRRMVKWMJFKX",
+        "88": "a=07, b=09: JSSNWLXNKGLY",
+        "89": "a=07, b=10: KTTOXMYOLHMZ",
+        "90": "a=07, b=11: LUUPYNZPMINA",
+        "91": "a=07, b=12: MVVQZOAQNJOB",
+        "92": "a=07, b=13: NWWRAPBROKPC",
+        "93": "a=07, b=14: OXXSBQCSPLQD",
+        "94": "a=07, b=15: PYYTCRDTQMRE",
+        "95": "a=07, b=16: QZZUDSEURNSF",
+        "96": "a=07, b=17: RAAVETFVSOTG",
+        "97": "a=07, b=18: SBBWFUGWTPUH",
+        "98": "a=07, b=19: TCCXGVHXUQVI",
+        "99": "a=07, b=20: UDDYHWIYVRWJ",
+        "100": "a=07, b=21: VEEZIXJZWSXK",
+        "101": "a=07, b=22: WFFAJYKAXTYL",
+        "102": "a=07, b=23: XGGBKZLBYUZM",
+        "103": "a=07, b=24: YHHCLAMCZVAN",
+        "104": "a=07, b=25: ZIIDMBNDAWBO",
+        "105": "a=09, b=00: ATTUNKSUFLKX",
+        "106": "a=09, b=01: BUUVOLTVGMLY",
+        "107": "a=09, b=02: CVVWPMUWHNMZ",
+        "108": "a=09, b=03: DWWXQNVXIONA",
+        "109": "a=09, b=04: EXXYROWYJPOB",
+        "110": "a=09, b=05: FYYZSPXZKQPC",
+        "111": "a=09, b=06: GZZATQYALRQD",
+        "112": "a=09, b=07: HAABURZBMSRE",
+        "113": "a=09, b=08: IBBCVSACNTSF",
+        "114": "a=09, b=09: JCCDWTBDOUTG",
+        "115": "a=09, b=10: KDDEXUCEPVUH",
+        "116": "a=09, b=11: LEEFYVDFQWVI",
+        "117": "a=09, b=12: MFFGZWEGRXWJ",
+        "118": "a=09, b=13: NGGHAXFHSYXK",
+        "119": "a=09, b=14: OHHIBYGITZYL",
+        "120": "a=09, b=15: PIIJCZHJUAZM",
+        "121": "a=09, b=16: QJJKDAIKVBAN",
+        "122": "a=09, b=17: RKKLEBJLWCBO",
+        "123": "a=09, b=18: SLLMFCKMXDCP",
+        "124": "a=09, b=19: TMMNGDLNYEDQ",
+        "125": "a=09, b=20: UNNOHEMOZFER",
+        "126": "a=09, b=21: VOOPIFNPAGFS",
+        "127": "a=09, b=22: WPPQJGOQBHGT",
+        "128": "a=09, b=23: XQQRKHPRCIHU",
+        "129": "a=09, b=24: YRRSLIQSDJIV",
+        "130": "a=09, b=25: ZSSTMJRTEKJW",
+        "131": "a=11, b=00: ADDKNSWKJZSF",
+        "132": "a=11, b=01: BEELOTXLKATG",
+        "133": "a=11, b=02: CFFMPUYMLBUH",
+        "134": "a=11, b=03: DGGNQVZNMCVI",
+        "135": "a=11, b=04: EHHORWAONDWJ",
+        "136": "a=11, b=05: FIIPSXBPOEXK",
+        "137": "a=11, b=06: GJJQTYCQPFYL",
+        "138": "a=11, b=07: HKKRUZDRQGZM",
+        "139": "a=11, b=08: ILLSVAESRHAN",
+        "140": "a=11, b=09: JMMTWBFTSIBO",
+        "141": "a=11, b=10: KNNUXCGUTJCP",
+        "142": "a=11, b=11: LOOVYDHVUKDQ",
+        "143": "a=11, b=12: MPPWZEIWVLER",
+        "144": "a=11, b=13: NQQXAFJXWMFS",
+        "145": "a=11, b=14: ORRYBGKYXNGT",
+        "146": "a=11, b=15: PSSZCHLZYOHU",
+        "147": "a=11, b=16: QTTADIMAZPIV",
+        "148": "a=11, b=17: RUUBEJNBAQJW",
+        "149": "a=11, b=18: SVVCFKOCBRKX",
+        "150": "a=11, b=19: TWWDGLPDCSLY",
+        "151": "a=11, b=20: UXXEHMQEDTMZ",
+        "152": "a=11, b=21: VYYFINRFEUNA",
+        "153": "a=11, b=22: WZZGJOSGFVOB",
+        "154": "a=11, b=23: XAAHKPTHGWPC",
+        "155": "a=11, b=24: YBBILQUIHXQD",
+        "156": "a=11, b=25: ZCCJMRVJIYRE",
+        "157": "a=15, b=00: AXXQNIEQRBIV",
+        "158": "a=15, b=01: BYYROJFRSCJW",
+        "159": "a=15, b=02: CZZSPKGSTDKX",
+        "160": "a=15, b=03: DAATQLHTUELY",
+        "161": "a=15, b=04: EBBURMIUVFMZ",
+        "162": "a=15, b=05: FCCVSNJVWGNA",
+        "163": "a=15, b=06: GDDWTOKWXHOB",
+        "164": "a=15, b=07: HEEXUPLXYIPC",
+        "165": "a=15, b=08: IFFYVQMYZJQD",
+        "166": "a=15, b=09: JGGZWRNZAKRE",
+        "167": "a=15, b=10: KHHAXSOABLSF",
+        "168": "a=15, b=11: LIIBYTPBCMTG",
+        "169": "a=15, b=12: MJJCZUQCDNUH",
+        "170": "a=15, b=13: NKKDAVRDEOVI",
+        "171": "a=15, b=14: OLLEBWSEFPWJ",
+        "172": "a=15, b=15: PMMFCXTFGQXK",
+        "173": "a=15, b=16: QNNGDYUGHRYL",
+        "174": "a=15, b=17: ROOHEZVHISZM",
+        "175": "a=15, b=18: SPPIFAWIJTAN",
+        "176": "a=15, b=19: TQQJGBXJKUBO",
+        "177": "a=15, b=20: URRKHCYKLVCP",
+        "178": "a=15, b=21: VSSLIDZLMWDQ",
+        "179": "a=15, b=22: WTTMJEAMNXER",
+        "180": "a=15, b=23: XUUNKFBNOYFS",
+        "181": "a=15, b=24: YVVOLGCOPZGT",
+        "182": "a=15, b=25: ZWWPMHDPQAHU",
+        "183": "a=17, b=00: AHHGNQIGVPQD",
+        "184": "a=17, b=01: BIIHORJHWQRE",
+        "185": "a=17, b=02: CJJIPSKIXRSF",
+        "186": "a=17, b=03: DKKJQTLJYSTG",
+        "187": "a=17, b=04: ELLKRUMKZTUH",
+        "188": "a=17, b=05: FMMLSVNLAUVI",
+        "189": "a=17, b=06: GNNMTWOMBVWJ",
+        "190": "a=17, b=07: HOONUXPNCWXK",
+        "191": "a=17, b=08: IPPOVYQODXYL",
+        "192": "a=17, b=09: JQQPWZRPEYZM",
+        "193": "a=17, b=10: KRRQXASQFZAN",
+        "194": "a=17, b=11: LSSRYBTRGABO",
+        "195": "a=17, b=12: MTTSZCUSHBCP",
+        "196": "a=17, b=13: NUUTADVTICDQ",
+        "197": "a=17, b=14: OVVUBEWUJDER",
+        "198": "a=17, b=15: PWWVCFXVKEFS",
+        "199": "a=17, b=16: QXXWDGYWLFGT",
+        "200": "a=17, b=17: RYYXEHZXMGHU",
+        "201": "a=17, b=18: SZZYFIAYNHIV",
+        "202": "a=17, b=19: TAAZGJBZOIJW",
+        "203": "a=17, b=20: UBBAHKCAPJKX",
+        "204": "a=17, b=21: VCCBILDBQKLY",
+        "205": "a=17, b=22: WDDCJMECRLMZ",
+        "206": "a=17, b=23: XEEDKNFDSMNA",
+        "207": "a=17, b=24: YFFELOGETNOB",
+        "208": "a=17, b=25: ZGGFMPHFUOPC",
+        "209": "a=19, b=00: ARRWNYMWZDYL",
+        "210": "a=19, b=01: BSSXOZNXAEZM",
+        "211": "a=19, b=02: CTTYPAOYBFAN",
+        "212": "a=19, b=03: DUUZQBPZCGBO",
+        "213": "a=19, b=04: EVVARCQADHCP",
+        "214": "a=19, b=05: FWWBSDRBEIDQ",
+        "215": "a=19, b=06: GXXCTESCFJER",
+        "216": "a=19, b=07: HYYDUFTDGKFS",
+        "217": "a=19, b=08: IZZEVGUEHLGT",
+        "218": "a=19, b=09: JAAFWHVFIMHU",
+        "219": "a=19, b=10: KBBGXIWGJNIV",
+        "220": "a=19, b=11: LCCHYJXHKOJW",
+        "221": "a=19, b=12: MDDIZKYILPKX",
+        "222": "a=19, b=13: NEEJALZJMQLY",
+        "223": "a=19, b=14: OFFKBMAKNRMZ",
+        "224": "a=19, b=15: PGGLCNBLOSNA",
+        "225": "a=19, b=16: QHHMDOCMPTOB",
+        "226": "a=19, b=17: RIINEPDNQUPC",
+        "227": "a=19, b=18: SJJOFQEORVQD",
+        "228": "a=19, b=19: TKKPGRFPSWRE",
+        "229": "a=19, b=20: ULLQHSGQTXSF",
+        "230": "a=19, b=21: VMMRITHRUYTG",
+        "231": "a=19, b=22: WNNSJUISVZUH",
+        "232": "a=19, b=23: XOOTKVJTWAVI",
+        "233": "a=19, b=24: YPPULWKUXBWJ",
+        "234": "a=19, b=25: ZQQVMXLVYCXK",
+        "235": "a=21, b=00: ABBMNGQMDRGT",
+        "236": "a=21, b=01: BCCNOHRNESHU",
+        "237": "a=21, b=02: CDDOPISOFTIV",
+        "238": "a=21, b=03: DEEPQJTPGUJW",
+        "239": "a=21, b=04: EFFQRKUQHVKX",
+        "240": "a=21, b=05: FGGRSLVRIWLY",
+        "241": "a=21, b=06: GHHSTMWSJXMZ",
+        "242": "a=21, b=07: HIITUNXTKYNA",
+        "243": "a=21, b=08: IJJUVOYULZOB",
+        "244": "a=21, b=09: JKKVWPZVMAPC",
+        "245": "a=21, b=10: KLLWXQAWNBQD",
+        "246": "a=21, b=11: LMMXYRBXOCRE",
+        "247": "a=21, b=12: MNNYZSCYPDSF",
+        "248": "a=21, b=13: NOOZATDZQETG",
+        "249": "a=21, b=14: OPPABUEARFUH",
+        "250": "a=21, b=15: PQQBCVFBSGVI",
+        "251": "a=21, b=16: QRRCDWGCTHWJ",
+        "252": "a=21, b=17: RSSDEXHDUIXK",
+        "253": "a=21, b=18: STTEFYIEVJYL",
+        "254": "a=21, b=19: TUUFGZJFWKZM",
+        "255": "a=21, b=20: UVVGHAKGXLAN",
+        "256": "a=21, b=21: VWWHIBLHYMBO",
+        "257": "a=21, b=22: WXXIJCMIZNCP",
+        "258": "a=21, b=23: XYYJKDNJAODQ",
+        "259": "a=21, b=24: YZZKLEOKBPER",
+        "260": "a=21, b=25: ZAALMFPLCQFS",
+        "261": "a=23, b=00: ALLCNOUCHFOB",
+        "262": "a=23, b=01: BMMDOPVDIGPC",
+        "263": "a=23, b=02: CNNEPQWEJHQD",
+        "264": "a=23, b=03: DOOFQRXFKIRE",
+        "265": "a=23, b=04: EPPGRSYGLJSF",
+        "266": "a=23, b=05: FQQHSTZHMKTG",
+        "267": "a=23, b=06: GRRITUAINLUH",
+        "268": "a=23, b=07: HSSJUVBJOMVI",
+        "269": "a=23, b=08: ITTKVWCKPNWJ",
+        "270": "a=23, b=09: JUULWXDLQOXK",
+        "271": "a=23, b=10: KVVMXYEMRPYL",
+        "272": "a=23, b=11: LWWNYZFNSQZM",
+        "273": "a=23, b=12: MXXOZAGOTRAN",
+        "274": "a=23, b=13: NYYPABHPUSBO",
+        "275": "a=23, b=14: OZZQBCIQVTCP",
+        "276": "a=23, b=15: PAARCDJRWUDQ",
+        "277": "a=23, b=16: QBBSDEKSXVER",
+        "278": "a=23, b=17: RCCTEFLTYWFS",
+        "279": "a=23, b=18: SDDUFGMUZXGT",
+        "280": "a=23, b=19: TEEVGHNVAYHU",
+        "281": "a=23, b=20: UFFWHIOWBZIV",
+        "282": "a=23, b=21: VGGXIJPXCAJW",
+        "283": "a=23, b=22: WHHYJKQYDBKX",
+        "284": "a=23, b=23: XIIZKLRZECLY",
+        "285": "a=23, b=24: YJJALMSAFDMZ",
+        "286": "a=23, b=25: ZKKBMNTBGENA",
+        "287": "a=25, b=00: AVVSNWYSLTWJ",
+        "288": "a=25, b=01: BWWTOXZTMUXK",
+        "289": "a=25, b=02: CXXUPYAUNVYL",
+        "290": "a=25, b=03: DYYVQZBVOWZM",
+        "291": "a=25, b=04: EZZWRACWPXAN",
+        "292": "a=25, b=05: FAAXSBDXQYBO",
+        "293": "a=25, b=06: GBBYTCEYRZCP",
+        "294": "a=25, b=07: HCCZUDFZSADQ",
+        "295": "a=25, b=08: IDDAVEGATBER",
+        "296": "a=25, b=09: JEEBWFHBUCFS",
+        "297": "a=25, b=10: KFFCXGICVDGT",
+        "298": "a=25, b=11: LGGDYHJDWEHU",
+        "299": "a=25, b=12: MHHEZIKEXFIV",
+        "300": "a=25, b=13: NIIFAJLFYGJW",
+        "301": "a=25, b=14: OJJGBKMGZHKX",
+        "302": "a=25, b=15: PKKHCLNHAILY",
+        "303": "a=25, b=16: QLLIDMOIBJMZ",
+        "304": "a=25, b=17: RMMJENPJCKNA",
+        "305": "a=25, b=18: SNNKFOQKDLOB",
+        "306": "a=25, b=19: TOOLGPRLEMPC",
+        "307": "a=25, b=20: UPPMHQSMFNQD",
+        "308": "a=25, b=21: VQQNIRTNGORE",
+        "309": "a=25, b=22: WRROJSUOHPSF",
+        "310": "a=25, b=23: XSSPKTVPIQTG",
+        "311": "a=25, b=24: YTTQLUWQJRUH",
+        "312": "a=25, b=25: ZUURMVXRKSVI"
+      }
+    },
+    {
+      "id": "affine_gen_036",
+      "function": "affine_gen",
+      "json": {
+        "input_text": "IHHWVCSWFRCP",
+        "mode": "Decode"
+      },
+      "expected": {
+        "0": "Affine Cipher Decode:",
+        "1": "a=01, b=00: IHHWVCSWFRCP",
+        "2": "a=01, b=01: HGGVUBRVEQBO",
+        "3": "a=01, b=02: GFFUTAQUDPAN",
+        "4": "a=01, b=03: FEETSZPTCOZM",
+        "5": "a=01, b=04: EDDSRYOSBNYL",
+        "6": "a=01, b=05: DCCRQXNRAMXK",
+        "7": "a=01, b=06: CBBQPWMQZLWJ",
+        "8": "a=01, b=07: BAAPOVLPYKVI",
+        "9": "a=01, b=08: AZZONUKOXJUH",
+        "10": "a=01, b=09: ZYYNMTJNWITG",
+        "11": "a=01, b=10: YXXMLSIMVHSF",
+        "12": "a=01, b=11: XWWLKRHLUGRE",
+        "13": "a=01, b=12: WVVKJQGKTFQD",
+        "14": "a=01, b=13: VUUJIPFJSEPC",
+        "15": "a=01, b=14: UTTIHOEIRDOB",
+        "16": "a=01, b=15: TSSHGNDHQCNA",
+        "17": "a=01, b=16: SRRGFMCGPBMZ",
+        "18": "a=01, b=17: RQQFELBFOALY",
+        "19": "a=01, b=18: QPPEDKAENZKX",
+        "20": "a=01, b=19: POODCJZDMYJW",
+        "21": "a=01, b=20: ONNCBIYCLXIV",
+        "22": "a=01, b=21: NMMBAHXBKWHU",
+        "23": "a=01, b=22: MLLAZGWAJVGT",
+        "24": "a=01, b=23: LKKZYFVZIUFS",
+        "25": "a=01, b=24: KJJYXEUYHTER",
+        "26": "a=01, b=25: JIIXWDTXGSDQ",
+        "27": "a=03, b=00: ULLQHSGQTXSF",
+        "28": "a=03, b=01: LCCHYJXHKOJW",
+        "29": "a=03, b=02: CTTYPAOYBFAN",
+        "30": "a=03, b=03: TKKPGRFPSWRE",
+        "31": "a=03, b=04: KBBGXIWGJNIV",
+        "32": "a=03, b=05: BSSXOZNXAEZM",
+        "33": "a=03, b=06: SJJOFQEORVQD",
+        "34": "a=03, b=07: JAAFWHVFIMHU",
+        "35": "a=03, b=08: ARRWNYMWZDYL",
+        "36": "a=03, b=09: RIINEPDNQUPC",
+        "37": "a=03, b=10: IZZEVGUEHLGT",
+        "38": "a=03, b=11: ZQQVMXLVYCXK",
+        "39": "a=03, b=12: QHHMDOCMPTOB",
+        "40": "a=03, b=13: HYYDUFTDGKFS",
+        "41": "a=03, b=14: YPPULWKUXBWJ",
+        "42": "a=03, b=15: PGGLCNBLOSNA",
+        "43": "a=03, b=16: GXXCTESCFJER",
+        "44": "a=03, b=17: XOOTKVJTWAVI",
+        "45": "a=03, b=18: OFFKBMAKNRMZ",
+        "46": "a=03, b=19: FWWBSDRBEIDQ",
+        "47": "a=03, b=20: WNNSJUISVZUH",
+        "48": "a=03, b=21: NEEJALZJMQLY",
+        "49": "a=03, b=22: EVVARCQADHCP",
+        "50": "a=03, b=23: VMMRITHRUYTG",
+        "51": "a=03, b=24: MDDIZKYILPKX",
+        "52": "a=03, b=25: DUUZQBPZCGBO",
+        "53": "a=05, b=00: MRRUZQOUBTQD",
+        "54": "a=05, b=01: RWWZEVTZGYVI",
+        "55": "a=05, b=02: WBBEJAYELDAN",
+        "56": "a=05, b=03: BGGJOFDJQIFS",
+        "57": "a=05, b=04: GLLOTKIOVNKX",
+        "58": "a=05, b=05: LQQTYPNTASPC",
+        "59": "a=05, b=06: QVVYDUSYFXUH",
+        "60": "a=05, b=07: VAADIZXDKCZM",
+        "61": "a=05, b=08: AFFINECIPHER",
+        "62": "a=05, b=09: FKKNSJHNUMJW",
+        "63": "a=05, b=10: KPPSXOMSZROB",
+        "64": "a=05, b=11: PUUXCTRXEWTG",
+        "65": "a=05, b=12: UZZCHYWCJBYL",
+        "66": "a=05, b=13: ZEEHMDBHOGDQ",
+        "67": "a=05, b=14: EJJMRIGMTLIV",
+        "68": "a=05, b=15: JOORWNLRYQNA",
+        "69": "a=05, b=16: OTTWBSQWDVSF",
+        "70": "a=05, b=17: TYYBGXVBIAXK",
+        "71": "a=05, b=18: YDDGLCAGNFCP",
+        "72": "a=05, b=19: DIILQHFLSKHU",
+        "73": "a=05, b=20: INNQVMKQXPMZ",
+        "74": "a=05, b=21: NSSVARPVCURE",
+        "75": "a=05, b=22: SXXAFWUAHZWJ",
+        "76": "a=05, b=23: XCCFKBZFMEBO",
+        "77": "a=05, b=24: CHHKPGEKRJGT",
+        "78": "a=05, b=25: HMMPULJPWOLY",
+        "79": "a=07, b=00: QBBSDEKSXVER",
+        "80": "a=07, b=01: BMMDOPVDIGPC",
+        "81": "a=07, b=02: MXXOZAGOTRAN",
+        "82": "a=07, b=03: XIIZKLRZECLY",
+        "83": "a=07, b=04: ITTKVWCKPNWJ",
+        "84": "a=07, b=05: TEEVGHNVAYHU",
+        "85": "a=07, b=06: EPPGRSYGLJSF",
+        "86": "a=07, b=07: PAARCDJRWUDQ",
+        "87": "a=07, b=08: ALLCNOUCHFOB",
+        "88": "a=07, b=09: LWWNYZFNSQZM",
+        "89": "a=07, b=10: WHHYJKQYDBKX",
+        "90": "a=07, b=11: HSSJUVBJOMVI",
+        "91": "a=07, b=12: SDDUFGMUZXGT",
+        "92": "a=07, b=13: DOOFQRXFKIRE",
+        "93": "a=07, b=14: OZZQBCIQVTCP",
+        "94": "a=07, b=15: ZKKBMNTBGENA",
+        "95": "a=07, b=16: KVVMXYEMRPYL",
+        "96": "a=07, b=17: VGGXIJPXCAJW",
+        "97": "a=07, b=18: GRRITUAINLUH",
+        "98": "a=07, b=19: RCCTEFLTYWFS",
+        "99": "a=07, b=20: CNNEPQWEJHQD",
+        "100": "a=07, b=21: NYYPABHPUSBO",
+        "101": "a=07, b=22: YJJALMSAFDMZ",
+        "102": "a=07, b=23: JUULWXDLQOXK",
+        "103": "a=07, b=24: UFFWHIOWBZIV",
+        "104": "a=07, b=25: FQQHSTZHMKTG",
+        "105": "a=09, b=00: YVVOLGCOPZGT",
+        "106": "a=09, b=01: VSSLIDZLMWDQ",
+        "107": "a=09, b=02: SPPIFAWIJTAN",
+        "108": "a=09, b=03: PMMFCXTFGQXK",
+        "109": "a=09, b=04: MJJCZUQCDNUH",
+        "110": "a=09, b=05: JGGZWRNZAKRE",
+        "111": "a=09, b=06: GDDWTOKWXHOB",
+        "112": "a=09, b=07: DAATQLHTUELY",
+        "113": "a=09, b=08: AXXQNIEQRBIV",
+        "114": "a=09, b=09: XUUNKFBNOYFS",
+        "115": "a=09, b=10: URRKHCYKLVCP",
+        "116": "a=09, b=11: ROOHEZVHISZM",
+        "117": "a=09, b=12: OLLEBWSEFPWJ",
+        "118": "a=09, b=13: LIIBYTPBCMTG",
+        "119": "a=09, b=14: IFFYVQMYZJQD",
+        "120": "a=09, b=15: FCCVSNJVWGNA",
+        "121": "a=09, b=16: CZZSPKGSTDKX",
+        "122": "a=09, b=17: ZWWPMHDPQAHU",
+        "123": "a=09, b=18: WTTMJEAMNXER",
+        "124": "a=09, b=19: TQQJGBXJKUBO",
+        "125": "a=09, b=20: QNNGDYUGHRYL",
+        "126": "a=09, b=21: NKKDAVRDEOVI",
+        "127": "a=09, b=22: KHHAXSOABLSF",
+        "128": "a=09, b=23: HEEXUPLXYIPC",
+        "129": "a=09, b=24: EBBURMIUVFMZ",
+        "130": "a=09, b=25: BYYROJFRSCJW",
+        "131": "a=11, b=00: WDDCJMECRLMZ",
+        "132": "a=11, b=01: DKKJQTLJYSTG",
+        "133": "a=11, b=02: KRRQXASQFZAN",
+        "134": "a=11, b=03: RYYXEHZXMGHU",
+        "135": "a=11, b=04: YFFELOGETNOB",
+        "136": "a=11, b=05: FMMLSVNLAUVI",
+        "137": "a=11, b=06: MTTSZCUSHBCP",
+        "138": "a=11, b=07: TAAZGJBZOIJW",
+        "139": "a=11, b=08: AHHGNQIGVPQD",
+        "140": "a=11, b=09: HOONUXPNCWXK",
+        "141": "a=11, b=10: OVVUBEWUJDER",
+        "142": "a=11, b=11: VCCBILDBQKLY",
+        "143": "a=11, b=12: CJJIPSKIXRSF",
+        "144": "a=11, b=13: JQQPWZRPEYZM",
+        "145": "a=11, b=14: QXXWDGYWLFGT",
+        "146": "a=11, b=15: XEEDKNFDSMNA",
+        "147": "a=11, b=16: ELLKRUMKZTUH",
+        "148": "a=11, b=17: LSSRYBTRGABO",
+        "149": "a=11, b=18: SZZYFIAYNHIV",
+        "150": "a=11, b=19: ZGGFMPHFUOPC",
+        "151": "a=11, b=20: GNNMTWOMBVWJ",
+        "152": "a=11, b=21: NUUTADVTICDQ",
+        "153": "a=11, b=22: UBBAHKCAPJKX",
+        "154": "a=11, b=23: BIIHORJHWQRE",
+        "155": "a=11, b=24: IPPOVYQODXYL",
+        "156": "a=11, b=25: PWWVCFXVKEFS",
+        "157": "a=15, b=00: EXXYROWYJPOB",
+        "158": "a=15, b=01: XQQRKHPRCIHU",
+        "159": "a=15, b=02: QJJKDAIKVBAN",
+        "160": "a=15, b=03: JCCDWTBDOUTG",
+        "161": "a=15, b=04: CVVWPMUWHNMZ",
+        "162": "a=15, b=05: VOOPIFNPAGFS",
+        "163": "a=15, b=06: OHHIBYGITZYL",
+        "164": "a=15, b=07: HAABURZBMSRE",
+        "165": "a=15, b=08: ATTUNKSUFLKX",
+        "166": "a=15, b=09: TMMNGDLNYEDQ",
+        "167": "a=15, b=10: MFFGZWEGRXWJ",
+        "168": "a=15, b=11: FYYZSPXZKQPC",
+        "169": "a=15, b=12: YRRSLIQSDJIV",
+        "170": "a=15, b=13: RKKLEBJLWCBO",
+        "171": "a=15, b=14: KDDEXUCEPVUH",
+        "172": "a=15, b=15: DWWXQNVXIONA",
+        "173": "a=15, b=16: WPPQJGOQBHGT",
+        "174": "a=15, b=17: PIIJCZHJUAZM",
+        "175": "a=15, b=18: IBBCVSACNTSF",
+        "176": "a=15, b=19: BUUVOLTVGMLY",
+        "177": "a=15, b=20: UNNOHEMOZFER",
+        "178": "a=15, b=21: NGGHAXFHSYXK",
+        "179": "a=15, b=22: GZZATQYALRQD",
+        "180": "a=15, b=23: ZSSTMJRTEKJW",
+        "181": "a=15, b=24: SLLMFCKMXDCP",
+        "182": "a=15, b=25: LEEFYVDFQWVI",
+        "183": "a=17, b=00: CFFMPUYMLBUH",
+        "184": "a=17, b=01: FIIPSXBPOEXK",
+        "185": "a=17, b=02: ILLSVAESRHAN",
+        "186": "a=17, b=03: LOOVYDHVUKDQ",
+        "187": "a=17, b=04: ORRYBGKYXNGT",
+        "188": "a=17, b=05: RUUBEJNBAQJW",
+        "189": "a=17, b=06: UXXEHMQEDTMZ",
+        "190": "a=17, b=07: XAAHKPTHGWPC",
+        "191": "a=17, b=08: ADDKNSWKJZSF",
+        "192": "a=17, b=09: DGGNQVZNMCVI",
+        "193": "a=17, b=10: GJJQTYCQPFYL",
+        "194": "a=17, b=11: JMMTWBFTSIBO",
+        "195": "a=17, b=12: MPPWZEIWVLER",
+        "196": "a=17, b=13: PSSZCHLZYOHU",
+        "197": "a=17, b=14: SVVCFKOCBRKX",
+        "198": "a=17, b=15: VYYFINRFEUNA",
+        "199": "a=17, b=16: YBBILQUIHXQD",
+        "200": "a=17, b=17: BEELOTXLKATG",
+        "201": "a=17, b=18: EHHORWAONDWJ",
+        "202": "a=17, b=19: HKKRUZDRQGZM",
+        "203": "a=17, b=20: KNNUXCGUTJCP",
+        "204": "a=17, b=21: NQQXAFJXWMFS",
+        "205": "a=17, b=22: QTTADIMAZPIV",
+        "206": "a=17, b=23: TWWDGLPDCSLY",
+        "207": "a=17, b=24: WZZGJOSGFVOB",
+        "208": "a=17, b=25: ZCCJMRVJIYRE",
+        "209": "a=19, b=00: KZZIXWQIDFWJ",
+        "210": "a=19, b=01: ZOOXMLFXSULY",
+        "211": "a=19, b=02: ODDMBAUMHJAN",
+        "212": "a=19, b=03: DSSBQPJBWYPC",
+        "213": "a=19, b=04: SHHQFEYQLNER",
+        "214": "a=19, b=05: HWWFUTNFACTG",
+        "215": "a=19, b=06: WLLUJICUPRIV",
+        "216": "a=19, b=07: LAAJYXRJEGXK",
+        "217": "a=19, b=08: APPYNMGYTVMZ",
+        "218": "a=19, b=09: PEENCBVNIKBO",
+        "219": "a=19, b=10: ETTCRQKCXZQD",
+        "220": "a=19, b=11: TIIRGFZRMOFS",
+        "221": "a=19, b=12: IXXGVUOGBDUH",
+        "222": "a=19, b=13: XMMVKJDVQSJW",
+        "223": "a=19, b=14: MBBKZYSKFHYL",
+        "224": "a=19, b=15: BQQZONHZUWNA",
+        "225": "a=19, b=16: QFFODCWOJLCP",
+        "226": "a=19, b=17: FUUDSRLDYARE",
+        "227": "a=19, b=18: UJJSHGASNPGT",
+        "228": "a=19, b=19: JYYHWVPHCEVI",
+        "229": "a=19, b=20: YNNWLKEWRTKX",
+        "230": "a=19, b=21: NCCLAZTLGIZM",
+        "231": "a=19, b=22: CRRAPOIAVXOB",
+        "232": "a=19, b=23: RGGPEDXPKMDQ",
+        "233": "a=19, b=24: GVVETSMEZBSF",
+        "234": "a=19, b=25: VKKTIHBTOQHU",
+        "235": "a=21, b=00: OJJGBKMGZHKX",
+        "236": "a=21, b=01: JEEBWFHBUCFS",
+        "237": "a=21, b=02: EZZWRACWPXAN",
+        "238": "a=21, b=03: ZUURMVXRKSVI",
+        "239": "a=21, b=04: UPPMHQSMFNQD",
+        "240": "a=21, b=05: PKKHCLNHAILY",
+        "241": "a=21, b=06: KFFCXGICVDGT",
+        "242": "a=21, b=07: FAAXSBDXQYBO",
+        "243": "a=21, b=08: AVVSNWYSLTWJ",
+        "244": "a=21, b=09: VQQNIRTNGORE",
+        "245": "a=21, b=10: QLLIDMOIBJMZ",
+        "246": "a=21, b=11: LGGDYHJDWEHU",
+        "247": "a=21, b=12: GBBYTCEYRZCP",
+        "248": "a=21, b=13: BWWTOXZTMUXK",
+        "249": "a=21, b=14: WRROJSUOHPSF",
+        "250": "a=21, b=15: RMMJENPJCKNA",
+        "251": "a=21, b=16: MHHEZIKEXFIV",
+        "252": "a=21, b=17: HCCZUDFZSADQ",
+        "253": "a=21, b=18: CXXUPYAUNVYL",
+        "254": "a=21, b=19: XSSPKTVPIQTG",
+        "255": "a=21, b=20: SNNKFOQKDLOB",
+        "256": "a=21, b=21: NIIFAJLFYGJW",
+        "257": "a=21, b=22: IDDAVEGATBER",
+        "258": "a=21, b=23: DYYVQZBVOWZM",
+        "259": "a=21, b=24: YTTQLUWQJRUH",
+        "260": "a=21, b=25: TOOLGPRLEMPC",
+        "261": "a=23, b=00: GPPKTIUKHDIV",
+        "262": "a=23, b=01: PYYTCRDTQMRE",
+        "263": "a=23, b=02: YHHCLAMCZVAN",
+        "264": "a=23, b=03: HQQLUJVLIEJW",
+        "265": "a=23, b=04: QZZUDSEURNSF",
+        "266": "a=23, b=05: ZIIDMBNDAWBO",
+        "267": "a=23, b=06: IRRMVKWMJFKX",
+        "268": "a=23, b=07: RAAVETFVSOTG",
+        "269": "a=23, b=08: AJJENCOEBXCP",
+        "270": "a=23, b=09: JSSNWLXNKGLY",
+        "271": "a=23, b=10: SBBWFUGWTPUH",
+        "272": "a=23, b=11: BKKFODPFCYDQ",
+        "273": "a=23, b=12: KTTOXMYOLHMZ",
+        "274": "a=23, b=13: TCCXGVHXUQVI",
+        "275": "a=23, b=14: CLLGPEQGDZER",
+        "276": "a=23, b=15: LUUPYNZPMINA",
+        "277": "a=23, b=16: UDDYHWIYVRWJ",
+        "278": "a=23, b=17: DMMHQFRHEAFS",
+        "279": "a=23, b=18: MVVQZOAQNJOB",
+        "280": "a=23, b=19: VEEZIXJZWSXK",
+        "281": "a=23, b=20: ENNIRGSIFBGT",
+        "282": "a=23, b=21: NWWRAPBROKPC",
+        "283": "a=23, b=22: WFFAJYKAXTYL",
+        "284": "a=23, b=23: FOOJSHTJGCHU",
+        "285": "a=23, b=24: OXXSBQCSPLQD",
+        "286": "a=23, b=25: XGGBKZLBYUZM",
+        "287": "a=25, b=00: STTEFYIEVJYL",
+        "288": "a=25, b=01: TUUFGZJFWKZM",
+        "289": "a=25, b=02: UVVGHAKGXLAN",
+        "290": "a=25, b=03: VWWHIBLHYMBO",
+        "291": "a=25, b=04: WXXIJCMIZNCP",
+        "292": "a=25, b=05: XYYJKDNJAODQ",
+        "293": "a=25, b=06: YZZKLEOKBPER",
+        "294": "a=25, b=07: ZAALMFPLCQFS",
+        "295": "a=25, b=08: ABBMNGQMDRGT",
+        "296": "a=25, b=09: BCCNOHRNESHU",
+        "297": "a=25, b=10: CDDOPISOFTIV",
+        "298": "a=25, b=11: DEEPQJTPGUJW",
+        "299": "a=25, b=12: EFFQRKUQHVKX",
+        "300": "a=25, b=13: FGGRSLVRIWLY",
+        "301": "a=25, b=14: GHHSTMWSJXMZ",
+        "302": "a=25, b=15: HIITUNXTKYNA",
+        "303": "a=25, b=16: IJJUVOYULZOB",
+        "304": "a=25, b=17: JKKVWPZVMAPC",
+        "305": "a=25, b=18: KLLWXQAWNBQD",
+        "306": "a=25, b=19: LMMXYRBXOCRE",
+        "307": "a=25, b=20: MNNYZSCYPDSF",
+        "308": "a=25, b=21: NOOZATDZQETG",
+        "309": "a=25, b=22: OPPABUEARFUH",
+        "310": "a=25, b=23: PQQBCVFBSGVI",
+        "311": "a=25, b=24: QRRCDWGCTHWJ",
+        "312": "a=25, b=25: RSSDEXHDUIXK"
+      }
+    },
+    {
+      "id": "split_text_gen_037",
+      "function": "split_text_gen",
+      "json": {
+        "input_text": "ABCDEFGHIJ",
+        "length": "3",
+        "mode": "space"
+      },
+      "expected": {
+        "0": "split length: 3",
+        "1": "ABC DEF GHI J"
+      }
+    },
+    {
+      "id": "split_text_gen_038",
+      "function": "split_text_gen",
+      "json": {
+        "input_text": "ABCDEFGHIJ",
+        "length": "3",
+        "mode": "comma"
+      },
+      "expected": {
+        "0": "split length: 3",
+        "1": "ABC,DEF,GHI,J"
+      }
+    },
+    {
+      "id": "split_text_gen_039",
+      "function": "split_text_gen",
+      "json": {
+        "input_text": "ABCDEFGHIJ",
+        "length": "3",
+        "mode": "newline"
+      },
+      "expected": {
+        "0": "split length: 3",
+        "1": "ABC\nDEF\nGHI\nJ"
+      }
+    },
+    {
+      "id": "number_conv_gen_040",
+      "function": "number_conv_gen",
+      "json": {
+        "input_text": "10,255",
+        "base": "10"
+      },
+      "expected": {
+        "0": "Converting 10,255",
+        "1": "from base: 10",
+        "2": "to base 02: 1010,11111111",
+        "3": "to base 03: 101,100110",
+        "4": "to base 04: 22,3333",
+        "5": "to base 05: 20,2010",
+        "6": "to base 06: 14,1103",
+        "7": "to base 07: 13,513",
+        "8": "to base 08: 12,377",
+        "9": "to base 09: 11,313",
+        "10": "to base 10: 10,255",
+        "11": "to base 11: A,212",
+        "12": "to base 12: A,193",
+        "13": "to base 13: A,168",
+        "14": "to base 14: A,143",
+        "15": "to base 15: A,120",
+        "16": "to base 16: A,FF",
+        "17": "to base 17: A,F0",
+        "18": "to base 18: A,E3",
+        "19": "to base 19: A,D8",
+        "20": "to base 20: A,CF",
+        "21": "to base 21: A,C3",
+        "22": "to base 22: A,BD",
+        "23": "to base 23: A,B2",
+        "24": "to base 24: A,AF",
+        "25": "to base 25: A,A5",
+        "26": "to base 26: A,9L",
+        "27": "to base 27: A,9C",
+        "28": "to base 28: A,93",
+        "29": "to base 29: A,8N",
+        "30": "to base 30: A,8F",
+        "31": "to base 31: A,87",
+        "32": "to base 32: A,7V",
+        "33": "to base 33: A,7O",
+        "34": "to base 34: A,7H",
+        "35": "to base 35: A,7A",
+        "36": "to base 36: A,73"
+      }
+    },
+    {
+      "id": "number_conv_gen_041",
+      "function": "number_conv_gen",
+      "json": {
+        "input_text": "10,255",
+        "base": ""
+      },
+      "expected": {
+        "0": "Converting 10,255",
+        "1": "from base: 10",
+        "2": "to base 02: 1010,11111111",
+        "3": "to base 03: 101,100110",
+        "4": "to base 04: 22,3333",
+        "5": "to base 05: 20,2010",
+        "6": "to base 06: 14,1103",
+        "7": "to base 07: 13,513",
+        "8": "to base 08: 12,377",
+        "9": "to base 09: 11,313",
+        "10": "to base 10: 10,255",
+        "11": "to base 11: A,212",
+        "12": "to base 12: A,193",
+        "13": "to base 13: A,168",
+        "14": "to base 14: A,143",
+        "15": "to base 15: A,120",
+        "16": "to base 16: A,FF",
+        "17": "to base 17: A,F0",
+        "18": "to base 18: A,E3",
+        "19": "to base 19: A,D8",
+        "20": "to base 20: A,CF",
+        "21": "to base 21: A,C3",
+        "22": "to base 22: A,BD",
+        "23": "to base 23: A,B2",
+        "24": "to base 24: A,AF",
+        "25": "to base 25: A,A5",
+        "26": "to base 26: A,9L",
+        "27": "to base 27: A,9C",
+        "28": "to base 28: A,93",
+        "29": "to base 29: A,8N",
+        "30": "to base 30: A,8F",
+        "31": "to base 31: A,87",
+        "32": "to base 32: A,7V",
+        "33": "to base 33: A,7O",
+        "34": "to base 34: A,7H",
+        "35": "to base 35: A,7A",
+        "36": "to base 36: A,73"
+      }
+    },
+    {
+      "id": "phonetic_gen_042",
+      "function": "phonetic_gen",
+      "json": {
+        "input_text": "alpha bravo",
+        "mode": "Decode"
+      },
+      "expected": {
+        "0": "Phonetic Alphabet Decode:",
+        "1": "Input text = \nalpha bravo",
+        "2": "\n------",
+        "3": "#International Radiotelephony Spelling Alphabet (NATO phonetic alphabet)\nCode table = [alfa bravo charlie delta echo foxtrot golf hotel india juliett kilo lima mike november oscar papa quebec romeo sierra tango uniform victor whiskey x-ray yankee zulu]\nalpha B",
+        "4": "\n------",
+        "5": "#1951 ICAO code words\nCode table = [alfa bravo coca delta echo foxtrot gold hotel india juliett kilo lima metro nectar oscar papa quebec romeo sierra tango union victor whiskey extra yankee zulu]\nalpha B",
+        "6": "\n------",
+        "7": "#1949 ICAO code words\nCode table = [alfa beta coca delta echo foxtrot golf hotel india julietta kilo lima metro nectar oscar papa quebec romeo sierra tango union victor whiskey x-ray yankee zebra]\nalpha bravo",
+        "8": "\n------",
+        "9": "#1947 ICAO Latin America/Caribbean\nCode table = [ana brazil coco dado elsa fiesta gato hombre india julio kilo luis mama norma opera peru quebec rosa sara tomas uruguay victor whiskey equis yolanda zeta]\nalpha bravo",
+        "10": "\n------",
+        "11": "#1947 ICAO alphabet\nCode table = [adam baker charlie david edward freddie george harry ida john king luis mama norma opera peru quebec rosa sara tomas uruguay victor whiskey equis yolanda zeta]\nalpha bravo"
+      }
+    },
+    {
+      "id": "phonetic_gen_043",
+      "function": "phonetic_gen",
+      "json": {
+        "input_text": "attack",
+        "mode": "Encode"
+      },
+      "expected": {
+        "0": "Phonetic Alphabet Encode:",
+        "1": "Input text = \nattack",
+        "2": "\n------",
+        "3": "#International Radiotelephony Spelling Alphabet (NATO phonetic alphabet)\nCode table = [alfa bravo charlie delta echo foxtrot golf hotel india juliett kilo lima mike november oscar papa quebec romeo sierra tango uniform victor whiskey x-ray yankee zulu]\nALFATANGOTANGOALFACHARLIEKILO",
+        "4": "\n------",
+        "5": "#1951 ICAO code words\nCode table = [alfa bravo coca delta echo foxtrot gold hotel india juliett kilo lima metro nectar oscar papa quebec romeo sierra tango union victor whiskey extra yankee zulu]\nALFATANGOTANGOALFACOCAKILO",
+        "6": "\n------",
+        "7": "#1949 ICAO code words\nCode table = [alfa beta coca delta echo foxtrot golf hotel india julietta kilo lima metro nectar oscar papa quebec romeo sierra tango union victor whiskey x-ray yankee zebra]\nALFATANGOTANGOALFACOCAKILO",
+        "8": "\n------",
+        "9": "#1947 ICAO Latin America/Caribbean\nCode table = [ana brazil coco dado elsa fiesta gato hombre india julio kilo luis mama norma opera peru quebec rosa sara tomas uruguay victor whiskey equis yolanda zeta]\nANATOMASTOMASANACOCOKILO",
+        "10": "\n------",
+        "11": "#1947 ICAO alphabet\nCode table = [adam baker charlie david edward freddie george harry ida john king luis mama norma opera peru quebec rosa sara tomas uruguay victor whiskey equis yolanda zeta]\nADAMTOMASTOMASADAMCHARLIEKING"
+      }
+    },
+    {
+      "id": "polybius_gen_044",
+      "function": "polybius_gen",
+      "json": {
+        "input_text": "2315313134",
+        "mode": "Decode"
+      },
+      "expected": {
+        "0": "Input: 2315313134\nPolybius Cipher Decode:HELLO"
+      }
+    },
+    {
+      "id": "polybius_gen_045",
+      "function": "polybius_gen",
+      "json": {
+        "input_text": "HELLO",
+        "mode": "Encode"
+      },
+      "expected": {
+        "0": "Input: HELLO\nPolybius Cipher Encode:2315313134"
+      }
+    },
+    {
+      "id": "riddle_tables_gen_046",
+      "function": "riddle_tables_gen",
+      "json": {
+        "mode": "jp_trad_month_name"
+      },
+      "expected": {
+        "0": "Japan Traditional Month Name",
+        "1": "1月: 睦月 (むつき)",
+        "2": "2月: 如月 (きさらぎ)",
+        "3": "3月: 弥生 (やよい)",
+        "4": "4月: 卯月 (うづき) ",
+        "5": "5月: 皐月 (さつき)",
+        "6": "6月: 水無月 (みなづき)",
+        "7": "7月: 文月 (ふみつき)",
+        "8": "8月: 葉月 (はづき)",
+        "9": "9月: 長月 (ながつき)",
+        "10": "10月: 神無月 (かんなづき)",
+        "11": "11月: 霜月 (しもつき)",
+        "12": "12月: 師走 (しわす)"
+      }
+    },
+    {
+      "id": "riddle_tables_gen_047",
+      "function": "riddle_tables_gen",
+      "json": {
+        "mode": "zodiac"
+      },
+      "expected": {
+        "0": "Zodiac Name (Latin, Japanese, English, Greek)",
+        "1": "<p>Aries, 牡羊座, Ram, Κριός (Krios)</p>",
+        "2": "<p>Taurus, 牡牛座, Bull, Ταῦρος (Tauros)</p>",
+        "3": "<p>Gemini, 双子座, Twins, Δίδυμοι (Didymoi)</p>",
+        "4": "<p>Cancer, 蟹座, Crab, Καρκίνος (Karkinos)</p>",
+        "5": "<p>Leo, 獅子座, Lion, Λέων (Leōn) </p>",
+        "6": "<p>Virgo, 乙女座, Maiden, Παρθένος (Parthenos)</p>",
+        "7": "<p>Libra, 天秤座, Scales, Ζυγός (Zygos)</p>",
+        "8": "<p>Scorpio, 蠍座, Scorpion, Σκoρπίος (Skorpios)</p>",
+        "9": "<p>Sagittarius, 射手座, Archer, Τοξότης (Toxotēs)</p>",
+        "10": "<p>Capricorn, 山羊座, Mountain Goat, Αἰγόκερως (Aigokerōs)</p>",
+        "11": "<p>Aquarius, 水瓶座, Water-Bearer, Ὑδροχόος (Hydrokhoos)</p>",
+        "12": "<p>Pisces, 魚座, 2 Fish, Ἰχθύες (Ikhthyes)</p>"
+      }
+    },
+    {
+      "id": "riddle_tables_gen_048",
+      "function": "riddle_tables_gen",
+      "json": {
+        "mode": "japanese_zodiac"
+      },
+      "expected": {
+        "0": "十二支 (Japanese Zodiac)",
+        "1": " 1. 子, Rat",
+        "2": " 2. 丑, Cow",
+        "3": " 3. 寅, Tiger",
+        "4": " 4. 卯, Rabbit",
+        "5": " 5. 辰, Dragon",
+        "6": " 6. 巳, Snake",
+        "7": " 7. 午, Horse",
+        "8": " 8. 未, Goat",
+        "9": " 9. 申, Monkey",
+        "10": "10. 酉, Rooster",
+        "11": "11. 戌, Dog",
+        "12": "12. 亥, Wild boar"
+      }
+    },
+    {
+      "id": "riddle_tables_gen_049",
+      "function": "riddle_tables_gen",
+      "json": {
+        "mode": "keyboard_layout"
+      },
+      "expected": {
+        "0": "US Keyboard Layout",
+        "1": "<img class=\"responsive large-width\" src=\"/static/image/640px-US_ANSI_keyboard_character_layout_JIS_comparison.svg.png\">",
+        "2": "",
+        "3": "Japanese Keyboard Layout",
+        "4": "<img class=\"responsive large-width\" src=\"/static/image/640px-JIS_keyboard_character_layout_US_ANSI_comparison.svg.png\">",
+        "5": "",
+        "6": "Images are from https://ja.wikipedia.org/wiki/%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB:US_ANSI_keyboard_character_layout_JIS_comparison.svg and https://ja.wikipedia.org/wiki/%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB:JIS_keyboard_character_layout_US_ANSI_comparison.svg"
+      }
+    },
+    {
+      "id": "swap_xy_gen_050",
+      "function": "swap_xy_gen",
+      "json": {
+        "input_text": "A1B2C3"
+      },
+      "expected": {
+        "0": "A\n1\nB\n2\nC\n3"
+      }
+    },
+    {
+      "id": "rot_ex_gen_051",
+      "function": "rot_ex_gen",
+      "json": {
+        "input_text": "Abc123",
+        "mode": "rotplus_atbash"
+      },
+      "expected": {
+        "0": "ROT+",
+        "1": "00: Abc123\n01: Bcd234\n02: Cde345\n03: Def456\n04: Efg567\n05: Fgh678\n06: Ghi789\n07: Hij890\n08: Ijk901\n09: Jkl012\n10: Klm123\n11: Lmn234\n12: Mno345\n13: Nop456\n14: Opq567\n15: Pqr678\n16: Qrs789\n17: Rst890\n18: Stu901\n19: Tuv012\n20: Uvw123\n21: Vwx234\n22: Wxy345\n23: Xyz456\n24: Yza567\n25: Zab678",
+        "2": "-----",
+        "3": "ROT+ -> Atbash",
+        "4": "00: Zyx987\n01: Yxw876\n02: Xwv765\n03: Wvu654\n04: Vut543\n05: Uts432\n06: Tsr321\n07: Srq210\n08: Rqp109\n09: Qpo098\n10: Pon987\n11: Onm876\n12: Nml765\n13: Mlk654\n14: Lkj543\n15: Kji432\n16: Jih321\n17: Ihg210\n18: Hgf109\n19: Gfe098\n20: Fed987\n21: Edc876\n22: Dcb765\n23: Cba654\n24: Baz543\n25: Azy432"
+      }
+    },
+    {
+      "id": "rot_ex_gen_052",
+      "function": "rot_ex_gen",
+      "json": {
+        "input_text": "Abc123",
+        "mode": "rotminus_atbash"
+      },
+      "expected": {
+        "0": "ROT-",
+        "1": "00: Abc123\n01: Zab012\n02: Yza901\n03: Xyz890\n04: Wxy789\n05: Vwx678\n06: Uvw567\n07: Tuv456\n08: Stu345\n09: Rst234\n10: Qrs123\n11: Pqr012\n12: Opq901\n13: Nop890\n14: Mno789\n15: Lmn678\n16: Klm567\n17: Jkl456\n18: Ijk345\n19: Hij234\n20: Ghi123\n21: Fgh012\n22: Efg901\n23: Def890\n24: Cde789\n25: Bcd678",
+        "2": "-----",
+        "3": "ROT- -> Atbash",
+        "4": "00: Zyx987\n01: Azy098\n02: Baz109\n03: Cba210\n04: Dcb321\n05: Edc432\n06: Fed543\n07: Gfe654\n08: Hgf765\n09: Ihg876\n10: Jih987\n11: Kji098\n12: Lkj109\n13: Mlk210\n14: Nml321\n15: Onm432\n16: Pon543\n17: Qpo654\n18: Rqp765\n19: Srq876\n20: Tsr987\n21: Uts098\n22: Vut109\n23: Wvu210\n24: Xwv321\n25: Yxw432"
+      }
+    },
+    {
+      "id": "rot_ex_gen_053",
+      "function": "rot_ex_gen",
+      "json": {
+        "input_text": "Abc123",
+        "mode": "atbash_rotplus"
+      },
+      "expected": {
+        "0": "ROT+",
+        "1": "00: Abc123\n01: Bcd234\n02: Cde345\n03: Def456\n04: Efg567\n05: Fgh678\n06: Ghi789\n07: Hij890\n08: Ijk901\n09: Jkl012\n10: Klm123\n11: Lmn234\n12: Mno345\n13: Nop456\n14: Opq567\n15: Pqr678\n16: Qrs789\n17: Rst890\n18: Stu901\n19: Tuv012\n20: Uvw123\n21: Vwx234\n22: Wxy345\n23: Xyz456\n24: Yza567\n25: Zab678",
+        "2": "-----",
+        "3": "Atbash -> ROT+",
+        "4": "00: Zyx987\n01: Azy098\n02: Baz109\n03: Cba210\n04: Dcb321\n05: Edc432\n06: Fed543\n07: Gfe654\n08: Hgf765\n09: Ihg876\n10: Jih987\n11: Kji098\n12: Lkj109\n13: Mlk210\n14: Nml321\n15: Onm432\n16: Pon543\n17: Qpo654\n18: Rqp765\n19: Srq876\n20: Tsr987\n21: Uts098\n22: Vut109\n23: Wvu210\n24: Xwv321\n25: Yxw432"
+      }
+    },
+    {
+      "id": "rot_ex_gen_054",
+      "function": "rot_ex_gen",
+      "json": {
+        "input_text": "Abc123",
+        "mode": "atbash_rotminus"
+      },
+      "expected": {
+        "0": "ROT-",
+        "1": "00: Abc123\n01: Zab012\n02: Yza901\n03: Xyz890\n04: Wxy789\n05: Vwx678\n06: Uvw567\n07: Tuv456\n08: Stu345\n09: Rst234\n10: Qrs123\n11: Pqr012\n12: Opq901\n13: Nop890\n14: Mno789\n15: Lmn678\n16: Klm567\n17: Jkl456\n18: Ijk345\n19: Hij234\n20: Ghi123\n21: Fgh012\n22: Efg901\n23: Def890\n24: Cde789\n25: Bcd678",
+        "2": "-----",
+        "3": "Atbash -> ROT-",
+        "4": "00: Zyx987\n01: Yxw876\n02: Xwv765\n03: Wvu654\n04: Vut543\n05: Uts432\n06: Tsr321\n07: Srq210\n08: Rqp109\n09: Qpo098\n10: Pon987\n11: Onm876\n12: Nml765\n13: Mlk654\n14: Lkj543\n15: Kji432\n16: Jih321\n17: Ihg210\n18: Hgf109\n19: Gfe098\n20: Fed987\n21: Edc876\n22: Dcb765\n23: Cba654\n24: Baz543\n25: Azy432"
+      }
+    },
+    {
+      "id": "rectangle_ex_gen_055",
+      "function": "rectangle_ex_gen",
+      "json": {
+        "input_text": "ABCDEFGH",
+        "mode": "All pattern",
+        "mode_ex": "normal"
+      },
+      "expected": {
+        "0": "Text length = 8",
+        "1": "-----",
+        "2": "Column count = 2",
+        "3": "AB",
+        "4": "CD",
+        "5": "EF",
+        "6": "GH",
+        "7": "-----",
+        "8": "Column count = 3",
+        "9": "ABC",
+        "10": "DEF",
+        "11": "GH",
+        "12": "-----",
+        "13": "Column count = 4",
+        "14": "ABCD",
+        "15": "EFGH"
+      }
+    },
+    {
+      "id": "rectangle_ex_gen_056",
+      "function": "rectangle_ex_gen",
+      "json": {
+        "input_text": "ABCDEFGH",
+        "mode": "All pattern",
+        "mode_ex": "reverse_even"
+      },
+      "expected": {
+        "0": "Text length = 8",
+        "1": "-----",
+        "2": "Column count = 2",
+        "3": "AB",
+        "4": "DC",
+        "5": "EF",
+        "6": "HG",
+        "7": "-----",
+        "8": "Column count = 3",
+        "9": "ABC",
+        "10": "FED",
+        "11": "GH ",
+        "12": "-----",
+        "13": "Column count = 4",
+        "14": "ABCD",
+        "15": "HGFE"
+      }
+    },
+    {
+      "id": "vigenere_ex_gen_057",
+      "function": "vigenere_ex_gen",
+      "json": {
+        "input_text": "AttackAtDawn123",
+        "key": "KEY42"
+      },
+      "expected": {
+        "0": "Text: AttackAtDawn123\nKey: KEY42\nDecoded: QpvwaaWvZymj781\nEncoded: KxreeuErHcgr565\nBeaufort: KlfeaaEfBcor329\nAuto key Decoded: QpvwauLyHacc753\nAuto key Encoded: KxreekTmDcgn053"
+      }
+    },
+    {
+      "id": "charcode_ex_gen_058",
+      "function": "charcode_ex_gen",
+      "json": {
+        "input_text": "656667 414243"
+      },
+      "expected": {
+        "0": "Attempt to decode by DEC",
+        "1": "Extracted numbers: 65 66 67 41 42 43",
+        "2": "ABC)*+",
+        "3": "------",
+        "10": "Attempt to decode by HEX",
+        "11": "Extracted numbers: 65 66 67 41 42 43",
+        "12": "efgABC",
+        "13": "------",
+        "20": "Attempt to decode by OCT",
+        "21": "Extracted numbers: 65 66 67 41 42 43",
+        "22": "567!\"#",
+        "23": "------",
+        "30": "Attempt to decode by BIN",
+        "31": "Extracted numbers: ",
+        "32": ""
+      }
+    },
+    {
+      "id": "passcode_random_id_059",
+      "function": "passcode_random_id",
+      "json": {},
+      "expected": "42"
+    },
+    {
+      "id": "passcode_today_id_060",
+      "function": "passcode_today_id",
+      "json": {},
+      "expected": "77"
+    },
+    {
+      "id": "passcode_list_061",
+      "function": "passcode_list",
+      "json": {},
+      "expected": {
+        "1": "<a class=\"link\" href=\"./1\">#1 2026-03-01 ABCDEF1234... | Easy </a>",
+        "2": "<a class=\"link\" href=\"./2\">#2 2026-03-02 QWERTY9876... | Hard </a>"
+      }
+    },
+    {
+      "id": "passcode_validate_062",
+      "function": "passcode_validate",
+      "json": {
+        "id": "1",
+        "input_answer": "ok"
+      },
+      "expected": "<article class=\"border\"><h6 class=\"cyan-text\">Passcode confirmed.</h6><p class=\"large-text amber-text\">Gained:\n100 AP\n100 XM\nL1 Resonator\nL1 Xmp Burster\nL4 Power Cube</p>\n</article><p class=\"grey-text\">* Not actually gained in Ingress.</p>"
+    },
+    {
+      "id": "passcode_validate_063",
+      "function": "passcode_validate",
+      "json": {
+        "id": "1",
+        "input_answer": "near"
+      },
+      "expected": "<div class=\"mono orange-text results_area large-text\">Number part might be wrong.<div>"
+    },
+    {
+      "id": "passcode_validate_064",
+      "function": "passcode_validate",
+      "json": {
+        "id": "1",
+        "input_answer": "nope"
+      },
+      "expected": "<div class=\"mono gray-text results_area large-text\">Invalid.<div>"
+    },
+    {
+      "id": "ingress_keywords_gen_065",
+      "function": "ingress_keywords_gen",
+      "json": {
+        "pattern": "a"
+      },
+      "expected": {
+        "0": "agent",
+        "1": "alpha",
+        "2": "abaddon",
+        "3": "delta"
+      }
+    },
+    {
+      "id": "skip_gen_066",
+      "function": "skip_gen",
+      "json": {
+        "input_text": "WEAREDISCOVERED",
+        "mode": "Encode"
+      },
+      "expected": {
+        "0": "step:\n02: WAEICVRDERDSOEE\n03: WRIOREESVEADCED\n04: WECREDOEAIVDRSE\n05: WDVEIEASRRCEEOD\n06: WIRROESEEVACDDE\n07: WSDIEDREERVAOEC\n08: WCEOAVREERDEIDS\n09: WORRIEVEESAEDDC\n10: WVDEEIARSRECEDO\n11: WESRDVIAEODERCE\n12: WROIREEVSEADECD\n13: WEEOSDREDRVCIEA\n14: WDEREVOCSIDERAE\n"
+      }
+    },
+    {
+      "id": "skip_gen_067",
+      "function": "skip_gen",
+      "json": {
+        "input_text": "WEAREDISCOVERED",
+        "mode": "Decode"
+      },
+      "expected": {
+        "0": "step:\n02: WCEOAVREERDEIDS\n03: WDVEIEASRRCEEOD\n04: WECREDOEAIVDRSE\n05: WRIOREESVEADCED\n06: WDVRCEEIEEODASR\n07: WEEOSDREDRVCIEA\n08: WAEICVRDERDSOEE\n09: WDVASREODEIERCE\n10: WRIORADCEDEESVE\n11: WESRDVIAEODERCE\n12: WDVEODRCEASREIE\n13: WSDIEDREERVAOEC\n14: WDEREVOCSIDERAE\n"
+      }
+    },
+    {
+      "id": "bifid_gen_068",
+      "function": "bifid_gen",
+      "json": {
+        "input_text": "FLEEATONCE",
+        "key": "KEYWORD"
+      },
+      "expected": {
+        "0": "Key table:\nKEYWO\nRDABC\nFGHIL\nMNPQS\nTUVXZ",
+        "1": "\n",
+        "2": "Decoded: LKFZWDECRG\nEncoded: HKCWRODFUU"
+      }
+    },
+    {
+      "id": "vanity_gen_069",
+      "function": "vanity_gen",
+      "json": {
+        "input_text": "HELLO",
+        "mode": "Encode"
+      },
+      "expected": {
+        "0": "Text:",
+        "1": "HELLO",
+        "2": "\n",
+        "3": "Toggle style:",
+        "4": "44 33 555 555 666",
+        "5": "\n",
+        "10": "Press count - Number style:",
+        "11": "24 23 35 35 36",
+        "12": "\n",
+        "20": "Number - Press count style:",
+        "21": "42 32 53 53 63",
+        "22": "\n"
+      }
+    },
+    {
+      "id": "vanity_gen_070",
+      "function": "vanity_gen",
+      "json": {
+        "input_text": "4433555",
+        "mode": "Decode"
+      },
+      "expected": {
+        "0": "Toggle style:",
+        "1": "44 33 555",
+        "2": "HEL",
+        "3": "\n",
+        "10": "Press count - Number style:",
+        "11": "33",
+        "12": "F",
+        "13": "\n",
+        "20": "Number - Press count style:",
+        "21": "43",
+        "22": "I",
+        "23": "\n"
+      }
+    },
+    {
+      "id": "kakushi_gen_071",
+      "function": "kakushi_gen",
+      "json": {
+        "input_text": "HELLO",
+        "key": "KEY",
+        "mode": "Encode",
+        "debug_mode": "OFF"
+      },
+      "expected": {
+        "0": "---KAKUSHI CIPHERED---",
+        "1": "えあち近経",
+        "2": "\n"
+      }
+    },
+    {
+      "id": "kakushi_gen_072",
+      "function": "kakushi_gen",
+      "json": {
+        "input_text": "HELLO",
+        "key": "KEY",
+        "mode": "Encode",
+        "debug_mode": "ON"
+      },
+      "expected": {
+        "0": "---INPUT---",
+        "1": "HELLO",
+        "2": "\n",
+        "3": "---KEY---",
+        "4": "KEY",
+        "5": "\n",
+        "6": "---INPUT (Binary)---",
+        "7": "01001000 01000101 01001100 01001100 01001111",
+        "8": "\n",
+        "9": "---KEY STREAM (Binary)---",
+        "10": "01001011 01000101 01011001 10010110 10001010",
+        "11": "\n",
+        "12": "---KAKUSHI CIPHERED (Binary)---",
+        "13": "00000011 00000000 00010101 11011010 11000101",
+        "14": "\n",
+        "15": "---KAKUSHI CIPHERED---",
+        "16": "えあち近経",
+        "17": "\n"
+      }
+    },
+    {
+      "id": "kakushi_gen_073",
+      "function": "kakushi_gen",
+      "json": {
+        "input_text": "HELLO",
+        "key": "KEY",
+        "mode": "Decode",
+        "debug_mode": "OFF"
+      },
+      "expected": {
+        "0": "---KAKUSHI DECIPHERED---",
+        "1": "⟦'H'?⟧⟦'E'?⟧⟦'L'?⟧⟦'L'?⟧⟦'O'?⟧",
+        "2": "\n"
+      }
+    },
+    {
+      "id": "kakushi_gen_074",
+      "function": "kakushi_gen",
+      "json": {
+        "input_text": "HELLO",
+        "key": "KEY",
+        "mode": "Decode",
+        "debug_mode": "ON"
+      },
+      "expected": {
+        "0": "---INPUT---",
+        "1": "HELLO",
+        "2": "\n",
+        "3": "---KEY---",
+        "4": "KEY",
+        "5": "\n",
+        "6": "---INPUT (Binary)---",
+        "7": "00000000 00000000 00000000 00000000 00000000",
+        "8": "\n",
+        "9": "---KEY STREAM (Binary)---",
+        "10": "01001011 01000101 01011001 10010110 10001010",
+        "11": "\n",
+        "12": "---KAKUSHI DECIPHERED (Binary)---",
+        "13": "01001011 01000101 01011001 10010110 10001010",
+        "14": "\n",
+        "15": "---KAKUSHI DECIPHERED---",
+        "16": "⟦INVALID_CHAR@0:'H'⟧⟦INVALID_CHAR@1:'E'⟧⟦INVALID_CHAR@2:'L'⟧⟦INVALID_CHAR@3:'L'⟧⟦INVALID_CHAR@4:'O'⟧",
+        "17": "\n"
+      }
+    },
+    {
+      "id": "pwgen_gen_075",
+      "function": "pwgen_gen",
+      "json": {
+        "char_type": "1",
+        "length": "12"
+      },
+      "expected": {
+        "0": "ABCDEFGHIJKL"
+      }
+    },
+    {
+      "id": "pwgen_gen_076",
+      "function": "pwgen_gen",
+      "json": {
+        "char_type": "2",
+        "length": "12"
+      },
+      "expected": {
+        "0": "ABCDEFGHIJKL"
+      }
+    },
+    {
+      "id": "pwgen_gen_077",
+      "function": "pwgen_gen",
+      "json": {
+        "char_type": "3",
+        "length": "12"
+      },
+      "expected": {
+        "0": "ABCDEFGHIJKL"
+      }
+    },
+    {
+      "id": "pwgen_gen_078",
+      "function": "pwgen_gen",
+      "json": {
+        "char_type": "4",
+        "length": "12"
+      },
+      "expected": {
+        "0": "abcdefghijkl"
+      }
+    },
+    {
+      "id": "pwgen_gen_079",
+      "function": "pwgen_gen",
+      "json": {
+        "char_type": "5",
+        "length": "12"
+      },
+      "expected": {
+        "0": "012345678901"
+      }
+    },
+    {
+      "id": "pwgen_gen_080",
+      "function": "pwgen_gen",
+      "json": {
+        "char_type": "6",
+        "length": "12"
+      },
+      "expected": {
+        "0": "ABCDEFGHIJKL"
+      }
+    },
+    {
+      "id": "pwgen_gen_081",
+      "function": "pwgen_gen",
+      "json": {
+        "char_type": "7",
+        "length": "12"
+      },
+      "expected": {
+        "0": "ABCDEFGHIJKL"
+      }
+    },
+    {
+      "id": "pwgen_gen_082",
+      "function": "pwgen_gen",
+      "json": {
+        "char_type": "8",
+        "length": "12"
+      },
+      "expected": {
+        "0": "abcdefghijkl"
+      }
+    }
+  ],
+  "note": "Generated from current implementation with deterministic test stubs."
+}
