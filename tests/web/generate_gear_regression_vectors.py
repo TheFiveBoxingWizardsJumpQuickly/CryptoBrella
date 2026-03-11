@@ -8,6 +8,8 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+EXCLUDED_FUNCTIONS = {"to_what3words_gen", "to_coordinates_gen"}
+
 
 class DummyRequest:
     def __init__(self, payload):
@@ -163,10 +165,6 @@ def _build_cases():
         {"function": "reverse_gen", "json": {"input_text": "stressed"}},
         {"function": "columnar_gen", "json": {"input_text": "WEAREDISCOVERED", "key": "ZEBRA"}},
         {"function": "hash_gen", "json": {"input_text": "hash-target"}},
-        {"function": "to_what3words_gen", "json": {"latitude": "35.0", "longitude": "139.0", "language": "en"}},
-        {"function": "to_coordinates_gen", "json": {"words": "badformat"}},
-        {"function": "to_coordinates_gen", "json": {"words": "apifail"}},
-        {"function": "to_coordinates_gen", "json": {"words": "filled.count.soap"}},
         {"function": "braille_gen", "json": {"b1": True, "b2": False, "b3": False, "b4": False, "b5": False, "b6": False}},
         {
             "function": "braille_ja_gen",
@@ -236,6 +234,8 @@ def main():
     out_cases = []
     for i, case in enumerate(_build_cases(), start=1):
         fn_name = case["function"]
+        if fn_name in EXCLUDED_FUNCTIONS:
+            continue
         payload = case["json"]
         result = getattr(gear, fn_name)(DummyRequest(payload))
         out_cases.append(

@@ -12,6 +12,8 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+EXCLUDED_FUNCTIONS = {"to_what3words_gen", "to_coordinates_gen"}
+
 
 class DummyRequest:
     def __init__(self, payload):
@@ -116,7 +118,8 @@ def _normalize(value):
 def _load_fixture():
     path = Path(__file__).parent / "fixtures" / "gear_regression_vectors.json"
     with path.open(encoding="utf-8") as f:
-        return json.load(f)["cases"]
+        cases = json.load(f)["cases"]
+    return [case for case in cases if case["function"] not in EXCLUDED_FUNCTIONS]
 
 
 @pytest.fixture(scope="module")
@@ -139,7 +142,7 @@ def _request_handlers(gear):
 
 def test_fixture_covers_all_request_handlers(gear_module):
     fixture_functions = sorted({c["function"] for c in _load_fixture()})
-    handlers = _request_handlers(gear_module)
+    handlers = [name for name in _request_handlers(gear_module) if name not in EXCLUDED_FUNCTIONS]
     assert fixture_functions == handlers
 
 

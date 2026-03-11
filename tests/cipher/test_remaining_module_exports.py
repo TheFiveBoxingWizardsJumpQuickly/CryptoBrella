@@ -1,0 +1,34 @@
+import app.cipher.braille as braille_module
+import app.cipher.external_api as external_api_module
+import app.cipher.fn as fn
+import app.cipher.morse as morse_module
+import app.cipher.tables as tables_module
+import app.cipher.text_utils as text_utils_module
+import app.cipher.uuencode as uuencode_module
+import app.cipher.vanity as vanity_module
+
+
+def test_remaining_module_exports_match_fn_facade():
+    assert fn.kw is text_utils_module.kw
+    assert fn.chemical_symbol_convert is text_utils_module.chemical_symbol_convert
+    assert fn.abc012 is text_utils_module.abc012
+    assert fn.text_split is text_utils_module.text_split
+    assert fn.table_subtitution is text_utils_module.table_subtitution
+    assert fn.hiragana_to_katakana is text_utils_module.hiragana_to_katakana
+    assert fn.split_dakuten is text_utils_module.split_dakuten
+    assert fn.morse_e is morse_module.morse_e
+    assert fn.morse_d is morse_module.morse_d
+    assert fn.morse_wabun_e is morse_module.morse_wabun_e
+    assert fn.morse_wabun_d is morse_module.morse_wabun_d
+    assert fn.uu_encode is uuencode_module.uu_encode
+    assert fn.uu_decode is uuencode_module.uu_decode
+    assert fn.convert_to_3wa is external_api_module.convert_to_3wa
+    assert fn.convert_to_coordinates is external_api_module.convert_to_coordinates
+    assert fn.braille_d is braille_module.braille_d
+    assert fn.braille_ja_d is braille_module.braille_ja_d
+    assert fn.auto_split_number_string is vanity_module.auto_split_number_string
+    assert fn.vanity_e is vanity_module.vanity_e
+    assert fn.vanity_d is vanity_module.vanity_d
+    assert fn.return_japan_traditional_month_names_list is tables_module.return_japan_traditional_month_names_list
+    assert fn.return_zodiac_list is tables_module.return_zodiac_list
+    assert fn.return_japanese_zodiac_list is tables_module.return_japanese_zodiac_list
