@@ -31,7 +31,12 @@ def client(monkeypatch):
 
 
 def test_get_basic_pages(client):
-    assert client.get("/").status_code == 200
+    resp = client.get("/")
+    assert resp.status_code == 200
+    body = resp.get_data(as_text=True)
+    assert "Crypto Brella" in body
+    assert "Cryptography" in body
+    assert "Remember Ingress" in body
     assert client.get("/about").status_code == 200
 
 

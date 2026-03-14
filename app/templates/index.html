@@ -4,254 +4,54 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <link href="https://cdn.jsdelivr.net/npm/beercss@3.0.8/dist/cdn/beer.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <title>Crypto Brella</title>
     </head>
-    <body v-bind:class="css_bgcolor">
+    <body class="grey1">
         <main class="responsive" id="app">
             <h1 class="center-align middle-align bold small">Crypto Brella</h1>
             <h4 class="center-align middle-align bold small">Cipher Toolbox</h4>
 
             <div class="grid no-space">
-                <div class="teal s12">
-                    <h5 v-bind:class="css_category">Substitution ciphers</h5>
-                </div>
-                
-                <div class="blue-grey10 s12 elevate">
-                    <div class="grid no-space">
-                        <a href="/rot" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_rot.png">
-                            <p class="white-text">ROT</p>
-                        </a>
-
-                        <a href="/vigenere" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_vigenere.png">
-                            <p class="white-text">Vigenere</p>
-                        </a>
-
-                        <a href="/simplesub" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_simplesub.png">
-                            <p class="white-text">Simple<br>Substitutions</p>
-                        </a>
-
-                        <a href="/affine" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_affine.png">
-                            <p class="white-text">Affine</p>
-                        </a>
-
-                        <a href="/polybius" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_polybius.png">
-                            <p class="white-text">Polybius</p>
-                        </a>
-
-                        <a href="/playfair" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_playfair.png">
-                            <p class="white-text">Playfair</p>
-                        </a>
-
-                        <a href="/bifid" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_bifid.png">
-                            <p class="white-text">Bifid</p>
-                        </a>
-
-                        <a href="/purple" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_purple.png">
-                            <p class="white-text">Purple</p>
-                        </a>
-
-                        <a href="/enigma" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_enigma.png">
-                            <p class="white-text">Enigma</p>
-                        </a>
+                <template v-for="section in sections">
+                    <div :key="section.id + '-header'" class="teal s12">
+                        <h5 class="white-text small center-align middle-align">[[ section.title ]]</h5>
                     </div>
-                </div>
-                
-                <div v-bind:class="css_bgcolor" class="s12"><br></div>
-                <div class="teal s12">
-                    <h5 v-bind:class="css_category">Transposition ciphers</h5>
-                </div>
-                <div class="blue-grey10 s12 elevate">
-                    <div class="grid no-space">
-                        <a href="/reverse" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_reverse.png">
-                            <p class="white-text">Reverse</p>
-                        </a>
-                        <a href="/rectangle" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_rectangle.png">
-                            <p class="white-text">Rectangle</p>
-                        </a>
-                        <a href="/railfence" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_railfence.png">
-                            <p class="white-text">Railfence</p>
-                        </a>
-                        <a href="/columnar" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_columnar.png">
-                            <p class="white-text">Columnar</p>
-                        </a>
-                        <a href="/skip" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_skip.png">
-                            <p class="white-text">Skip</p>
-                        </a>
-                        <a href="/swap_xy" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_swap_xy.png">
-                            <p class="white-text">Swap X-Y axes</p>
-                        </a>
-                    </div>  
-                </div>
 
-                <div v-bind:class="css_bgcolor" class="s12"><br></div>
-                <div class="teal s12">
-                    <h5 v-bind:class="css_category">Encodings</h5>
-                </div>
-                <div class="blue-grey10 s12 elevate">
-                    <div class="grid no-space">
-                        <a href="/base64" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_base64.png">
-                            <p class="white-text">Base64 etc.</p>
-                        </a>
-                        <a href="/morse" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_morse.png">
-                            <p class="white-text">Morse</p>
-                        </a>
-                        <a href="/charcode" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_charcode.png">
-                            <p class="white-text">Character Code</p>
-                        </a>
-                        <a href="/braille" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_braille.png">
-                            <p class="white-text">Braille</p>
-                        </a>
-                        <a href="/braille_ja" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_braille_ja.png">
-                            <p class="white-text">Japanese Braille</p>
-                        </a>
-                        <a href="/phonetic" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_phonetic.png">
-                            <p class="white-text">Phonetic</p>
-                        </a>
-                        <a href="/vanity" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_vanity.png">
-                            <p class="white-text">Vanity Number</p>
-                        </a>
-                        <a href="/kakushi" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_kakushi.png">
-                            <p class="white-text">Kakushi</p>
-                        </a>
+                    <template v-for="category in section.categories">
+                        <div
+                            v-if="section.categories.length > 1"
+                            :key="section.id + '-' + category.id + '-title'"
+                            class="blue-grey10 s12"
+                        >
+                            <h6 class="white-text small center-align middle-align">[[ category.title ]]</h6>
+                        </div>
 
-                    </div>
-                </div>
+                        <div
+                            :key="section.id + '-' + category.id + '-tools'"
+                            class="blue-grey10 s12 elevate"
+                        >
+                            <div class="grid no-space">
+                                <a
+                                    v-for="tool in category.tools"
+                                    :key="tool.id"
+                                    :href="tool.path"
+                                    target="_blank"
+                                    class="vertical center-align s3 m2 l2"
+                                    :title="tool.description"
+                                >
+                                    <img class="circle" :src="'/static/image/' + tool.icon" :alt="tool.name">
+                                    <p class="white-text">[[ tool.display_name || tool.name ]]</p>
+                                </a>
+                            </div>
+                        </div>
+                    </template>
 
-
-                <div v-bind:class="css_bgcolor" class="s12"><br></div>
-                <div class="teal s12">
-                    <h5 v-bind:class="css_category">Other Tools</h5>
-                </div>
-                <div class="blue-grey10 s12 elevate">
-                    <div class="grid no-space">
-                        <a href="/frequency" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_frequency.png">
-                            <p class="white-text">Frequency Analysis</p>
-                        </a>
-                        <a href="/hash" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_hash.png">
-                            <p class="white-text">Hash</p>
-                        </a>
-                        <a href="/prime" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon23.png">
-                            <p class="white-text">Prime Decomposition <br>(素因数分解)</p>
-                        </a>
-                        <a href="/pwgen" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon24.png">
-                            <p class="white-text">Password Generator</p>
-                        </a>   
-                        <a href="/charreplace" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_charreplace.png">
-                            <p class="white-text">Character replace</p>
-                        </a>   
-                        <a href="/resize" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_resize.png">
-                            <p class="white-text">Resize image</p>
-                        </a>    
-                        <a href="/rsa" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_rsa.png">
-                            <p class="white-text">RSA</p>
-                        </a>    
-                        <a href="/split_text" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_split_text.png">
-                            <p class="white-text">Split text</p>
-                        </a>  
-                        <a href="/number_conv" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_number_conv.png">
-                            <p class="white-text">Number conversion</p>
-                        </a>
-                        <a href="/riddle_tables" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_riddle_tables.png">
-                            <p class="white-text">Riddle tables</p>
-                        </a>
-                        <a href="/memo" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_memo.png">
-                            <p class="white-text">Memo</p>
-                        </a>
-                    </div>
-                </div>
-
-                <div v-bind:class="css_bgcolor" class="s12"><br></div>
-                <div class="teal s12">
-                    <h5 v-bind:class="css_category">Remember Ingress</h5>
-                </div>
-                <div class="blue-grey10 s12 elevate">
-                    <div class="grid no-space">
-                        <a href="/rot_ex" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_rot_ex.png">
-                            <p class="white-text">Rot ex</p>
-                        </a>
-                        <a href="/vigenere_ex" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_vigenere_ex.png">
-                            <p class="white-text">Vigenere ex</p>
-                        </a>
-                        <a href="/rectangle_ex" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_rectangle_ex.png">
-                            <p class="white-text">Rectangle ex</p>
-                        </a>
-                        <a href="/charcode_ex" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_charcode_ex.png">
-                            <p class="white-text">Character Code ex</p>
-                        </a>
-                        <a href="/ingress_keywords" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_ingress_keywords.png">
-                            <p class="white-text">Keywords</p>
-                        </a>
-                    </div>
-                </div>
-
-                <div v-bind:class="css_bgcolor" class="s12"><br></div>
-                <div class="teal s12">
-                    <h5 v-bind:class="css_category">Extra</h5>
-                </div>
-                <div class="blue-grey10 s12 elevate">
-                    <div class="grid no-space">
-                        <a href="/challenge/" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_cryptobrella.png">
-                            <p class="white-text">Cipher Challenge</p>
-                        </a>
-                        <a href="/passcode" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_passcode.png">
-                            <p class="white-text">Passcode Challenge</p>
-                        </a>
-                        <a href="/link" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_link.png">
-                            <p class="white-text">Link</p>
-                        </a> 
-                        <a href="/about" target="_blank" v-bind:class="css_item">
-                            <img class="circle"  src="/static/image/icon_about.png">
-                            <p class="white-text">About</p>
-                        </a> 
-                    </div>
-                </div>
+                    <div :key="section.id + '-spacer'" class="grey1 s12"><br></div>
+                </template>
             </div>
 
-            <p class="center-align">Contact: a3xgvo 
-                <a href="https://twitter.com/a3xgvo" target="_blank" class="link">Twitter</a> 
+            <p class="center-align">Contact: a3xgvo
+                <a href="https://twitter.com/a3xgvo" target="_blank" class="link">Twitter</a>
                 <a href="https://a3xgvo-weblog.blogspot.com" target="_blank" class="link">Blog</a>
             </p>
         </main>
@@ -260,13 +60,10 @@
             var app = new Vue({
                 el: '#app',
                 data: {
-                    css_category: 'white-text small center-align middle-align',
-                    css_item: 'vertical center-align s3 m2 l2',
-                    css_bgcolor: 'grey1',
+                    sections: {{ catalog_sections | tojson }},
                 },
                 delimiters: ['[[', ']]']
-            })
+            });
         </script>
     </body>
-
 </html>

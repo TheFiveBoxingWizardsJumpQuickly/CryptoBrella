@@ -3,6 +3,7 @@ import app.gear as gear
 import app.secret.cryptobrella as cryptobrella
 
 from app.prosaic import prose
+from app.tool_catalog import get_home_catalog
 from flask import Flask, abort, render_template, request, send_from_directory, url_for, jsonify
 
 def create_app():
@@ -19,7 +20,7 @@ app.config['SECRET_IMAGE_FOLDER'] = os.path.join(
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', catalog_sections=get_home_catalog())
 
 
 @app.route('/about')
