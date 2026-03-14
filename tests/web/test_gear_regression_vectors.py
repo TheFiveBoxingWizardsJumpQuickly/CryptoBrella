@@ -23,10 +23,6 @@ class DummyRequest:
 def _ensure_secret_stub():
     if "app.secret" not in sys.modules:
         sys.modules["app.secret"] = types.ModuleType("app.secret")
-    if "app.secret.apikey" not in sys.modules:
-        mod = types.ModuleType("app.secret.apikey")
-        mod.get_w3w_apikey = lambda: "DUMMY_W3W_API_KEY"
-        sys.modules["app.secret.apikey"] = mod
 
 
 def _apply_stubs(monkeypatch, gear):
@@ -40,42 +36,7 @@ def _apply_stubs(monkeypatch, gear):
             out.append(table[i % len(table)])
         return "".join(out)
 
-    def stub_convert_to_3wa(apikey, latitude, longitude, language):
-        return {
-            "language": language,
-            "words": "filled.count.soap",
-            "coordinates": {"lat": float(latitude), "lng": float(longitude)},
-            "square": {
-                "southwest": {"lat": float(latitude) - 0.001, "lng": float(longitude) - 0.001},
-                "northeast": {"lat": float(latitude) + 0.001, "lng": float(longitude) + 0.001},
-            },
-            "country": "JP",
-            "nearestPlace": "Tokyo",
-            "map": "https://example.invalid/map",
-        }
-
-    def stub_convert_to_coordinates(apikey, words):
-        if words == "badformat":
-            return {"format error": "badformat is not W3W format."}
-        if words == "apifail":
-            return {"error": "simulated API error"}
-        return {
-            "language": "en",
-            "words": words,
-            "coordinates": {"lat": 35.0, "lng": 139.0},
-            "square": {
-                "southwest": {"lat": 34.999, "lng": 138.999},
-                "northeast": {"lat": 35.001, "lng": 139.001},
-            },
-            "country": "JP",
-            "nearestPlace": "Tokyo",
-            "map": "https://example.invalid/map2",
-        }
-
     monkeypatch.setattr(gear, "password_generate", stub_password_generate)
-    monkeypatch.setattr(gear, "get_w3w_apikey", lambda: "DUMMY_W3W_API_KEY")
-    monkeypatch.setattr(gear, "convert_to_3wa", stub_convert_to_3wa)
-    monkeypatch.setattr(gear, "convert_to_coordinates", stub_convert_to_coordinates)
     monkeypatch.setattr(gear, "passcode_get_random_id", lambda: 42)
     monkeypatch.setattr(gear, "passcode_get_today_id", lambda: 77)
     monkeypatch.setattr(

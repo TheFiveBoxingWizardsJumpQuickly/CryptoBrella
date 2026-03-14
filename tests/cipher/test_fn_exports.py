@@ -19,8 +19,6 @@ EXPECTED_EXPORTS = {
     "codepoint_to_char",
     "columnar_d",
     "columnar_e",
-    "convert_to_3wa",
-    "convert_to_coordinates",
     "enigma",
     "factorize",
     "kakushi_decode",

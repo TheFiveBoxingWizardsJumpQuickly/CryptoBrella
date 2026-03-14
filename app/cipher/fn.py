@@ -22,7 +22,6 @@ from .base_conversion import (
     codepoint_to_char,
     valid_chars_for_base_n,
 )
-from .external_api import convert_to_3wa, convert_to_coordinates
 from .affine import affine_d, affine_d_a, affine_e, affine_e_a
 from .code_tables import (
     list_0,
@@ -130,8 +129,6 @@ __all__ = [
     "codepoint_to_char",
     "columnar_d",
     "columnar_e",
-    "convert_to_3wa",
-    "convert_to_coordinates",
     "enigma",
     "extract_integer_only",
     "factorize",

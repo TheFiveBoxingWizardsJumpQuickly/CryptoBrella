@@ -1,6 +1,5 @@
 import app.cipher.adfgvx as adfgvx_module
 import app.cipher.braille as braille_module
-import app.cipher.external_api as external_api_module
 import app.cipher.fn as fn
 import app.cipher.math_functions as math_functions_module
 import app.cipher.morse as morse_module
@@ -32,8 +31,6 @@ def test_remaining_module_exports_match_fn_facade():
     assert fn.morse_wabun_d is morse_module.morse_wabun_d
     assert fn.uu_encode is uuencode_module.uu_encode
     assert fn.uu_decode is uuencode_module.uu_decode
-    assert fn.convert_to_3wa is external_api_module.convert_to_3wa
-    assert fn.convert_to_coordinates is external_api_module.convert_to_coordinates
     assert fn.braille_d is braille_module.braille_d
     assert fn.braille_ja_d is braille_module.braille_ja_d
     assert fn.auto_split_number_string is vanity_module.auto_split_number_string

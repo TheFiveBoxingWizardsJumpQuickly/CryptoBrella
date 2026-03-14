@@ -21,8 +21,6 @@ from app.cipher.fn import (
     codepoint_to_char,
     columnar_d,
     columnar_e,
-    convert_to_3wa,
-    convert_to_coordinates,
     enigma,
     extract_integer_only,
     factorize,
@@ -83,7 +81,6 @@ from app.cipher.fn import (
     vig_e_auto,
 )
 from app.cipher.resize import resize_image
-from app.secret.apikey import get_w3w_apikey
 from app.cipher.ingress_passcode import passcode_get_record_by_id, passcode_validate_answer, passcode_get_reward, passcode_get_today_id, passcode_get_random_id, passcode_get_list, passcode_get_filtered_keywords
 
 
@@ -680,58 +677,6 @@ def hash_gen(request):
         hashlib.blake2s(input_text.encode()).hexdigest()
 
     return results
-
-
-def to_what3words_gen(request):
-    latitude = request.json['latitude']
-    longitude = request.json['longitude']
-    language = request.json['language']
-    apikey = get_w3w_apikey()
-
-    results = {}
-    wa = convert_to_3wa(apikey, latitude, longitude, language)
-    results[0] = \
-        'Language: ' + wa['language'] + '\n' +\
-        'Words: ' + wa['words'] + '\n' +\
-        'Coordinates: Lat= ' + str(wa['coordinates']['lat']) + ', Lng= ' + str(wa['coordinates']['lng']) + '\n' +\
-        'South West: Lat= ' + str(wa['square']['southwest']['lat']) + ', Lng= ' + str(wa['square']['southwest']['lng']) + '\n' +\
-        'North East: Lat= ' + str(wa['square']['northeast']['lat']) + \
-        ', Lng= ' + str(wa['square']['northeast']['lng']) + '\n' +\
-        'Country: ' + wa['country'] + '\n' +\
-        'Nearest Place: ' + wa['nearestPlace'] + '\n' +\
-        'Map: <a href="' + \
-        wa['map'] + '" target="_blank" class="link">' + wa['map'] + '</a>'
-
-    return results
-
-
-def to_coordinates_gen(request):
-    words = request.json['words']
-    apikey = get_w3w_apikey()
-
-    results = {}
-    wa = convert_to_coordinates(apikey, words)
-    if 'format error' in wa:
-        results[0] = wa['format error']
-    elif 'error' in wa:
-        results[0] = words
-        results[1] = wa['error']
-    else:
-        results[0] = \
-            'Language: ' + wa['language'] + '\n' +\
-            'Words: ' + wa['words'] + '\n' +\
-            'Coordinates: Lat= ' + str(wa['coordinates']['lat']) + ', Lng= ' + str(wa['coordinates']['lng']) + '\n' +\
-            'South West: Lat= ' + str(wa['square']['southwest']['lat']) + ', Lng= ' + str(wa['square']['southwest']['lng']) + '\n' +\
-            'North East: Lat= ' + str(wa['square']['northeast']['lat']) + \
-            ', Lng= ' + str(wa['square']['northeast']['lng']) + '\n' +\
-            'Country: ' + wa['country'] + '\n' +\
-            'Nearest Place: ' + wa['nearestPlace'] + '\n' +\
-            'Map: <a href="' + \
-            wa['map'] + '" target="_blank" class="link">' + wa['map'] + '</a>'
-
-    return results
-
-
 def braille_gen(request):
     b1 = '1' if request.json['b1'] else '0'
     b2 = '1' if request.json['b2'] else '0'
