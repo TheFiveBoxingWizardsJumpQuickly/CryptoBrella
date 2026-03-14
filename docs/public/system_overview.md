@@ -18,6 +18,7 @@ Last updated: 2026-03-07
 - Routing and page rendering: `app/app.py`
 - Crypto Functions API handlers: `app/gear.py`
 - General cipher/encoding logic: `app/cipher/fn.py`
+- Shared math helpers for cipher modules: `app/cipher/math_functions.py`
 - Transposition logic: `app/cipher/transposition.py`
 - Enigma implementation: `app/cipher/enigma.py`
 - Purple implementation: `app/cipher/purple.py`

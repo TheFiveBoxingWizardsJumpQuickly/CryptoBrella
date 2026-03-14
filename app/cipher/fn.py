@@ -13,6 +13,7 @@ from .analysis import (
     return_phonetic_alphabet_values,
     trigram_frequency,
 )
+from .adfgvx import adfgx_d, adfgx_e, adfgvx_d, adfgvx_e
 from .braille import braille_d, braille_ja_d
 from .base_conversion import (
     base_a_to_base_b,
@@ -47,7 +48,7 @@ from .common import (
 from .enigma import enigma, plugboard_gen
 from .purple import purple_decode, purple_encode
 from .kakushi import kakushi_encode, kakushi_decode
-from .math_functions import factorize, rsa_decode, rsa_encode, xgcd
+from .math_functions import factorize, xgcd
 from .morse import bacon1_d, bacon1_e, bacon2_d, bacon2_e, morse_d, morse_e, morse_wabun_d, morse_wabun_e
 from .misc import password_generate
 from .polybius_playfair import (
@@ -99,6 +100,7 @@ from .transposition import (
     skip_e,
     swap_xy_axes,
 )
+from .rsa import rsa_decode, rsa_encode
 from .uuencode import uu_decode, uu_encode
 from .vanity import auto_split_number_string, vanity_d, vanity_e
 
@@ -202,69 +204,3 @@ __all__ = [
     "vig_e_auto",
     "xgcd",
 ]
-
-
-def adfgx_e(text, table_keyword, transposition_keyword):
-    table = mixed_alphabet(table_keyword, True)
-    letter_set = "ADFGX"
-    trimmed_text = text.replace(" ", "").upper().replace("J", "I")
-
-    fractionated = ""
-    for s in trimmed_text:
-        index = table.index(s)
-        row_num = int(index/5)
-        col_num = index % 5
-        fractionated += letter_set[row_num]
-        fractionated += letter_set[col_num]
-
-    return "".join(columnar_e(fractionated, assign_digits(transposition_keyword)))
-
-
-def adfgx_d(text, table_keyword, transposition_keyword):
-    fractionated = columnar_d(text, assign_digits(transposition_keyword))
-
-    table = mixed_alphabet(table_keyword, True)
-    letter_set = "ADFGX"
-
-    plain_text = ""
-    for i, s in enumerate(fractionated):
-        if i % 2 == 0:
-            row_num = letter_set.index(s)
-        else:
-            col_num = letter_set.index(s)
-            plain_text += table[row_num*5 + col_num]
-
-    return "".join(plain_text)
-
-
-def adfgvx_e(text, table_keyword, transposition_keyword):
-    table = mixed_alphanumeric(table_keyword)
-    letter_set = "ADFGVX"
-    trimmed_text = text.replace(" ", "").upper()
-
-    fractionated = ""
-    for s in trimmed_text:
-        index = table.index(s)
-        row_num = int(index/6)
-        col_num = index % 6
-        fractionated += letter_set[row_num]
-        fractionated += letter_set[col_num]
-
-    return "".join(columnar_e(fractionated, assign_digits(transposition_keyword)))
-
-
-def adfgvx_d(text, table_keyword, transposition_keyword):
-    fractionated = columnar_d(text, assign_digits(transposition_keyword))
-
-    table = mixed_alphanumeric(table_keyword)
-    letter_set = "ADFGVX"
-
-    plain_text = ""
-    for i, s in enumerate(fractionated):
-        if i % 2 == 0:
-            row_num = letter_set.index(s)
-        else:
-            col_num = letter_set.index(s)
-            plain_text += table[row_num*6 + col_num]
-
-    return "".join(plain_text)

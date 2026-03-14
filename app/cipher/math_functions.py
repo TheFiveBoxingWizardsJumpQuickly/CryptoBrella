@@ -86,10 +86,8 @@ def factorize(num):
         factor, notation = calc(n)
         return str(n) + ' = ' + factor, notation
 
-# RSA
+
 # https://tex2e.github.io/blog/crypto/modular-mul-inverse
-
-
 def xgcd(a, b):
     x0, y0, x1, y1 = 1, 0, 0, 1
     while b != 0:
@@ -105,18 +103,6 @@ def modinv(a, m):
         return 0
     else:
         return x % m
-
-
-def rsa_encode(m, e, n):
-    return pow(m, e, n)
-
-# IF n = p * q
-
-
-def rsa_decode(c, e, n, p, q):
-    d = modinv(e, (p-1) * (q-1))
-    return [pow(c, d, n), d]
-
 
 # Debug
 '''

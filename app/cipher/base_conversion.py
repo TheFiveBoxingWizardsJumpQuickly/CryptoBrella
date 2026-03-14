@@ -1,6 +1,6 @@
 import codecs
-from .common import *
-from .code_tables import *
+from .common import split_by_len
+from .code_tables import list_base36
 
 
 def deca(list):

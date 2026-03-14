@@ -1,7 +1,10 @@
+import app.cipher.adfgvx as adfgvx_module
 import app.cipher.braille as braille_module
 import app.cipher.external_api as external_api_module
 import app.cipher.fn as fn
+import app.cipher.math_functions as math_functions_module
 import app.cipher.morse as morse_module
+import app.cipher.rsa as rsa_module
 import app.cipher.tables as tables_module
 import app.cipher.text_utils as text_utils_module
 import app.cipher.uuencode as uuencode_module
@@ -9,6 +12,13 @@ import app.cipher.vanity as vanity_module
 
 
 def test_remaining_module_exports_match_fn_facade():
+    assert fn.adfgx_e is adfgvx_module.adfgx_e
+    assert fn.adfgx_d is adfgvx_module.adfgx_d
+    assert fn.adfgvx_e is adfgvx_module.adfgvx_e
+    assert fn.adfgvx_d is adfgvx_module.adfgvx_d
+    assert fn.rsa_encode is rsa_module.rsa_encode
+    assert fn.rsa_decode is rsa_module.rsa_decode
+    assert fn.xgcd is math_functions_module.xgcd
     assert fn.kw is text_utils_module.kw
     assert fn.chemical_symbol_convert is text_utils_module.chemical_symbol_convert
     assert fn.abc012 is text_utils_module.abc012
