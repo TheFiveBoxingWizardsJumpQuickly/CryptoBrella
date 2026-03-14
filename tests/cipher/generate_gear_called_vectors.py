@@ -300,7 +300,7 @@ def main():
         "version": 1,
         "generated_on": str(date.today()),
         "case_count": len(cases),
-        "note": "Additional baseline vectors for functions used by gear.py (excluding what3words converters).",
+        "note": "Additional baseline vectors for functions used by gear.py.",
         "cases": cases,
     }
     out = Path(__file__).parent / "fixtures" / "gear_called_vectors.json"

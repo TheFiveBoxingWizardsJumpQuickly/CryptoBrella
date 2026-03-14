@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-EXCLUDED_FUNCTIONS = {"to_what3words_gen", "to_coordinates_gen"}
+EXCLUDED_FUNCTIONS = set()
 
 
 class DummyRequest:

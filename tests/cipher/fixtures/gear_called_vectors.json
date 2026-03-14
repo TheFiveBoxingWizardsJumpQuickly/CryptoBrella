@@ -2,7 +2,7 @@
   "version": 1,
   "generated_on": "2026-03-07",
   "case_count": 725,
-  "note": "Additional baseline vectors for functions used by gear.py (excluding what3words converters).",
+  "note": "Additional baseline vectors for functions used by gear.py.",
   "cases": [
     {
       "id": "playfair_e_0001",

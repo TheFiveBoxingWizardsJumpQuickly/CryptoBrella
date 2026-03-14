@@ -364,49 +364,6 @@
       }
     },
     {
-      "id": "to_what3words_gen_027",
-      "function": "to_what3words_gen",
-      "json": {
-        "latitude": "35.0",
-        "longitude": "139.0",
-        "language": "en"
-      },
-      "expected": {
-        "0": "Language: en\nWords: filled.count.soap\nCoordinates: Lat= 35.0, Lng= 139.0\nSouth West: Lat= 34.999, Lng= 138.999\nNorth East: Lat= 35.001, Lng= 139.001\nCountry: JP\nNearest Place: Tokyo\nMap: <a href=\"https://example.invalid/map\" target=\"_blank\" class=\"link\">https://example.invalid/map</a>"
-      }
-    },
-    {
-      "id": "to_coordinates_gen_028",
-      "function": "to_coordinates_gen",
-      "json": {
-        "words": "badformat"
-      },
-      "expected": {
-        "0": "badformat is not W3W format."
-      }
-    },
-    {
-      "id": "to_coordinates_gen_029",
-      "function": "to_coordinates_gen",
-      "json": {
-        "words": "apifail"
-      },
-      "expected": {
-        "0": "apifail",
-        "1": "simulated API error"
-      }
-    },
-    {
-      "id": "to_coordinates_gen_030",
-      "function": "to_coordinates_gen",
-      "json": {
-        "words": "filled.count.soap"
-      },
-      "expected": {
-        "0": "Language: en\nWords: filled.count.soap\nCoordinates: Lat= 35.0, Lng= 139.0\nSouth West: Lat= 34.999, Lng= 138.999\nNorth East: Lat= 35.001, Lng= 139.001\nCountry: JP\nNearest Place: Tokyo\nMap: <a href=\"https://example.invalid/map2\" target=\"_blank\" class=\"link\">https://example.invalid/map2</a>"
-      }
-    },
-    {
       "id": "braille_gen_031",
       "function": "braille_gen",
       "json": {

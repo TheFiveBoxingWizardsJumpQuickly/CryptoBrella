@@ -68,11 +68,7 @@ Last updated: 2026-03-07
   - `debug_mode == OFF`: returns result text only.
   - `debug_mode == ON`: returns detailed blocks including binary intermediates.
 
-## 4. Planned-Removal Features
-- `to_what3words_gen` and `to_coordinates_gen` are scheduled for removal.
-- They are excluded from new P0 specification/test investment.
-
-## 5. Test Synchronization Rule
+## 4. Test Synchronization Rule
 - Baseline fixtures lock current behavior.
 - When intentional behavior changes are made, update in this order:
   1. `docs/public/spec_baseline.md`

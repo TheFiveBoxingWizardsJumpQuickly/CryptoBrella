@@ -7,8 +7,8 @@ Last updated: 2026-03-07
 - Utility pages previously treated as "Other Tools" are included in the same management scope.
 
 ## 2. Top-Page Counts
-- Managed pages: 40
-- `gear/<function>` based pages: 38
+- Managed pages: 38
+- `gear/<function>` based pages: 36
 - Non-`gear` API page: 1 (`/resize` -> `POST /g/resize/`)
 - Client-only page: 1 (`/memo`)
 
@@ -37,8 +37,6 @@ Last updated: 2026-03-07
 | Encodings | `braille` | `braille_gen` | `b1`, `b2`, `b3`, `b4`, `b5`, `b6` | `braille_d(braille_dots)` |
 | Encodings | `braille_ja` | `braille_ja_gen` | `bl1`, `bl2`, `bl3`, `bl4`, `bl5`, `bl6`, `br1`, `br2`, `br3`, `br4`, `br5`, `br6` | `braille_ja_d(braille_dots)` |
 | Encodings | `phonetic` | `phonetic_gen` | `input_text`, `mode` | `phonetic_alphabet_d(text, dic)`, `phonetic_alphabet_e(text, dic)`, `return_phonetic_alphabet_values(dic)` |
-| Encodings | `to_what3words` | `to_what3words_gen` | `latitude`, `longitude`, `language` | `convert_to_3wa(apikey, latitude, longitude, language)` |
-| Encodings | `to_coordinates` | `to_coordinates_gen` | `words` | `convert_to_coordinates(apikey, words)` |
 | Encodings | `vanity` | `vanity_gen` | `input_text`, `mode` | `vanity_d(text, style)`, `vanity_e(text, style)`, `auto_split_number_string(text, pattern)` |
 | Encodings | `kakushi` | `kakushi_gen` | `input_text`, `key`, `mode`, `debug_mode` | `kakushi_encode(text: str, keyword: str, debug: bool=True)`, `kakushi_decode(encoded: str, keyword: str, debug: bool=False)` |
 | Crypto utilities | `frequency` | `frequency_gen` | `input_text` | `letter_frequency(text, sortkey=0, reverse_flag=False)`, `unique(text, sort=False)` |
@@ -59,5 +57,4 @@ Last updated: 2026-03-07
 | Remember Ingress | `ingress_keywords` | `ingress_keywords_gen` | `pattern` | `passcode_get_filtered_keywords(pattern)` |
 
 ## 4. Notes
-- `to_what3words` and `to_coordinates` are currently included but planned for removal.
 - `challenge`, `passcode`, `about`, and `link` are top-page entries but excluded from this inventory because they are not crypto transform APIs.

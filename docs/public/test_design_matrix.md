@@ -13,7 +13,7 @@ Last updated: 2026-03-07
 |---|---|---|
 | P0 | `enigma`, `purple`, `vigenere`, `affine`, transposition, `kakushi` | Immediate detection of core logic breakage |
 | P1 | `morse`, `braille`, `phonetic`, `polybius`, `bifid`, `vanity`, frequency utilities | Prevent regressions in surrounding crypto utilities |
-| P2 | `to_what3words`, `to_coordinates`, LINE webhook, passcode DB-dependent features | Staged checks for external dependency paths |
+| P2 | passcode DB-dependent features | Staged checks for external dependency paths |
 
 ## 3. Implemented Tests (Summary)
 
@@ -35,7 +35,6 @@ Last updated: 2026-03-07
   - Flask `test_client` smoke checks for representative GET/POST and HTTP 500 paths
 
 ## 4. Constraints and Current Policy
-- `convert_to_3wa` / `convert_to_coordinates` are planned for removal and excluded from deeper P0 investment.
 - Large fixture baselines lock current behavior; intentional behavior changes require fixture regeneration.
 - Fixture baselines do not replace explicit specification; P0 acceptance should converge to explicit spec tests.
 
@@ -43,4 +42,4 @@ Last updated: 2026-03-07
 1. Add explicit P0 spec tests based on `docs/public/spec_baseline.md`.
 2. Keep fixture baselines for not-yet-specified behavior and reduce them over time.
 3. Expand HTTP-level smoke/integration coverage for key routes and representative error payloads.
-4. When removal features are deleted, update fixtures and public docs in the same change set.
+4. Keep fixtures and public docs aligned with the currently supported feature set.

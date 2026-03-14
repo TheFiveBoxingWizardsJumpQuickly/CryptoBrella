@@ -3,7 +3,7 @@ import app.gear as gear
 import app.secret.cryptobrella as cryptobrella
 
 from app.prosaic import prose
-from flask import Flask, render_template, request, send_from_directory, url_for, jsonify
+from flask import Flask, abort, render_template, request, send_from_directory, url_for, jsonify
 
 def create_app():
     return Flask(__name__)
@@ -35,6 +35,9 @@ def favicon():
 @app.route('/<string:file>')
 def show_page(file):
     file = file.split('.')[0]
+    template_path = os.path.join(app.root_path, 'templates', 'Tools', file + '.html')
+    if not os.path.exists(template_path):
+        abort(404)
     return render_template('Tools/'+file+'.html', BASEURL=request.url_root)
 
 
