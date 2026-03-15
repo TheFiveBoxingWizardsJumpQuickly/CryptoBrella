@@ -1,6 +1,6 @@
 # Test Coverage Audit (Current State)
 
-Last updated: 2026-03-07
+Last updated: 2026-03-16
 
 ## 1. Audit Scope
 - Internal core functions called from `app/gear.py` request handlers
@@ -12,6 +12,7 @@ Last updated: 2026-03-07
 - Core functions reached through handler execution: **66/66**
 - Flask HTTP smoke coverage exists in `tests/web/test_http_api_smoke.py`
   - basic GET/POST success paths
+  - custom 404 page path
   - unknown-handler 500 path
   - missing-required-key 500 path
 

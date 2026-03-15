@@ -1,6 +1,6 @@
 # Crypto Function Inventory
 
-Last updated: 2026-03-07
+Last updated: 2026-03-16
 
 ## 1. Management Term
 - This project manages cipher transforms, analysis utilities, and encoding helpers under one term: **Crypto Functions**.
@@ -11,6 +11,8 @@ Last updated: 2026-03-07
 - `gear/<function>` based pages: 36
 - Non-`gear` API page: 1 (`/resize` -> `POST /g/resize/`)
 - Client-only page: 1 (`/memo`)
+- Top-page organization is metadata-driven from `app/tool_catalog.py`.
+- Current top-page groups are: `Cryptography`, `Encoding`, `Utility`, `Remember Ingress`, `Extra`.
 
 ## 3. Inventory (Page -> API -> Inputs -> Internal Functions)
 
@@ -58,3 +60,4 @@ Last updated: 2026-03-07
 
 ## 4. Notes
 - `challenge`, `passcode`, `about`, and `link` are top-page entries but excluded from this inventory because they are not crypto transform APIs.
+- The top page also provides in-page search over tool `name`, `aliases`, and `tags`.

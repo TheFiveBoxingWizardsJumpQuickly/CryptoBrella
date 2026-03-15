@@ -1,6 +1,6 @@
 # Test Design Matrix
 
-Last updated: 2026-03-07
+Last updated: 2026-03-16
 
 ## 1. Goals
 - Layer 1: regression detection for Crypto Functions logic (known vectors, boundaries, exception behavior).
@@ -32,7 +32,7 @@ Last updated: 2026-03-07
   - `gear_regression_vectors.json` (82 cases)
   - also validates fixture coverage of all request handlers
 - `tests/web/test_http_api_smoke.py`
-  - Flask `test_client` smoke checks for representative GET/POST and HTTP 500 paths
+  - Flask `test_client` smoke checks for representative GET/POST, custom 404 behavior, and HTTP 500 paths
 
 ## 4. Constraints and Current Policy
 - Large fixture baselines lock current behavior; intentional behavior changes require fixture regeneration.
