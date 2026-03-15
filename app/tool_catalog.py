@@ -362,7 +362,7 @@ TOOL_CATALOG = [
         "name": "Resize Image",
         "description": "Resize and pad uploaded images.",
         "aliases": ["image resize", "resize image"],
-        "tags": ["utility", "image", "resize"],
+        "tags": ["utility", "image", "resize","picture"],
         "icon": "icon_resize.png",
     },
     {

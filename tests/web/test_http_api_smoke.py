@@ -41,6 +41,15 @@ def test_get_basic_pages(client):
     assert client.get("/about").status_code == 200
 
 
+def test_missing_page_uses_custom_404(client):
+    resp = client.get("/not-found")
+    assert resp.status_code == 404
+    body = resp.get_data(as_text=True)
+    assert "404 Not Found" in body
+    assert "The page you are looking for could not be found." in body
+    assert "Back to Top" in body
+
+
 def test_post_gear_rot_success(client):
     resp = client.post("/gear/rot_gen", json={"input_text": "Abc-123"})
     assert resp.status_code == 200

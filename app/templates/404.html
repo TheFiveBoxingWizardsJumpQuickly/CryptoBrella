@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/beercss@3.0.8/dist/cdn/beer.min.css" rel="stylesheet">
+        <link href="/static/css/style_v2.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/beercss@3.0.8/dist/cdn/beer.min.js"></script>
+        <title>404 Not Found</title>
+    </head>
+    <body class="dark">
+        <main class="responsive small-margin" id="app">
+            <div><a class="underline" href='{{BASEURL}}'>HOME</a></div>
+            <h1 class="center-align middle-align bold small">Crypto Brella</h1>
+
+            <div class="padding center large-width">
+                <h5>404 Not Found</h5>
+                <p>The page you are looking for could not be found.</p>
+                <br>
+                <p>
+                    <button class="transparent no-padding no-margin link cyan-text" @click="showNextMessage">☂</button>
+                    [[ currentMessageBody ]]
+                </p>
+                <nav class="center-align">
+                    <a href="{{BASEURL}}" class="button border">Back to Top</a>
+                </nav>
+            </div>
+        </main>
+        <script>
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    messages: {{ not_found_messages | tojson }},
+                    currentMessageIndex: {{ initial_message_index | tojson }},
+                },
+                computed: {
+                    currentMessageBody: function() {
+                        return this.messages[this.currentMessageIndex];
+                    },
+                },
+                methods: {
+                    showNextMessage: function() {
+                        this.currentMessageIndex = (this.currentMessageIndex + 1) % this.messages.length;
+                    },
+                },
+                delimiters: ['[[', ']]']
+            });
+        </script>
+    </body>
+</html>

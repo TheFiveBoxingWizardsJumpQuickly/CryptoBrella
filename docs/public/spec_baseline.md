@@ -1,6 +1,6 @@
 # CryptoBrella Baseline Specification
 
-Last updated: 2026-03-15
+Last updated: 2026-03-16
 
 ## 1. Purpose and Scope
 - This document captures current implementation behavior as the baseline specification.
@@ -17,6 +17,16 @@ Last updated: 2026-03-15
 - Response type:
   - Most handlers return `dict[int, str]` (Flask JSON serialization stringifies keys).
   - Some handlers return plain strings (for example `passcode_validate`).
+
+## 2.1 Top Page (`/`)
+- The home page renders a metadata-driven tool catalog from `app/tool_catalog.py`.
+- In-page search filters tools client-side using `name`, `aliases`, and `tags`.
+- If search yields no visible tools, the page shows `No matches`.
+- Pressing `Enter` in the search field opens the first visible result in a new tab.
+
+## 2.2 Not-Found Pages
+- Missing pages return HTTP 404 through a shared custom 404 page.
+- This applies to general missing routes and to missing `challenge` / `prosaic` pages.
 
 ## 3. Input Normalization Rules (P0)
 

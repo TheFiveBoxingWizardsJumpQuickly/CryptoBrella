@@ -1,10 +1,25 @@
 import os
+import random
 import app.gear as gear
 import app.secret.cryptobrella as cryptobrella
 
 from app.prosaic import prose
 from app.tool_catalog import get_home_catalog
 from flask import Flask, abort, render_template, request, send_from_directory, url_for, jsonify
+
+
+NOT_FOUND_MESSAGES = [
+    "A simple umbrella, a simple cipher, a little peace of mind.",
+    "An umbrella is comfort in rain or code.",
+    "A CryptoBrella is a shelter you carry with you.",
+    "Both ciphers and umbrellas protect, but they also hide the sky.",
+    "Better an umbrella in sunshine than none in a cipher storm.",
+    "Ciphers and umbrellas are the simplest forms of preparedness.",
+    "A good umbrella is quiet insurance. So is a good cipher.",
+    "An umbrella protects against storms. CryptoBrella protects against mystery.",
+    "An umbrella makes its own small world. A cipher makes its own small secret.",
+    "Many ciphers, one umbrella.",
+]
 
 def create_app():
     return Flask(__name__)
@@ -26,6 +41,17 @@ def index():
 @app.route('/about')
 def about():
     return render_template('about.html', BASEURL=request.url_root,)
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    initial_index = random.randrange(len(NOT_FOUND_MESSAGES))
+    return render_template(
+        '404.html',
+        BASEURL=request.url_root,
+        not_found_messages=NOT_FOUND_MESSAGES,
+        initial_message_index=initial_index,
+    ), 404
 
 
 @app.route('/favicon.ico')
@@ -124,7 +150,7 @@ def show_challenge_page(pageid):
                                content=content['content'],
                                )
     else:
-        return render_template('Challenge/cb_404.html')
+        abort(404)
 
 
 @app.route('/prosaic/<string:pageid>')
@@ -145,7 +171,7 @@ def show_prosaic_page(pageid):
                                link=content['link'],
                                )
     else:
-        return '404'
+        abort(404)
 
 
 @app.route('/gear/<string:function>', methods=['post'])
