@@ -20,42 +20,29 @@ def test_category_tool_order_covers_each_tool_once():
     assert set(ordered_ids) == {tool["id"] for tool in TOOL_CATALOG}
 
 
-def test_home_catalog_groups_tools_into_sections_and_categories():
+def test_home_catalog_contains_only_non_empty_categories():
     sections = get_home_catalog()
 
-    assert [section["id"] for section in sections] == [
-        "cryptography",
-        "encoding",
-        "text-tools",
-        "number-tools",
-        "utility",
-        "ingress-tools",
-        "extra-pages",
+    assert sections
+
+    for section in sections:
+        assert section["id"]
+        assert section["categories"]
+
+        for category in section["categories"]:
+            assert category["id"]
+            assert category["tools"]
+
+
+def test_home_catalog_covers_each_tool_once():
+    sections = get_home_catalog()
+
+    catalog_tool_ids = [
+        tool["id"]
+        for section in sections
+        for category in section["categories"]
+        for tool in category["tools"]
     ]
 
-    category_ids = [section["categories"][0]["id"] for section in sections[:5]]
-    assert category_ids == [
-        "cryptography",
-        "encoding",
-        "text-tools",
-        "number-tools",
-        "utility",
-    ]
-
-    cryptography_ids = [
-        tool["id"] for tool in sections[0]["categories"][0]["tools"]
-    ]
-    assert "rot" in cryptography_ids
-    assert "frequency" in cryptography_ids
-    assert "rsa" in cryptography_ids
-
-    ingress_ids = [
-        tool["id"] for tool in sections[5]["categories"][0]["tools"]
-    ]
-    assert set(ingress_ids) == {
-        "rot_ex",
-        "vigenere_ex",
-        "rectangle_ex",
-        "charcode_ex",
-        "ingress_keywords",
-    }
+    assert len(catalog_tool_ids) == len(set(catalog_tool_ids))
+    assert set(catalog_tool_ids) == {tool["id"] for tool in TOOL_CATALOG}

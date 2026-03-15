@@ -11,8 +11,17 @@
             <h1 class="center-align middle-align bold small">Crypto Brella</h1>
             <h4 class="center-align middle-align bold small">Cipher Toolbox</h4>
 
+            <div class="field prefix large-width center">
+                <i>search</i>
+                <input type="search" v-model.trim="searchQuery" @keydown.enter="openSingleMatch">
+            </div>
+
+            <p v-if="searchQuery.trim() && filteredSections.length === 0" class="center-align small">
+                No matches
+            </p>
+
             <div class="grid no-space">
-                <template v-for="section in sections">
+                <template v-for="section in filteredSections">
                     <div :key="section.id + '-header'" class="teal s12">
                         <h5 class="white-text small center-align middle-align">[[ section.title ]]</h5>
                     </div>
@@ -40,7 +49,7 @@
                                     :title="tool.description"
                                 >
                                     <img class="circle" :src="'/static/image/' + tool.icon" :alt="tool.name">
-                                    <p class="white-text">[[ tool.display_name || tool.name ]]</p>
+                                    <p class="white-text">[[ tool.name ]]</p>
                                 </a>
                             </div>
                         </div>
@@ -61,6 +70,63 @@
                 el: '#app',
                 data: {
                     sections: {{ catalog_sections | tojson }},
+                    searchQuery: '',
+                },
+                computed: {
+                    filteredSections: function() {
+                        var query = this.searchQuery.trim().toLowerCase();
+
+                        if (!query) {
+                            return this.sections;
+                        }
+
+                        return this.sections
+                            .map(function(section) {
+                                var categories = section.categories
+                                    .map(function(category) {
+                                        var tools = category.tools.filter(function(tool) {
+                                            return [
+                                                tool.name,
+                                            ]
+                                                .concat(tool.aliases || [])
+                                                .concat(tool.tags || [])
+                                                .filter(Boolean)
+                                                .join(' ')
+                                                .toLowerCase()
+                                                .indexOf(query) !== -1;
+                                        });
+
+                                        return Object.assign({}, category, { tools: tools });
+                                    })
+                                    .filter(function(category) {
+                                        return category.tools.length > 0;
+                                    });
+
+                                return Object.assign({}, section, { categories: categories });
+                            })
+                            .filter(function(section) {
+                                return section.categories.length > 0;
+                            });
+                    },
+                    filteredTools: function() {
+                        return this.filteredSections.reduce(function(tools, section) {
+                            return tools.concat(
+                                section.categories.reduce(function(categoryTools, category) {
+                                    return categoryTools.concat(category.tools);
+                                }, [])
+                            );
+                        }, []);
+                    },
+                },
+                methods: {
+                    openSingleMatch: function(event) {
+                        if (this.filteredTools.length === 0) {
+                            return;
+                        }
+
+                        event.preventDefault();
+                        window.open(this.filteredTools[0].path, '_blank');
+                    },
                 },
                 delimiters: ['[[', ']]']
             });

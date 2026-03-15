@@ -1,11 +1,12 @@
 # CryptoBrella System Overview
 
-Last updated: 2026-03-07
+Last updated: 2026-03-15
 
 ## 1. System Summary
 - CryptoBrella is a Flask-based Crypto Functions service.
 - Core logic lives in pure functions under `app/cipher/*`.
 - Web request/response handling is implemented in `app/gear.py`.
+- Top-page catalog metadata is managed in `app/tool_catalog.py`.
 - UI pages under `app/templates/Tools/*.html` call `POST /gear/<function>`.
 
 ## 2. Runtime Flow
@@ -24,10 +25,9 @@ Last updated: 2026-03-07
 - Purple implementation: `app/cipher/purple.py`
 - Kakushi implementation: `app/cipher/kakushi.py`
 - Passcode/DB access: `app/cipher/ingress_passcode.py`
-- LINE webhook blueprint: `app/line_bot_blueprint.py`
+- Top-page metadata/catalog: `app/tool_catalog.py`
 
 ## 4. Endpoint Categories
 - Pages: `/`, `/<page>`, `/about`, `/challenge/*`, `/passcode/*`, `/prosaic/*`
 - Crypto Functions API: `POST /gear/<function>`
 - Image API: `POST /g/resize/`, `GET /upload/`, `GET /modified_image/`
-- Webhook API: `POST /line/webhook`

@@ -1,11 +1,11 @@
 # CryptoBrella Baseline Specification
 
-Last updated: 2026-03-07
+Last updated: 2026-03-15
 
 ## 1. Purpose and Scope
 - This document captures current implementation behavior as the baseline specification.
 - Scope covers Web/API contracts in `app/app.py` and `app/gear.py`, with focus on P0 functions.
-- External dependency internals (W3W, LINE, passcode DB) are documented separately.
+- Passcode DB internals are documented separately.
 
 ## 2. Common Contract for `/gear/<function>`
 - Method: `POST` only.

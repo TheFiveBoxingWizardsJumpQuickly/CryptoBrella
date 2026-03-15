@@ -4,8 +4,6 @@ from copy import deepcopy
 CATEGORY_DEFINITIONS = [
     {"id": "cryptography", "title": "Cryptography"},
     {"id": "encoding", "title": "Encoding"},
-    {"id": "text-tools", "title": "Text Tools"},
-    {"id": "number-tools", "title": "Number Tools"},
     {"id": "utility", "title": "Utility"},
     {"id": "ingress-tools", "title": "Remember Ingress"},
     {"id": "extra-pages", "title": "Extra"},
@@ -28,9 +26,6 @@ CATEGORY_TOOL_ORDER = {
         "railfence",
         "columnar",
         "skip",
-        "swap_xy",
-        "frequency",
-        "rsa",
     ],
     "encoding": [
         "base64",
@@ -42,20 +37,19 @@ CATEGORY_TOOL_ORDER = {
         "vanity",
         "kakushi",
     ],
-    "text-tools": [
-        "charreplace",
-        "split_text",
-        "memo",
-    ],
-    "number-tools": [
+    "utility": [
         "prime",
         "number_conv",
-    ],
-    "utility": [
+        "charreplace",
+        "split_text",
         "hash",
         "pwgen",
         "resize",
-        "riddle_tables",
+        "riddle_tables",   
+        "swap_xy",
+        "frequency",
+        "rsa",
+        "memo",
     ],
     "ingress-tools": [
         "rot_ex",
@@ -79,7 +73,7 @@ TOOL_CATALOG = [
         "path": "/rot",
         "name": "ROT",
         "description": "Rotate text by a fixed alphabet shift.",
-        "aliases": ["caesar", "caesar cipher", "shift cipher", "rot13"],
+        "aliases": ["caesar", "caesar cipher", "shift cipher", "rot13", "rotate"],
         "tags": ["cipher", "substitution", "classical"],
         "icon": "icon_rot.png",
     },
@@ -97,8 +91,8 @@ TOOL_CATALOG = [
         "path": "/simplesub",
         "name": "Simple Substitutions",
         "description": "Work with monoalphabetic substitution tables.",
-        "aliases": ["simple substitution", "monoalphabetic substitution"],
-        "tags": ["cipher", "substitution", "classical"],
+        "aliases": ["simple substitution", "monoalphabetic substitution","tables"],
+        "tags": ["cipher", "substitution", "classical","A-a swap","Atbash","Morse","keyboard","Dvorak","MALTRON"],
         "icon": "icon_simplesub.png",
     },
     {
@@ -106,7 +100,7 @@ TOOL_CATALOG = [
         "path": "/affine",
         "name": "Affine",
         "description": "Encode and decode affine substitution ciphers.",
-        "aliases": ["affine cipher"],
+        "aliases": ["affine cipher","linear"],
         "tags": ["cipher", "substitution", "classical"],
         "icon": "icon_affine.png",
     },
@@ -125,7 +119,7 @@ TOOL_CATALOG = [
         "name": "Playfair",
         "description": "Encode and decode Playfair digraph ciphers.",
         "aliases": ["playfair cipher"],
-        "tags": ["cipher", "digraph", "classical"],
+        "tags": ["cipher", "digraph", "classical","matrix"],
         "icon": "icon_playfair.png",
     },
     {
@@ -142,7 +136,7 @@ TOOL_CATALOG = [
         "path": "/purple",
         "name": "Purple",
         "description": "Run the Japanese Purple cipher simulation.",
-        "aliases": ["purple cipher", "type b cipher machine"],
+        "aliases": ["purple cipher","Japan"],
         "tags": ["cipher", "machine", "ww2"],
         "icon": "icon_purple.png",
     },
@@ -161,7 +155,7 @@ TOOL_CATALOG = [
         "name": "Reverse",
         "description": "Reverse text order for quick transposition checks.",
         "aliases": ["reverse text", "backwards"],
-        "tags": ["transposition", "cipher", "text"],
+        "tags": ["transposition", "cipher", "text", "classical"],
         "icon": "icon_reverse.png",
     },
     {
@@ -170,7 +164,7 @@ TOOL_CATALOG = [
         "name": "Rectangle",
         "description": "Explore rectangle transposition patterns.",
         "aliases": ["rectangle cipher", "grid transposition"],
-        "tags": ["transposition", "cipher", "analysis"],
+        "tags": ["transposition", "cipher", "analysis", "classical","ingress","zig-zag","zigzag"],
         "icon": "icon_rectangle.png",
     },
     {
@@ -179,7 +173,7 @@ TOOL_CATALOG = [
         "name": "Railfence",
         "description": "Encode and decode rail fence ciphers.",
         "aliases": ["rail fence", "zigzag cipher"],
-        "tags": ["transposition", "cipher", "classical"],
+        "tags": ["transposition", "cipher", "classical","zig-zag"],
         "icon": "icon_railfence.png",
     },
     {
@@ -196,8 +190,8 @@ TOOL_CATALOG = [
         "path": "/skip",
         "name": "Skip",
         "description": "Read text with skip patterns.",
-        "aliases": ["skip cipher", "every nth"],
-        "tags": ["transposition", "cipher", "pattern"],
+        "aliases": ["skip cipher"],
+        "tags": ["transposition", "cipher", "classical"],
         "icon": "icon_skip.png",
     },
     {
@@ -206,7 +200,7 @@ TOOL_CATALOG = [
         "name": "Swap X-Y Axes",
         "description": "Transpose text laid out on a grid.",
         "aliases": ["swap xy", "transpose grid"],
-        "tags": ["transposition", "grid", "cipher"],
+        "tags": ["transposition", "grid"],
         "icon": "icon_swap_xy.png",
     },
     {
@@ -215,7 +209,7 @@ TOOL_CATALOG = [
         "name": "Frequency Analysis",
         "description": "Count letters and n-grams for cipher analysis.",
         "aliases": ["letter frequency", "frequency count"],
-        "tags": ["analysis", "cipher", "statistics"],
+        "tags": ["analysis", "cipher", "statistics","n-gram"],
         "icon": "icon_frequency.png",
     },
     {
@@ -224,7 +218,7 @@ TOOL_CATALOG = [
         "name": "RSA",
         "description": "Encode and decode simple RSA examples.",
         "aliases": ["rsa cipher", "public key"],
-        "tags": ["crypto", "modern", "public-key"],
+        "tags": ["mathematics", "modern", "public-key"],
         "icon": "icon_rsa.png",
     },
     {
@@ -233,7 +227,7 @@ TOOL_CATALOG = [
         "name": "Base64 etc.",
         "description": "Encode and decode base family formats.",
         "aliases": ["base64", "base32", "base58", "base85"],
-        "tags": ["encoding", "decode", "base"],
+        "tags": ["encode", "decode", "base"],
         "icon": "icon_base64.png",
     },
     {
@@ -241,8 +235,8 @@ TOOL_CATALOG = [
         "path": "/morse",
         "name": "Morse",
         "description": "Translate text and Morse code.",
-        "aliases": ["morse code"],
-        "tags": ["encoding", "radio", "communication"],
+        "aliases": ["morse code","dots and dashes","dits and dahs"],
+        "tags": ["encode", "decode","Japan"],
         "icon": "icon_morse.png",
     },
     {
@@ -251,7 +245,7 @@ TOOL_CATALOG = [
         "name": "Character Code",
         "description": "Convert text to character code representations.",
         "aliases": ["ascii", "unicode", "character code"],
-        "tags": ["encoding", "codepoint", "text"],
+        "tags": ["encode", "decode", "codepoint", "text"],
         "icon": "icon_charcode.png",
     },
     {
@@ -260,7 +254,7 @@ TOOL_CATALOG = [
         "name": "Braille",
         "description": "Convert text and Braille notation.",
         "aliases": ["braille code"],
-        "tags": ["encoding", "braille", "accessibility"],
+        "tags": ["blind"],
         "icon": "icon_braille.png",
     },
     {
@@ -269,7 +263,7 @@ TOOL_CATALOG = [
         "name": "Japanese Braille",
         "description": "Convert Japanese text and Braille notation.",
         "aliases": ["japanese braille", "tenji"],
-        "tags": ["encoding", "braille", "japanese"],
+        "tags": ["blind","Japan"],
         "icon": "icon_braille_ja.png",
     },
     {
@@ -278,7 +272,7 @@ TOOL_CATALOG = [
         "name": "Phonetic",
         "description": "Render text in phonetic alphabet forms.",
         "aliases": ["nato phonetic", "phonetic alphabet"],
-        "tags": ["encoding", "communication", "alphabet"],
+        "tags": ["alphabet"],
         "icon": "icon_phonetic.png",
     },
     {
@@ -287,7 +281,7 @@ TOOL_CATALOG = [
         "name": "Vanity Number",
         "description": "Convert between text and phone keypad numbers.",
         "aliases": ["phone keypad", "t9", "vanity"],
-        "tags": ["encoding", "phone", "number"],
+        "tags": ["phone", "number"],
         "icon": "icon_vanity.png",
     },
     {
@@ -296,7 +290,7 @@ TOOL_CATALOG = [
         "name": "Kakushi",
         "description": "Convert hidden text patterns used in puzzles.",
         "aliases": ["hidden text", "kakushi code"],
-        "tags": ["encoding", "puzzle", "japanese"],
+        "tags": ["encode","decode", "original", "japan","a3xgvo"],
         "icon": "icon_kakushi.png",
     },
     {
@@ -305,7 +299,7 @@ TOOL_CATALOG = [
         "name": "Character Replace",
         "description": "Replace characters in bulk.",
         "aliases": ["character replace", "replace text"],
-        "tags": ["text", "replace", "transform"],
+        "tags": ["text", "replace", "transform","utility"],
         "icon": "icon_charreplace.png",
     },
     {
@@ -314,7 +308,7 @@ TOOL_CATALOG = [
         "name": "Split Text",
         "description": "Split text into fixed lengths or groups.",
         "aliases": ["split text", "chunk text"],
-        "tags": ["text", "split", "format"],
+        "tags": ["text", "split", "format","utility"],
         "icon": "icon_split_text.png",
     },
     {
@@ -332,7 +326,7 @@ TOOL_CATALOG = [
         "name": "Prime Decomposition",
         "description": "Factor integers into primes.",
         "aliases": ["prime factorization", "prime decomposition"],
-        "tags": ["number", "math", "prime"],
+        "tags": ["number", "math", "prime","factor"],
         "icon": "icon23.png",
     },
     {
@@ -377,7 +371,7 @@ TOOL_CATALOG = [
         "name": "Riddle Tables",
         "description": "Browse handy puzzle and cipher reference tables.",
         "aliases": ["riddle tables", "reference tables"],
-        "tags": ["utility", "reference", "puzzle"],
+        "tags": ["utility", "reference", "puzzle","Japan","Traditional month","zodiac","keyboard"],
         "icon": "icon_riddle_tables.png",
     },
     {
@@ -385,8 +379,8 @@ TOOL_CATALOG = [
         "path": "/rot_ex",
         "name": "Rot ex",
         "description": "Ingress-oriented ROT helper.",
-        "aliases": ["rot ex", "ingress rot"],
-        "tags": ["ingress", "cipher", "rot"],
+        "aliases": ["caesar", "caesar cipher", "shift cipher", "rot13", "rotate"],
+        "tags": ["cipher", "substitution", "classical","ingress","atbash"],
         "icon": "icon_rot_ex.png",
     },
     {
@@ -394,8 +388,8 @@ TOOL_CATALOG = [
         "path": "/vigenere_ex",
         "name": "Vigenere ex",
         "description": "Ingress-oriented Vigenere helper.",
-        "aliases": ["vigenere ex", "ingress vigenere"],
-        "tags": ["ingress", "cipher", "vigenere"],
+        "aliases": ["vigenere cipher", "keyword cipher"],
+        "tags": ["cipher", "polyalphabetic", "classical","ingress"],
         "icon": "icon_vigenere_ex.png",
     },
     {
@@ -449,7 +443,7 @@ TOOL_CATALOG = [
         "name": "Link",
         "description": "Open related links and references.",
         "aliases": ["links", "reference links"],
-        "tags": ["extra", "links", "reference"],
+        "tags": ["links", "reference"],
         "icon": "icon_link.png",
     },
     {
@@ -458,7 +452,7 @@ TOOL_CATALOG = [
         "name": "About",
         "description": "Read about the site and its challenges.",
         "aliases": ["about cryptobrella"],
-        "tags": ["extra", "about", "help"],
+        "tags": ["about", "help"],
         "icon": "icon_about.png",
     },
 ]
