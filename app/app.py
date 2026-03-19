@@ -3,7 +3,7 @@ import random
 import app.gear as gear
 import app.secret.cryptobrella as cryptobrella
 
-from app.prosaic import prose
+from app.cipher_docs import get_cipher_doc_page
 from app.tool_catalog import get_home_catalog
 from flask import Flask, abort, render_template, request, send_from_directory, url_for, jsonify
 
@@ -153,14 +153,14 @@ def show_challenge_page(pageid):
         abort(404)
 
 
-@app.route('/prosaic/<string:pageid>')
-def show_prosaic_page(pageid):
-    existing_page_ids = prose(
+@app.route('/cipher_docs/<string:pageid>')
+def show_cipher_doc_page(pageid):
+    existing_page_ids = get_cipher_doc_page(
         mode='keys', pageid=None)
     if pageid in existing_page_ids:
-        content = prose(
+        content = get_cipher_doc_page(
             mode='page', pageid=pageid)
-        return render_template('prosaic.html.jinja',
+        return render_template('cipher_docs.html.jinja',
                                BASEURL=request.base_url,
                                title=content['title'],
                                lang=content['lang'],

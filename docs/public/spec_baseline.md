@@ -26,7 +26,7 @@ Last updated: 2026-03-16
 
 ## 2.2 Not-Found Pages
 - Missing pages return HTTP 404 through a shared custom 404 page.
-- This applies to general missing routes and to missing `challenge` / `prosaic` pages.
+- This applies to general missing routes and to missing `challenge` / `cipher_docs` pages.
 
 ## 3. Input Normalization Rules (P0)
 

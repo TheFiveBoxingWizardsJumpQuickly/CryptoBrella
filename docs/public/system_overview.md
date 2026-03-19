@@ -29,10 +29,10 @@ Last updated: 2026-03-16
 - Top-page metadata/catalog: `app/tool_catalog.py`
 
 ## 4. Endpoint Categories
-- Pages: `/`, `/<page>`, `/about`, `/challenge/*`, `/passcode/*`, `/prosaic/*`
+- Pages: `/`, `/<page>`, `/about`, `/challenge/*`, `/passcode/*`, `/cipher_docs/*`
 - Crypto Functions API: `POST /gear/<function>`
 - Image API: `POST /g/resize/`, `GET /upload/`, `GET /modified_image/`
 
 ## 5. Not-Found Handling
-- Missing general pages and missing `challenge` / `prosaic` pages resolve to a shared custom 404 page.
+- Missing general pages and missing `challenge` / `cipher_docs` pages resolve to a shared custom 404 page.
 - The 404 page returns HTTP 404 explicitly and includes a simple route back to the top page.

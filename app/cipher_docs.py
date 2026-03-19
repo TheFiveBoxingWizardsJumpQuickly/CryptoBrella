@@ -245,7 +245,7 @@ def output_with_tag(text):
     return output
 
 
-def prose(mode, pageid):
+def get_cipher_doc_page(mode, pageid):
     if mode == 'keys':
         return contents.keys()
     else:

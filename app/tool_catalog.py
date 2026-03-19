@@ -83,7 +83,7 @@ TOOL_CATALOG = [
         "name": "Vigenere",
         "description": "Encode and decode Vigenere cipher text.",
         "aliases": ["vigenere cipher", "keyword cipher"],
-        "tags": ["cipher", "polyalphabetic", "classical"],
+        "tags": ["cipher", "polyalphabetic", "classical","beaufort","gronsfeld","auto key"],
         "icon": "icon_vigenere.png",
     },
     {
@@ -327,7 +327,7 @@ TOOL_CATALOG = [
         "description": "Factor integers into primes.",
         "aliases": ["prime factorization", "prime decomposition"],
         "tags": ["number", "math", "prime","factor"],
-        "icon": "icon23.png",
+        "icon": "icon_prime.png",
     },
     {
         "id": "number_conv",
@@ -354,7 +354,7 @@ TOOL_CATALOG = [
         "description": "Generate random passwords.",
         "aliases": ["password generator", "pwgen"],
         "tags": ["utility", "password", "random"],
-        "icon": "icon24.png",
+        "icon": "icon_pwgen.png",
     },
     {
         "id": "resize",
@@ -389,7 +389,7 @@ TOOL_CATALOG = [
         "name": "Vigenere ex",
         "description": "Ingress-oriented Vigenere helper.",
         "aliases": ["vigenere cipher", "keyword cipher"],
-        "tags": ["cipher", "polyalphabetic", "classical","ingress"],
+        "tags": ["cipher", "polyalphabetic", "classical","beaufort","gronsfeld","auto key","ingress"],
         "icon": "icon_vigenere_ex.png",
     },
     {

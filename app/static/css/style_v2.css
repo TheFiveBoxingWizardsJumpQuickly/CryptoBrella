@@ -23,7 +23,29 @@ h1, h2, h3, h4, h5 {
   overflow: hidden;
 }
 
-.prosaic{
+.cipher-docs{
   line-height:1.9;
   word-wrap : break-word;
+}
+
+.about-body{
+  line-height: 1.75;
+}
+
+.about-body p{
+  margin: 0 0 0.9rem 0;
+}
+
+.about-body br{
+  display: none;
+}
+
+.about-list{
+  display: inline-block;
+  margin: 0.15rem auto 1rem auto;
+  padding-left: 1.5rem;
+}
+
+.about-body table{
+  margin-top: 0.5rem;
 }
