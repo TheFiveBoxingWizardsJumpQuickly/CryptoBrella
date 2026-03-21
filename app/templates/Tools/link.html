@@ -1,159 +1,20 @@
 {% extends "base_apps_v2.html.jinja" %}
 {% block title %}Link{% endblock %}
 {% block h1 %}Link{% endblock %}
-{% block lead %}Links to outer useful sites.{% endblock %}
+{% block lead %}Useful external sites related to ciphers, analysis, and adjacent work.{% endblock %}
 {% block input_area %}
-        <h5>Web-based Multi Cipher Tools</h5>
-        <article class="large-width blue-grey9 elevate">
-            <a href="https://multidec.web-lab.at" target="_blank">
-                <img class="circle medium" src="https://multidec.web-lab.at/favicon.ico" style="display:flex;">
-                <h6 class="small-padding">Multi-Dec</h6>
+        {% for section in link_sections %}
+        <h5>{{ section["title"] }}</h5>
+        {% for item in section["items"] %}
+        <article class="large-width blue-grey9 elevate link-card">
+            <a href="{{ item["url"] }}" target="_blank" rel="noopener noreferrer" class="link-card-head">
+                <img class="circle medium link-card-icon" src="{{ item["icon"] }}" alt="">
+                <h6 class="small-padding">{{ item["name"] }}</h6>
             </a>
-            <p>Highly user-friendly, flexible, and powerful tool.</p>
+            <p>{{ item["description"] }}</p>
         </article>
-
-        <article class="large-width blue-grey9 elevate">
-            <a href="https://cryptii.com/" target="_blank">
-                <img class="circle medium" src="https://cryptii.com/favicon.ico" style="display:flex;">
-                <h6 class="small-padding">cryptii</h6>
-            </a>
-            <p>Powerful and also outstanding design and UI.</p>
-        </article>
-
-        <article class="large-width blue-grey9 elevate">
-            <a href="http://rumkin.com/tools/cipher" target="_blank">
-                <img class="circle medium" src="http://rumkin.com/favicon.ico" style="display:flex;">
-                <h6 class="small-padding">Rumkin.com Cipher Tools</h6>
-            </a>
-            <p>Legendary and still useful cipher web tool.</p>
-        </article>
-
-        <article class="large-width blue-grey9 elevate">
-            <a href="https://www.geocachingtoolbox.com" target="_blank">
-                <img class="circle medium" src="https://www.geocachingtoolbox.com/favicon.ico" style="display:flex;">
-                <h6 class="small-padding">Geocaching Toolbox.com</h6>
-            </a>
-            <p>Many awesome maniac implementation of ciphers.</p>
-        </article>
-
-        <article class="large-width blue-grey9 elevate">
-            <a href="https://www.dcode.fr/en" target="_blank">
-                <img class="circle medium" src="https://www.dcode.fr/favicon.ico" style="display:flex;">
-                <h6 class="small-padding">dCode.xyz (dCode.fr)</h6>
-            </a>
-            <p>One of the most famous decoding web tool site.</p>
-        </article>
-
-
-        <h5>Analysis Tools</h5>
-        <article class="large-width blue-grey9 elevate">
-            <a href="https://www.onelook.com" target="_blank">
-                <img class="circle medium" src="https://www.onelook.com/favicon.ico" style="display:flex;">
-                <h6 class="small-padding">OneLook</h6>
-            </a>
-            <p>The greatest word-search service. I cannot find an alternative.</p>
-        </article>
-
-        <article class="large-width blue-grey9 elevate">
-            <a href="https://anagram-solver.net" target="_blank">
-                <img class="circle medium" src="https://anagram-solver.net/favicon.ico" style="display:flex;">
-                <h6 class="small-padding">Free Online Anagram Solver</h6>
-            </a>
-            <p>The one of the greatest anagram solver service. No update for years, but still I think this site has the best quality.</p>
-        </article>
-
-        <article class="large-width blue-grey9 elevate">
-            <a href="https://incoherency.co.uk/image-steganography/#unhide" target="_blank">
-                
-                <h6 class="small-padding">Image Steganography</h6>
-            </a>
-            <p>The steganography solver to find the secret in lower bits.</p>
-        </article>
-
-        <article class="large-width blue-grey9 elevate">
-            <a href="https://www.guballa.de/vigenere-solver" target="_blank">
-                <img class="circle medium" src="https://www.guballa.de/user/themes/jens-quark/images/favicon.png" style="display:flex;">
-                <h6 class="small-padding">Guballa.de Vigenere Solver</h6>
-            </a>
-            <p>Incredible auto vigenere solver. Any standard Vigenere cipher can be solved in a second although we do not know the key at all.</p>
-        </article>
-
-        <article class="large-width blue-grey9 elevate">
-            <a href="https://29a.ch/photo-forensics" target="_blank">
-                <h6 class="small-padding">Forensically</h6>
-            </a>
-            <p>Steganography, Exif, and hidden strings in an image.</p>
-        </article>
-
-
-        <article class="large-width blue-grey9 elevate">
-            <a href="https://hexed.it" target="_blank">
-                <img class="circle medium" src="https://hexed.it/img/logo.png" style="display:flex;">
-                <h6 class="small-padding">HexEd.it</h6>
-            </a>
-            <p>To see the file as a binary data.</p>
-        </article>
-
-        <h5>Other tools</h5>
-
-        <article class="large-width blue-grey9 elevate">
-            <a href="https://pixlr.com/e/" target="_blank">
-                <img class="circle medium" src="https://pixlr.com//favicon.ico" style="display:flex;">
-                <h6 class="small-padding">Photo Editor : Pixlr E</h6>
-            </a>
-            <p>Image modification such as changing colors, rotating, distort, cut and paste, etc.</p>
-            <p>Perfectly works on a browser.</p>
-        </article>
-
-        <article class="large-width blue-grey9 elevate">
-            <a href="https://pastebin.com" target="_blank">
-                <img class="circle medium" src="https://pastebin.com/favicon.ico" style="display:flex;">
-                <h6 class="small-padding">Pastebin.com</h6>
-            </a>
-            <p>Text data sharing tool.</p>
-        </article>
-
-        <article class="large-width blue-grey9 elevate">
-            <a href="https://cryptobin.co" target="_blank">
-                <img class="circle medium" src="https://cryptobin.co/favicon.ico" style="display:flex;">
-                <h6 class="small-padding">Cryptobin.co</h6>
-            </a>
-            <p>Text data sharing tool. As it has a functionality to protect the message by a password, sometimes the reward is posted to this site then the encoded password is provided to the challengers.</p>
-        </article>
-
-        <h5>Thanks to</h5>
-
-        <article class="large-width blue-grey9 elevate">
-            <a href="https://www.pythonanywhere.com" target="_blank">
-                <img class="circle medium white" src="https://www.pythonanywhere.com/favicon.ico" style="display:flex;">
-                <h6 class="small-padding">pythonanywhere</h6>
-            </a>
-            <p>This site is hosted by pythonanywhere</p>
-        </article>
-
-        <article class="large-width blue-grey9 elevate">
-            <a href="https://flask.palletsprojects.com" target="_blank">
-                <img class="circle medium white" src="https://flask.palletsprojects.com/_static/flask-icon.png" style="display:flex;">
-                <h6 class="small-padding">Flask</h6>
-            </a>
-            <p>This site is developped by using Flask.</p>
-        </article>
-
-        <article class="large-width blue-grey9 elevate">
-            <a href="https://www.beercss.com" target="_blank">
-                <img class="circle medium" src="https://www.beercss.com/favicon.png" style="display:flex;">
-                <h6 class="small-padding">Beercss</h6>
-            </a>
-            <p>This site uses Beercss.</p>
-        </article>
-
-        <article class="large-width blue-grey9 elevate">
-            <a href="https://www.midjourney.com" target="_blank">
-                <img class="circle medium" src="https://www.midjourney.com/apple-touch-icon.png" style="display:flex;">
-                <h6 class="small-padding">Midjourney</h6>
-            </a>
-            <p>The most of visual assets in this site is created by using Midjourney.</p>
-        </article>
+        {% endfor %}
+        {% endfor %}
 
 {% endblock %}
 {% block standard_results_area %}

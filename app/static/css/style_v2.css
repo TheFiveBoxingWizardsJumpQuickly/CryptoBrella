@@ -49,3 +49,37 @@ h1, h2, h3, h4, h5 {
 .about-body table{
   margin-top: 0.5rem;
 }
+
+.link-card{
+  display: block;
+  padding: 0.9rem 1rem;
+  text-align: left;
+}
+
+.link-card + .link-card{
+  margin-top: 0.75rem;
+}
+
+.link-card-head{
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.65rem;
+  width: 100%;
+}
+
+.link-card-icon{
+  flex: 0 0 auto;
+}
+
+.link-card,
+.link-card a,
+.link-card h6,
+.link-card p{
+  text-align: left;
+}
+
+.link-card p{
+  margin: 0.45rem 0 0 0;
+  width: 100%;
+}

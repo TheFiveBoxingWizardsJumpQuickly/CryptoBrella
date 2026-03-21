@@ -4,6 +4,7 @@ import app.gear as gear
 import app.secret.cryptobrella as cryptobrella
 
 from app.cipher_docs import get_cipher_doc_page
+from app.link_catalog import get_link_sections
 from app.tool_catalog import get_home_catalog
 from flask import Flask, abort, render_template, request, send_from_directory, url_for, jsonify
 
@@ -41,6 +42,11 @@ def index():
 @app.route('/about')
 def about():
     return render_template('about.html', BASEURL=request.url_root,)
+
+
+@app.route('/link')
+def link():
+    return render_template('Tools/link.html', BASEURL=request.url_root, link_sections=get_link_sections())
 
 
 @app.errorhandler(404)

@@ -39,6 +39,11 @@ def test_get_basic_pages(client):
     assert "Cryptography" in body
     assert "Remember Ingress" in body
     assert client.get("/about").status_code == 200
+    link_resp = client.get("/link")
+    assert link_resp.status_code == 200
+    link_body = link_resp.get_data(as_text=True)
+    assert "Built with" in link_body
+    assert "Useful external sites related to ciphers" in link_body
 
 
 def test_missing_page_uses_custom_404(client):
