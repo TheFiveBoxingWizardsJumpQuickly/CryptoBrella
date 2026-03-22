@@ -174,7 +174,7 @@ def show_cipher_doc_page(pageid):
                                how_to_use_tool=content['how_to_use_tool'],
                                test_cases=content['test_cases'],
                                challenge=content['challenge'],
-                               link=content['link'],
+                               related_links=content['related_links'],
                                )
     else:
         abort(404)

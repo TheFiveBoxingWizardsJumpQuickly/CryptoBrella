@@ -1,0 +1,12 @@
+title: Vigenere
+lang: En
+
+[about]
+
+[how_to_use_tool]
+
+[test_cases]
+
+[challenge]
+
+[related_links]

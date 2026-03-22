@@ -1,0 +1,30 @@
+title: ROT
+lang: En
+
+[about]
+
+[how_to_use_tool]
+
+[test_cases]
+::pre
+Case 1
+INPUT = ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
+ROT +8
+OUTPUT = IJKLMNOPQRSTUVWXYZABCDEFGHijklmnopqrstuvwxyzabcdefgh0123456789
+
+Case 2
+INPUT = The rabbit-hole went straight on like a tunnel for some way, and then dipped suddenly down, so suddenly that Alice had not a moment to think about stopping herself before she found herself falling down a very deep well.
+ROT +20
+OUTPUT = Nby luvvcn-bify qyhn mnlucabn ih fcey u nohhyf zil migy qus, uhx nbyh xcjjyx moxxyhfs xiqh, mi moxxyhfs nbun Ufcwy bux hin u gigyhn ni nbche uvion mnijjcha bylmyfz vyzily mby ziohx bylmyfz zuffcha xiqh u pyls xyyj qyff.
+::endpre
+
+[challenge]
+::pre
+B Ebzrb, Ebzrb, jurersber neg gubh Ebzrb?
+Qral gul sngure naq ershfr gul anzr.
+Be vs gubh jvyg abg, or ohg fjbea zl ybir,
+Naq V’yy ab ybatre or n Pnchyrg.
+::endpre
+
+[related_links]
+- Cipher Tool: Rot | ../rot

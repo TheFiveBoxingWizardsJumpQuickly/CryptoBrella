@@ -55,6 +55,15 @@ def test_missing_page_uses_custom_404(client):
     assert "Back to Top" in body
 
 
+def test_cipher_docs_page_renders(client):
+    resp = client.get("/cipher_docs/rot-ja")
+    assert resp.status_code == 200
+    body = resp.get_data(as_text=True)
+    assert "ROT" in body
+    assert "Can you decode?" in body
+    assert "Cipher Tool: Rot" in body
+
+
 def test_post_gear_rot_success(client):
     resp = client.post("/gear/rot_gen", json={"input_text": "Abc-123"})
     assert resp.status_code == 200

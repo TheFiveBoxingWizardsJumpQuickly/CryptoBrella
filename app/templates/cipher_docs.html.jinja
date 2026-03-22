@@ -19,7 +19,17 @@
                         {% elif lang=='En' %}
                             <h4>About the cipher</h4>  
                         {% endif %}
-                        {{about}}
+                        {% if about %}
+                            {% for block in about %}
+                                {% if block.type == 'paragraph' %}
+                                    <p>{{ block.text }}</p>
+                                {% elif block.type == 'pre' %}
+                                    <pre class="cipher-docs-pre">{{ block.text }}</pre>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <p>No contents yet.</p>
+                        {% endif %}
                     </article>
                     <article class="gray9 white-text round center large-padding">
                         {% if lang=='Ja' %}
@@ -27,19 +37,55 @@
                         {% elif lang=='En' %}
                             <h4>How to use the tool</h4>  
                         {% endif %}
-                        {{how_to_use_tool}}
+                        {% if how_to_use_tool %}
+                            {% for block in how_to_use_tool %}
+                                {% if block.type == 'paragraph' %}
+                                    <p>{{ block.text }}</p>
+                                {% elif block.type == 'pre' %}
+                                    <pre class="cipher-docs-pre">{{ block.text }}</pre>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <p>No contents yet.</p>
+                        {% endif %}
                     </article>
                     <article class="gray9 white-text round center large-padding">
                         <h4>Test cases</h4>
-                        {{test_cases}}
+                        {% if test_cases %}
+                            {% for block in test_cases %}
+                                {% if block.type == 'paragraph' %}
+                                    <p>{{ block.text }}</p>
+                                {% elif block.type == 'pre' %}
+                                    <pre class="cipher-docs-pre">{{ block.text }}</pre>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <p>No contents yet.</p>
+                        {% endif %}
                     </article>
                     <article class="gray9 white-text round center large-padding">
                         <h4>Can you decode?</h4>
-                        {{challenge}}
+                        {% if challenge %}
+                            {% for block in challenge %}
+                                {% if block.type == 'paragraph' %}
+                                    <p>{{ block.text }}</p>
+                                {% elif block.type == 'pre' %}
+                                    <pre class="cipher-docs-pre">{{ block.text }}</pre>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <p>No contents yet.</p>
+                        {% endif %}
                     </article>
                      <article class="gray9 white-text round center large-padding">
                         <h4>Link</h4>
-                        {{link}}
+                        {% if related_links %}
+                            {% for link in related_links %}
+                                <p><a href="{{ link.url }}" target="_blank" class="link">{{ link.label }}</a></p>
+                            {% endfor %}
+                        {% else %}
+                            <p>No contents yet.</p>
+                        {% endif %}
                     </article>
                 </div>
         </main>
