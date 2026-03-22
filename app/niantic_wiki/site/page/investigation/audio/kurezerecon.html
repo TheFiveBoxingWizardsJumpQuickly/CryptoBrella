@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>investigation/audio/kurezerecon [Niantic Project Wiki]</title>
+  <link rel="stylesheet" href="/niantic_wiki/styles.css">
+  <link rel="shortcut icon" href="/niantic_wiki/lib/tpl/dokuwiki/images/favicon.ico">
+  <script src="/niantic_wiki/script.js" defer></script>
+</head>
+<body class="dokuwiki">
+  <div id="dokuwiki__site">
+    <div id="dokuwiki__top" class="site dokuwiki mode_show tpl_dokuwiki home">
+      <header id="dokuwiki__header"><div class="pad group">
+        <div class="headings group">
+          <h1 class="logo"><a href="/niantic_wiki/page/start.html" accesskey="h" title="Home [h]"><img src="/niantic_wiki/lib/tpl/dokuwiki2/images/logo.png" width="364" height="98" alt=""><span>Niantic Project Wiki</span></a></h1>
+        </div>
+        <div class="tools group">
+          <div id="dokuwiki__sitetools">
+            <form action="/niantic_wiki/search" method="get" role="search" class="search"><input type="search" name="q" placeholder="Search" autocomplete="on"><button type="submit" title="Search">Search</button></form>
+            <ul>
+              <li><a href="/niantic_wiki/about">About this page</a></li>
+              <li><a href="/niantic_wiki/media-manager">Media Manager</a></li>
+              <li><a href="/niantic_wiki/">Sitemap</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="breadcrumbs"><div class="trace"><a href="/niantic_wiki/page/start.html">start</a> · <a href="/niantic_wiki/page/investigation.html">investigation</a> · <a href="/niantic_wiki/page/investigation/audio.html">audio</a> · <a href="/niantic_wiki/page/investigation/audio/kurezerecon.html">kurezerecon</a></div></div>
+        <hr class="a11y">
+      </div></header>
+      <div class="wrapper group">
+        <main id="dokuwiki__content"><div class="pad group">
+          <div class="pageId"><span>investigation/audio/kurezerecon</span></div>
+          <div class="page group"><div id="dw__toc" class="dw_toc"><h3 class="toggle">Table of Contents</h3><div><ul class="toc"><ul class="toc"><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/audio/kurezerecon.html#kureze">Kureze</a></div><ul class="toc"><li class="level3"><div class="li"><a href="/niantic_wiki/page/investigation/audio/kurezerecon.html#nianplabsreconkureze2">NIA.NPLabsRecon.Kureze2</a></div></li><li class="level3"><div class="li"><a href="/niantic_wiki/page/investigation/audio/kurezerecon.html#nianplabsreconkureze3">NIA.NPLabsRecon.Kureze3</a></div></li></ul></li></ul></li></ul></div></div><span id="section"></span>
+<h2 id="kureze">Kureze</h2>
+<h3 id="section"></h3>
+<p><a href="/niantic_wiki/media/investigation/kureze1.ogg">Wiki mirror</a></p>
+<p>This audio is found after solving the puzzle started in the <a href="https://niantic.schlarp.com/investigation:videos:niantic#niantic_project_afram__drone" class="urlextern" target="_blank" rel="noreferrer">Afram video</a> <a href="https://niantic.schlarp.com/investigation:timeline:11_2012#nov_9_2012" class="urlextern" target="_blank" rel="noreferrer">timeline entry</a><br></p>
+<p>The creation time of this audio is uncertain.</p>
+<details class="dw-fold"><summary>Transcription</summary>
+<p>Perhaps it was Socrates who said of antiquity: &quot;The truth cannot be perceived; and even if it could be perceived, it cannot be apprehended; and even if apprehended, it cannot be communicated.&quot; Physics is a world of truth, and that description still applies.</p>
+</details>
+<p>There is a puzzle in the source code (line 4323) of this document which, when solved, leads to the Kureze2 audio.</p>
+<details class="dw-fold"><summary>Solution</summary>
+<p>&lt;html&gt; &lt;head&gt; &lt;script type=&#x27;text/javascript&#x27;&gt;</p>
+<p>s = &quot;tamounbfsgekiztvhtusbksbzknztvhopngkxbefiuyvmtusbfxbeknztamopngksgefnzyahtungksgzknuyahtpsgfxgekizyvmtunbkxbzkiutamopnbksgekiztvhtunbfsgzknztvmtpsgksgzfizyvmtusbkxgzfnutamopnbksgefizyahtunbksgzfnuyamopsgfsgekizyvmtusbkxbeknztamopsgksgefnztvhtunbksgzknutvhtpsgksbzfizyvmopsbkxgzfnztvmousgfsgefiuyahtungkxgzknuyahtpngfxgekizyahopnbkxbzfiztamopngksbefnzyahtpngfsgzkiutvmopngfxgekiuyahopnbfxgzfiutvmousgksgekiuyahtunbfxgzfnztvhopngfxgekizyahtpnbkxgzfnutamtpsbksgekiztvhtungfsbzfnuyamtpsgfxbekizyahtpsbkxgzfnutamopsbksbekiuyvhtunbksgzfnztvhtpngfxgefizyvmopnbkxgzkiutamousbksgefnztv&quot;; c = &quot;tvhopnbfsbzfiu&quot;;</p>
+<p>var o = &quot;&quot;; var n = 0; var b = 7; for (var i = 0; i &lt; s.length; i++) {</p>
+<p>if (s[i] != c[i % c.length]) { n += 1 &lt;&lt; b; } b--; if (b &lt; 0) { b = 7; o += String.fromCharCode(n); n = 0; } }</p>
+<p>alert(o); &lt;/script&gt; &lt;/head&gt; &lt;body&gt;&lt;/body&gt;</p>
+</details>
+<hr>
+<h3 id="nianplabsreconkureze2">NIA.NPLabsRecon.Kureze2</h3>
+<p><a href="http://commondatastorage.googleapis.com/pac/IB/00/sc0/truth/kure2e1.html" class="urlextern" target="_blank" rel="noreferrer">Original link</a> <a href="/niantic_wiki/media/investigation/iiezeruktruthkurezeii.mp3">Wiki mirror</a></p>
+<details class="dw-fold"><summary>Transcription</summary>
+<p>Physics is a world of truth. And, that description still applies. At first, we thought our particle accelerator was malfunctioning, or that there had been some electronic anomaly on our monitors; but in due course, we realized that we were seeing a non-random flow of information coming from the sub-atomic particles we were studying.</p>
+</details>
+<hr>
+<h3 id="nianplabsreconkureze3">NIA.NPLabsRecon.Kureze3</h3>
+<p>Found thanks to a tip in the email <a href="/niantic_wiki/page/investigation/chatlogs.html#developing-ada">Developing Ada</a><br></p>
+<p><a href="http://commondatastorage.googleapis.com/pac/IB/00/sc0/truth/kur3ze.html" class="urlextern" target="_blank" rel="noreferrer">Original link</a> <a href="/niantic_wiki/media/investigation/kur3ze.ogg">Wiki Mirror</a></p>
+<details class="dw-fold"><summary>Transcription</summary>
+<p>We ran several tests, and concluded that there was no other explanation, other than the we had connected with at least one other dimension. We realized that we had crossed a threshold in which global security could be at risk. So, we contacted Calvin, and he brought the NIA.</p>
+</details>
+<hr></div>
+        </div></main>
+        <nav id="dokuwiki__pagetools" aria-labelledby="dokuwiki__pagetools__heading">
+          <h3 class="a11y" id="dokuwiki__pagetools__heading">Page Tools</h3>
+          <div class="tools"><ul>
+            <li class="top"><a href="#dokuwiki__top" title="Back to top [t]" accesskey="t"><span>Back to top</span></a></li>
+          </ul></div>
+        </nav>
+      </div>
+      <footer id="dokuwiki__footer"><div class="pad">
+        <div class="license">This is an unofficial archive of the Ingress story wiki originally hosted at <a href="https://niantic.schlarp.com/" target="_blank" rel="noreferrer">https://niantic.schlarp.com/</a>.</div>
+        <div class="license">All original content belongs to its respective authors and contributors.</div>
+        <div class="license">This archive is provided to preserve access after the original site became unavailable.</div>
+      </div></footer>
+    </div>
+  </div>
+  <div id="screen__mode" class="no"></div>
+</body>
+</html>

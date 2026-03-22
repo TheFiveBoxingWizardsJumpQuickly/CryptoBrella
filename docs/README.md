@@ -22,6 +22,7 @@ This repository separates documentation into public/shareable documents and loca
 ## Public Documents
 
 - `system_overview.md`: runtime structure and endpoint flow.
+- `archive_integration.md`: how imported archive content is hosted under the Flask app.
 - `spec_baseline.md`: current implementation behavior used as the baseline spec.
 - `crypto_function_inventory.md`: page/API/function inventory.
 - `test_design_matrix.md`: test-layer goals and forward test plan.

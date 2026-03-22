@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Events / Anomalies [Niantic Project Wiki]</title>
+  <link rel="stylesheet" href="/niantic_wiki/styles.css">
+  <link rel="shortcut icon" href="/niantic_wiki/lib/tpl/dokuwiki/images/favicon.ico">
+  <script src="/niantic_wiki/script.js" defer></script>
+</head>
+<body class="dokuwiki">
+  <div id="dokuwiki__site">
+    <div id="dokuwiki__top" class="site dokuwiki mode_show tpl_dokuwiki home">
+      <header id="dokuwiki__header"><div class="pad group">
+        <div class="headings group">
+          <h1 class="logo"><a href="/niantic_wiki/page/start.html" accesskey="h" title="Home [h]"><img src="/niantic_wiki/lib/tpl/dokuwiki2/images/logo.png" width="364" height="98" alt=""><span>Niantic Project Wiki</span></a></h1>
+        </div>
+        <div class="tools group">
+          <div id="dokuwiki__sitetools">
+            <form action="/niantic_wiki/search" method="get" role="search" class="search"><input type="search" name="q" placeholder="Search" autocomplete="on"><button type="submit" title="Search">Search</button></form>
+            <ul>
+              <li><a href="/niantic_wiki/about">About this page</a></li>
+              <li><a href="/niantic_wiki/media-manager">Media Manager</a></li>
+              <li><a href="/niantic_wiki/">Sitemap</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="breadcrumbs"><div class="trace"><a href="/niantic_wiki/page/start.html">start</a> · <a href="/niantic_wiki/page/investigation.html">investigation</a> · <a href="/niantic_wiki/page/investigation/apps.html">apps</a> · <span>ingress</span> · <a href="/niantic_wiki/page/investigation/apps/ingress/events.html">events</a></div></div>
+        <hr class="a11y">
+      </div></header>
+      <div class="wrapper group">
+        <main id="dokuwiki__content"><div class="pad group">
+          <div class="pageId"><span>investigation/apps/ingress/events</span></div>
+          <div class="page group"><div id="dw__toc" class="dw_toc"><h3 class="toggle">Table of Contents</h3><div><ul class="toc"><li class="level1"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#events--anomalies">Events / Anomalies</a></div><ul class="toc"><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#battleforcahokia">#battleforcahokia</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#saveklue">#SaveKlue</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#ingresssxsw">IngressSXSW</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#freemisty">#Freemisty</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#operation-juice-club">Operation Juice Club</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#shaperdata">#Shaperdata</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#magic-castle">Magic Castle</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#bowstring">#Bowstring</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#ingressdays">#IngressDays</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#timezero">#TimeZero</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#saveklue-freeklue">#SaveKlue (#FreeKlue)</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#voynich">#Voynich</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#minotaur">#Minotaur</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#cassandra---sydney">#Cassandra - Sydney</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#cassandra---milan">#Cassandra - Milan</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#cassandra---tokyo">#Cassandra - Tokyo</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#cassandra---dusseldorf">#Cassandra - Dusseldorf</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#cassandra---boston--washington-dc">#Cassandra - Boston / Washington DC</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#cassandra---manila">#Cassandra - Manila</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#cassandra---paris">#Cassandra - Paris</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#cassandra---so-paulo">#Cassandra - São Paulo</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#cassandra---hong-kong">#Cassandra - Hong Kong</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#cassandra---cologne">#Cassandra - Cologne</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#cassandra---chicago--new-york">#Cassandra - Chicago / New York</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#13magnus">#13magnus</a></div><ul class="toc"><li class="level3"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#1st-wave">1st Wave</a></div></li><li class="level3"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#2nd-event">2nd Event</a></div></li><li class="level3"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#3rd-event">3rd Event</a></div></li><li class="level3"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#4th-event">4th Event</a></div></li><li class="level3"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#5th-event">5th Event</a></div></li><li class="level3"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#6th-event">6th Event</a></div></li></ul></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#recursion">Recursion</a></div><ul class="toc"><li class="level3"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#dice2014">#Dice2014</a></div></li><li class="level3"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#recursion-artifacts">#Recursion Artifacts</a></div></li><li class="level3"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#1st-anomaly">1st anomaly</a></div></li><li class="level3"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#2nd-anomaly">2nd anomaly</a></div></li><li class="level3"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#3rd-anomaly">3rd anomaly</a></div></li><li class="level3"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#4th-anomaly">4th anomaly</a></div></li><li class="level3"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#5th-anomaly">5th anomaly</a></div></li><li class="level3"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#6th-anomaly">6th anomaly</a></div></li><li class="level3"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#recursion-07">Recursion 07</a></div></li></ul></li></ul></li><li class="level1"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#interitus">Interitus</a></div></li><li class="level1"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#ingressio">IngressIO</a></div></li><li class="level1"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#new-agent-initiative">#New Agent Initiative</a></div></li><li class="level1"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#helios">#Helios</a></div></li><li class="level1"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#shonin">#Shonin</a></div></li><li class="level1"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#persepolis">#Persepolis</a></div></li><li class="level1"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#abaddon">#Abaddon</a></div></li><li class="level1"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#obsidian">#Obsidian</a></div></li><li class="level1"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/events.html#magnus-reawakens">#MAGNUS: REAWAKENS</a></div></li></ul></div></div><span id="section"></span>
+<span id="events__anomalies"></span><span id="events_anomalies"></span><span id="events-anomalies"></span>
+<h1 id="events--anomalies">Events / Anomalies</h1>
+<p>Events are planned by the Ingress team and are normally called XM anomalies, and involve the 2 opposing factions fighting for dominance of a certain area for a couple of hours. The rules tend to change from event to event. The winning faction apart from getting extra bonus normally under the form of one use passcodes or/and invites, also determines some changes in the story and alignments of story characters.</p>
+<p>See <a href="/niantic_wiki/page/events/ingress_mission_days.html">Ingress Mission Days</a> for Mission Day Event Information.</p>
+<p>See <a href="/niantic_wiki/page/events/flash_shards.html">Flash Shard Events</a> for Flash Shard Event Information.</p>
+<p>A day of the week <a href="http://www.calculatorcat.com/free_calculators/day_of_week.phtml" class="urlextern" target="_blank" rel="noreferrer">calculator</a></p>
+<hr>
+<h2 id="battleforcahokia">#battleforcahokia</h2>
+<p><a href="https://plus.google.com/events/culq53jki3hgpapgei3vr2lae0o" class="urlextern" target="_blank" rel="noreferrer">Event page</a> <br> <a href="http://commondatastorage.googleapis.com/pac/IB/02/TOTD/_02_ttotd_021_161511.html" class="urlextern" target="_blank" rel="noreferrer">Details/Instructions</a></p>
+<span id="location_and_date"></span>
+<h4 id="location-and-date">Location and date</h4>
+<p>Cahokia, Illinois, USA <br> January 28th 2013 <br></p>
+<span id="final_result"></span>
+<h4 id="final-result">Final Result</h4>
+<p><a href="https://plus.google.com/103320655754019011706/posts/Y2UvgQmZnzi" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br> Enlightened controlled the main and right portal <br> <br> Enlightened won <br></p>
+<span id="effect_in_the_story"></span>
+<h4 id="effect-in-the-story">Effect in the story</h4>
+<p><a href="http://commondatastorage.googleapis.com/pac/IB/02/item/inhell.html" class="urlextern" target="_blank" rel="noreferrer">chattlog</a> <br> <a href="/niantic_wiki/page/investigation/characters.html#henry_hank_johnson">Hank Johnson</a>&#x27;s alignment shifted towards Enlightenment <br></p>
+<hr>
+<h2 id="saveklue">#SaveKlue</h2>
+<p><a href="https://plus.google.com/events/ch5eknhk8ai71d1ce1nc7efe1ik" class="urlextern" target="_blank" rel="noreferrer">Event page</a> <br> <a href="http://commondatastorage.googleapis.com/pac/IB/03/item/wallaceshowdown.jpg" class="urlextern" target="_blank" rel="noreferrer">Details/Instructions</a></p>
+<span id="location_and_date"></span><span id="location_and_date1"></span>
+<h4 id="location-and-date1">Location and date</h4>
+<p>William Wallace Monument, Scotland <br> March 2nd 2013 <br></p>
+<span id="final_result"></span><span id="final_result1"></span>
+<h4 id="final-result1">Final Result</h4>
+<p><a href="https://plus.google.com/u/0/+NianticProject/posts/Gb9zFkjtYkQ" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br> Resistance had the field over Wallace monument at the time of measurement. <br> <br> Resistance won <br></p>
+<span id="effect_in_the_story"></span><span id="effect_in_the_story1"></span>
+<h4 id="effect-in-the-story1">Effect in the story</h4>
+<p><a href="http://youtu.be/ySJ4HTAgZmE" class="urlextern" target="_blank" rel="noreferrer">Video</a> <br> <a href="/niantic_wiki/page/investigation/characters.html#klue_pseudonym">Klue</a>&#x27;s alignment turned towards Resistance <br></p>
+<hr>
+<h2 id="ingresssxsw">IngressSXSW</h2>
+<p><a href="https://plus.google.com/events/cvjg8637886h5ui30lfmboa4ils" class="urlextern" target="_blank" rel="noreferrer">Event page</a> <br></p>
+<span id="location_and_date"></span><span id="location_and_date2"></span>
+<h4 id="location-and-date2">Location and date</h4>
+<p>Austin, TX, USA <br> 9-Mar-2013 <br></p>
+<span id="final_result"></span><span id="final_result2"></span>
+<h4 id="final-result2">Final Result</h4>
+<p><a href="https://plus.google.com/+NianticProject/posts/Cqgg92SCWSh" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br></p>
+<hr>
+<h2 id="freemisty">#Freemisty</h2>
+<p><a href="https://plus.google.com/events/ckjsfprltqm15514ta2mvliegeg" class="urlextern" target="_blank" rel="noreferrer">Event page (SXSW)</a> and <a href="https://plus.google.com/events/cj3k3dldjqi8gao0ivjn5olocg8" class="urlextern" target="_blank" rel="noreferrer">Event page (Garycon, Lake Geneva)</a> <br> <a href="http://commondatastorage.googleapis.com/pac/IB/04/item/mistyanomalies.jpg" class="urlextern" target="_blank" rel="noreferrer">Details and Info</a> <br> <a href="http://commondatastorage.googleapis.com/pac/IB/04/item/misty-anomalies-update.jpg" class="urlextern" target="_blank" rel="noreferrer">Update</a> <br></p>
+<span id="location_and_date"></span><span id="location_and_date3"></span>
+<h4 id="location-and-date3">Location and date</h4>
+<p>Austin, Texas <br> March 9th 2013 <br> <br> Geneva Ridge Resort, Wisconsin <br> March 16th 2013 <br></p>
+<span id="final_result"></span><span id="final_result3"></span>
+<h4 id="final-result3">Final Result</h4>
+<p><a href="https://plus.google.com/u/0/103320655754019011706/posts/2bpRCckzqWm" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br> XM Anomaly I, Austin, TX: Resistance <br> XM Anomaly II, Austin, TX: Enlightened <br> XM Anomaly III, Lake Geneva, WI: Enlightened <br></p>
+<p>Enlightened won series 2-1</p>
+<span id="effect_in_the_story"></span><span id="effect_in_the_story2"></span>
+<h4 id="effect-in-the-story2">Effect in the story</h4>
+<p><a href="http://youtu.be/ByveE2b4jJI?t=1m8s" class="urlextern" target="_blank" rel="noreferrer">Video</a> <br> <a href="/niantic_wiki/page/investigation/characters.html#misty_hannah">Misty Hannah</a> managed to escape the NIA facility by hypertreading and shifted her alignment towards Enlightenment <br></p>
+<hr>
+<span id="operation_juice_club"></span>
+<h2 id="operation-juice-club">Operation Juice Club</h2>
+<p><a href="https://plus.google.com/u/0/events/c1p4b6iamgg6m0bmkd5pa5i1nqo" class="urlextern" target="_blank" rel="noreferrer">Event page</a> <br> <a href="http://commondatastorage.googleapis.com/pac/IB/04/item/anomaly-la.jpg" class="urlextern" target="_blank" rel="noreferrer">Details/Instructions</a></p>
+<span id="location_and_date"></span><span id="location_and_date4"></span>
+<h4 id="location-and-date4">Location and date</h4>
+<p>Los Angeles, California <br> March 27th 2013 <br></p>
+<span id="final_result"></span><span id="final_result4"></span>
+<h4 id="final-result4">Final Result</h4>
+<p><a href="https://plus.google.com/u/0/103320655754019011706/posts/S2jt4Qj9vSf" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br></p>
+<p>Resistance blocked the nodes needed. <br> <br> Resistance won <br></p>
+<span id="effect_in_the_story"></span><span id="effect_in_the_story3"></span>
+<h4 id="effect-in-the-story3">Effect in the story</h4>
+<p><a href="/niantic_wiki/page/investigation/characters.html#misty_hannah">Misty Hannah</a>&#x27;s Hyperthreading Plan failed and she was contained in L.A. <br></p>
+<hr>
+<h2 id="shaperdata">#Shaperdata</h2>
+<p><a href="https://plus.google.com/u/0/events/c7jjnj1vq2ts627o1uj85fnnjic" class="urlextern" target="_blank" rel="noreferrer">Event page</a> <br> <a href="https://docs.google.com/document/d/1uJWIlQr67-i1veZPHu9vFF_bQ6QkJHXcA3I-l290ecw/edit?hl=en&amp;forcehl=1#null" class="urlextern" target="_blank" rel="noreferrer">Details/ instructions</a></p>
+<span id="location_and_date"></span><span id="location_and_date5"></span>
+<h4 id="location-and-date5">Location and date</h4>
+<p>Geneva, Switzerland <br> Paris, France<br> Zurich, Switzerland <br> Milan, Italy <br> Stuttgart, Germany <br> Munich, Germany <br> Monaco <br> Berlin, Germany <br> April 21st 2013 <br></p>
+<span id="final_result"></span><span id="final_result5"></span>
+<h4 id="final-result5">Final Result</h4>
+<p><a href="https://plus.google.com/u/0/103320655754019011706/posts/idWY7DeenEx" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br> RESISTANCE: 7 <br> ENLIGHTENED: 0 <br></p>
+<span id="effect_in_the_story"></span><span id="effect_in_the_story4"></span>
+<h4 id="effect-in-the-story4">Effect in the story</h4>
+<p><a href="http://youtu.be/PoSQDbKcOPI?t=59s" class="urlextern" target="_blank" rel="noreferrer">Ingress Report</a> <br> Resistance received the shaper data package. Up to now the fate of the information contained inside is still unknown.</p>
+<hr>
+<span id="magic_castle"></span>
+<h2 id="magic-castle">Magic Castle</h2>
+<p><a href="https://plus.google.com/+JoePhilley/posts/aEmizRFWFFu" class="urlextern" target="_blank" rel="noreferrer">J.P. post</a> <br></p>
+<span id="location_and_date"></span><span id="location_and_date6"></span>
+<h4 id="location-and-date6">Location and date</h4>
+<p>Los Angeles, CA, USA <br> 24-Apr-2013 <br></p>
+<span id="final_result"></span><span id="final_result6"></span>
+<h4 id="final-result6">Final Result</h4>
+<p><a href="https://plus.google.com/+Ingress/posts/DsySKLPnA8G" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br></p>
+<hr>
+<h2 id="bowstring">#Bowstring</h2>
+<p><a href="https://plus.google.com/u/0/events/cct0tpgkbvrfe7gf3f8403i68d0" class="urlextern" target="_blank" rel="noreferrer">Event page</a> <br> <a href="http://commondatastorage.googleapis.com/pac/IB/06/item/bowstring.jpg" class="urlextern" target="_blank" rel="noreferrer">Details/Instructions</a></p>
+<span id="location_and_date"></span><span id="location_and_date7"></span>
+<h4 id="location-and-date7">Location and date</h4>
+<p>San Francisco, California, USA <br> May 16th 2013 <br></p>
+<span id="final_result"></span><span id="final_result7"></span>
+<h4 id="final-result7">Final Result</h4>
+<p><a href="https://plus.google.com/u/0/103320655754019011706/posts/4GsrxMabiXm" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br> Enlightened: 78 <br> Resistance: 9 <br> <br> Enlightened won <br></p>
+<span id="effect_in_the_story"></span><span id="effect_in_the_story5"></span>
+<h4 id="effect-in-the-story5">Effect in the story</h4>
+<p><a href="http://youtu.be/yLMzh0EoYW0?t=7m23s" class="urlextern" target="_blank" rel="noreferrer">Ingress report</a> <br> <a href="/niantic_wiki/page/investigation/characters.html#ben-jackland">Ben Jackland</a>&#x27;s alignment changed to Enlightened</p>
+<hr>
+<h2 id="ingressdays">#IngressDays</h2>
+<p><a href="https://plus.google.com/events/c1uojs1fqclsp51l18b0hsqiqso" class="urlextern" target="_blank" rel="noreferrer">Event page</a> <br> <a href="http://commondatastorage.googleapis.com/pac/IB/06/item/plains.png" class="urlextern" target="_blank" rel="noreferrer">Instructions/Details</a></p>
+<p><a href="/niantic_wiki/page/investigation/apps/ingress/ingressdays.html">Detailed Dossier</a></p>
+<span id="location_and_date"></span><span id="location_and_date8"></span>
+<h4 id="location-and-date8">Location and date</h4>
+<p>Cross Plains, Texas, USA <br> June 7th and 8th 2013 <br></p>
+<span id="final_result"></span><span id="final_result8"></span>
+<h4 id="final-result8">Final Result</h4>
+<p><a href="https://plus.google.com/u/0/103320655754019011706/posts/S5d7XzM8QQy" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br></p>
+<p>Enlightened Final Total: 417 <br> Resistance Final Total: 42 <br> <br> Enlightened won <br></p>
+<span id="effect_in_the_story"></span><span id="effect_in_the_story6"></span>
+<h4 id="effect-in-the-story6">Effect in the story</h4>
+<p><a href="http://youtu.be/HZS0c7FmtRs?t=1m37s" class="urlextern" target="_blank" rel="noreferrer">(Video)</a> <br> There was one glyph found in a parking lot during the event. <br></p>
+<hr>
+<h2 id="timezero">#TimeZero</h2>
+<p><a href="https://plus.google.com/events/cbv6kah3kj8uk8n1d0g554453e8" class="urlextern" target="_blank" rel="noreferrer">Event page</a> <br> <a href="http://commondatastorage.googleapis.com/pac/IB/07/item/TimeZero.png" class="urlextern" target="_blank" rel="noreferrer">Instructions/details</a></p>
+<span id="location_and_date"></span><span id="location_and_date9"></span>
+<h4 id="location-and-date9">Location and date</h4>
+<p>Greenwich Park, London, UK <br> June 22nd 2013 <br></p>
+<span id="final_result"></span><span id="final_result9"></span>
+<h4 id="final-result9">Final Result</h4>
+<p><a href="https://plus.google.com/u/0/103320655754019011706/posts/AVFbMXtvCA9" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br></p>
+<p>Enlightened:	411 <br> Resistance:	274 <br> <br> Enlightened won <br></p>
+<span id="effect_in_the_story"></span><span id="effect_in_the_story7"></span>
+<h4 id="effect-in-the-story7">Effect in the story</h4>
+<p><a href="http://youtu.be/hiSPxQ86InI?t=1m2s" class="urlextern" target="_blank" rel="noreferrer">Ingress report</a> <br> Enlightened intercepted a package from <a href="/niantic_wiki/page/investigation/characters.html#henry_hank_johnson">Hank Johnson</a> to <a href="/niantic_wiki/page/investigation/characters.html#carrie_campbell">Carrie Campbell</a> containing some <a href="/niantic_wiki/page/investigation/images.html#the_glyphs">Glyphs</a> <br></p>
+<hr>
+<span id="saveklue_freeklue"></span>
+<h2 id="saveklue-freeklue">#SaveKlue (#FreeKlue)</h2>
+<p><a href="https://plus.google.com/u/0/events/c85sr5r2vb5d7103issvi3086k4" class="urlextern" target="_blank" rel="noreferrer">Event page</a> <br> <a href="https://plus.google.com/u/0/107849663787965375687/posts/fLbrvC4t79U" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a></p>
+<span id="location_and_date"></span><span id="location_and_date10"></span>
+<h4 id="location-and-date10">Location and date</h4>
+<p>Portland, Oregon, USA <br> June 30th 2013 <br></p>
+<span id="final_result"></span><span id="final_result10"></span>
+<h4 id="final-result10">Final Result</h4>
+<p><a href="https://plus.google.com/u/0/+Ingress/posts/Kk8BFhH8yd6" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br> Resistance Total for this Anomaly: 67 <br> Enlightened Total for this Anomaly: 72 <br></p>
+<p>Enlightened won <br></p>
+<span id="effect_in_the_story"></span><span id="effect_in_the_story8"></span>
+<h4 id="effect-in-the-story8">Effect in the story</h4>
+<p><a href="http://youtu.be/t8mVTI_fNog?t=2m3s" class="urlextern" target="_blank" rel="noreferrer">Ingress report</a> <br> <a href="/niantic_wiki/page/investigation/characters.html#klue-pseudonym">Klue</a>&#x27;s alignment changed to Enlightened <br></p>
+<hr>
+<h2 id="voynich">#Voynich</h2>
+<p><a href="https://plus.google.com/u/0/events/activity/csci3klbge9p6ng0emejf70kru4" class="urlextern" target="_blank" rel="noreferrer">Event page</a> <em>(dead link)</em> <br> <a href="https://plus.google.com/u/0/108020987035258478791/posts/Wn3B2CvjaMs" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a></p>
+<span id="location_and_date"></span><span id="location_and_date11"></span>
+<h4 id="location-and-date11">Location and date</h4>
+<p>Hamburg, Germany <br> Oslo, Norway <br> Copenhagen, Denmark <br> Helsinki, Finland <br> Stockholm , Sweden <br> Moscow, Russia <br> St. Petersburg, Russia <br> July 13th 2013 <br></p>
+<span id="final_result"></span><span id="final_result11"></span>
+<h4 id="final-result11">Final Result</h4>
+<p><a href="https://plus.google.com/u/0/+Ingress/posts/8Ax2ftvqFtC" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br> Anomaly Total for the Resistance is 478 <br> Anomaly Total for the Enlightened is 767 <br></p>
+<p>Enlightened won <br></p>
+<span id="effect_in_the_story"></span><span id="effect_in_the_story9"></span>
+<h4 id="effect-in-the-story9">Effect in the story</h4>
+<p><a href="http://youtu.be/ZYCOP_HAUmY?t=1m51s" class="urlextern" target="_blank" rel="noreferrer">Ingress Report</a> <br> <a href="/niantic_wiki/page/investigation/characters.html#carrie_campbell">Carrie Campbell</a> delivered a package to Enlightened that contained the <a href="/niantic_wiki/page/investigation/images.html#vision_journal">Vision Journal pages</a> <br></p>
+<hr>
+<h2 id="minotaur">#Minotaur</h2>
+<p><a href="https://plus.google.com/events/cqh9vjddl8lq3td2k3battncojo" class="urlextern" target="_blank" rel="noreferrer">Event page</a> <br> <a href="https://plus.google.com/u/0/108020987035258478791/posts/gfQkYwYhoxa" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a></p>
+<span id="location_and_date"></span><span id="location_and_date12"></span>
+<h4 id="location-and-date12">Location and date</h4>
+<p>Minneapolis, Minnesota <br> Salt Lake City, Utah <br> St. Louis, Missouri <br> Kansas City, Missouri <br> Montreal, Quebec <br> Denver, Colorado <br> Atlanta, Georgia <br> Toronto, Ontario <br> August 3rd 2013 <br></p>
+<span id="final_result"></span><span id="final_result12"></span>
+<h4 id="final-result12">Final Result</h4>
+<p><a href="https://plus.google.com/u/0/103320655754019011706/posts/92Drm17zvh1" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br></p>
+<p>Total for Resistance this Anomaly = 2603 <br> Total for Enlightened this Anomaly = 1032 <br> Resistance Won</p>
+<span id="effect_in_the_story"></span><span id="effect_in_the_story10"></span>
+<h4 id="effect-in-the-story10">Effect in the story</h4>
+<p><a href="http://youtu.be/uGdSvXRJibE?t=53s" class="urlextern" target="_blank" rel="noreferrer">Carrie Campbell alignment shifted towards Resistance and they received a package</a> containing the <a href="/niantic_wiki/page/investigation/glyphs.html#the_lightnman_decipherments">translation of glyphs</a> <br></p>
+<hr>
+<span id="cassandra_-_sydney"></span><span id="cassandra___sydney"></span><span id="cassandra_sydney"></span><span id="cassandra-sydney"></span>
+<h2 id="cassandra---sydney">#Cassandra - Sydney</h2>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/sydney.png" alt="sydney.png" loading="lazy" width="300"></p>
+<p>Sydney, Australia <br> August 11th 2013 <br></p>
+<p><a href="https://plus.google.com/events/clhmvpod13knjb2t367ulj72fcs" class="urlextern" target="_blank" rel="noreferrer">Event page</a> <br> <a href="https://plus.google.com/103320655754019011706/posts/TmqNkiieqvE" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br></p>
+<span id="final_result"></span><span id="final_result13"></span>
+<h4 id="final-result13">Final Result</h4>
+<p><a href="https://plus.google.com/u/0/+Ingress/posts/Y2exVzK1kqN" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br> <br> Total for the Resistance this Anomaly = 82 <br> Total for the Enlightened this Anomaly = 278 <br></p>
+<p>Enlightened won<br></p>
+<span id="effect_in_the_story"></span><span id="effect_in_the_story11"></span>
+<h4 id="effect-in-the-story11">Effect in the story</h4>
+<p>See <a href="/niantic_wiki/page/investigation/apps/ingress/events.html#cassandra_-_chicago_new_york">final #Cassandra event</a> <br></p>
+<hr>
+<span id="cassandra_-_milan"></span><span id="cassandra___milan"></span><span id="cassandra_milan"></span><span id="cassandra-milan"></span>
+<h2 id="cassandra---milan">#Cassandra - Milan</h2>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/milan.png" alt="milan.png" loading="lazy" width="300"> Milan, Italy <br> August 13th 2013 <br></p>
+<p><a href="https://plus.google.com/events/c2uiuvo8j52dup22s8clls1ml24" class="urlextern" target="_blank" rel="noreferrer">Event page</a> <br> <a href="https://plus.google.com/photos/+Ingress/albums/5910669727382801617/5910670575036404978?pid=5910670575036404978&amp;oid=103320655754019011706" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br></p>
+<span id="final_result"></span><span id="final_result14"></span>
+<h4 id="final-result14">Final Result</h4>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/cassandra-per-site-2.jpg" alt="cassandra-per-site-2.jpg" loading="lazy" width="400"></p>
+<p><a href="https://plus.google.com/103320655754019011706/posts/fnQ62hstCSp" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br> <br> Total for the Resistance this Anomaly = 79 <br> Total for the Enlightened this Anomaly = 158 <br></p>
+<p>Enlightened won <br></p>
+<span id="effect_in_the_story"></span><span id="effect_in_the_story12"></span>
+<h4 id="effect-in-the-story12">Effect in the story</h4>
+<p>See <a href="/niantic_wiki/page/investigation/apps/ingress/events.html#cassandra_-_chicago_new_york">final #Cassandra event</a> <br></p>
+<hr>
+<span id="cassandra_-_tokyo"></span><span id="cassandra___tokyo"></span><span id="cassandra_tokyo"></span><span id="cassandra-tokyo"></span>
+<h2 id="cassandra---tokyo">#Cassandra - Tokyo</h2>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/tokyo.png" alt="tokyo.png" loading="lazy" width="300"> Tokyo, Japan <br> August 15th 2013 <br></p>
+<p><a href="https://plus.google.com/events/cruam66m9ld08aa64n7etoebkqo" class="urlextern" target="_blank" rel="noreferrer">Event page</a> <br> <a href="https://plus.google.com/+Ingress/posts/aFLVXEqdP2W" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a></p>
+<details class="dw-fold"><summary>Hidden Info</summary>
+<p>Hidden in the logo <strong>3th4condensateu2v9v</strong></p>
+</details>
+<span id="final_result"></span><span id="final_result15"></span>
+<h4 id="final-result15">Final Result</h4>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/cassandra-anomaly-values-per-site3.jpg" alt="cassandra-anomaly-values-per-site3.jpg" loading="lazy" width="400"></p>
+<p><a href="https://plus.google.com/103320655754019011706/posts/ZPgHwFhzcVC" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br></p>
+<p>Total for the Resistance this Anomaly = 154 <br> Total for the Enlightened this Anomaly = 89 <br></p>
+<p>Resistance won <br></p>
+<span id="effect_in_the_story"></span><span id="effect_in_the_story13"></span>
+<h4 id="effect-in-the-story13">Effect in the story</h4>
+<p>See <a href="/niantic_wiki/page/investigation/apps/ingress/events.html#cassandra_-_chicago_new_york">final #Cassandra event</a></p>
+<hr>
+<span id="cassandra_-_dusseldorf"></span><span id="cassandra___dusseldorf"></span><span id="cassandra_dusseldorf"></span><span id="cassandra-dusseldorf"></span>
+<h2 id="cassandra---dusseldorf">#Cassandra - Dusseldorf</h2>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/dusseldorf.png" alt="dusseldorf.png" loading="lazy" width="300"> Dusseldorf, Germany <br> August 17th 2013 <br></p>
+<p><a href="https://plus.google.com/events/c3tesmqj8gchl6p9emdinej553o" class="urlextern" target="_blank" rel="noreferrer">Event page</a> <br> <a href="https://plus.google.com/u/0/+Ingress/posts/J3mECQdRNnM" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br></p>
+<details class="dw-fold"><summary>Hidden Info</summary>
+<p>Under Visur technology, this appears in the line <br> <em><br>/<br></em><br>\/<br>\/<br>\/<br><em><br></em>/<br>/\<em>/<br>\</em><em>/<br>/<br><br>/<br>\/<br>\/<br></em>\/\/<br>\<em>\</em><br>\/<br>\<em><br>/\/\</em><br>/<br><em>/<br>\</em>\/<br>\<em>/\ </em> <br> converting the / to 0 and the \ to 1 we get <br> 00100000 00110110 01110111 01110000 01100110 00110100 01110000 01101111 01110111 01100101 01110010 01110111 00110101 00110110 00111001 01110001 <br></p>
+<p>Binary to ASCII <strong> 6wpf4powerw569q</strong></p>
+</details>
+<span id="final_result"></span><span id="final_result16"></span>
+<h4 id="final-result16">Final Result</h4>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/masterscoring-4.png" alt="masterscoring-4.png" loading="lazy" width="300"></p>
+<p><a href="https://plus.google.com/u/0/+Ingress/posts/aqfymmszZzj" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br></p>
+<p>Total for the Resistance this Anomaly = 324 <br> Total for the Enlightened this Anomaly = 514 <br></p>
+<p>Enlightened won <br></p>
+<span id="effect_in_the_story"></span><span id="effect_in_the_story14"></span>
+<h4 id="effect-in-the-story14">Effect in the story</h4>
+<p>See <a href="/niantic_wiki/page/investigation/apps/ingress/events.html#cassandra_-_chicago_new_york">final #Cassandra event</a></p>
+<hr>
+<span id="cassandra_-_boston__washington_dc"></span><span id="cassandra___boston__washington_dc"></span><span id="cassandra_-_boston_washington_dc"></span><span id="cassandra_boston_washington_dc"></span><span id="cassandra-boston-washington-dc"></span>
+<h2 id="cassandra---boston--washington-dc">#Cassandra - Boston / Washington DC</h2>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/bostondc.png" alt="bostondc.png" loading="lazy" width="300"> Boston, Massachusetts <br> Washington DC <br> August 17th 2013 <br></p>
+<p><a href="https://plus.google.com/events/c43369mliqogl2c5r62r4mni0dk" class="urlextern" target="_blank" rel="noreferrer">Event page - Boston</a> <br> <a href="https://plus.google.com/events/cgv7dfbnhg9nrhp9n4gfth55mt8" class="urlextern" target="_blank" rel="noreferrer">Event page - Washington DC</a> <br> <a href="https://plus.google.com/u/0/+Ingress/posts/hpyJvUccBw6" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br></p>
+<details class="dw-fold"><summary>Hidden Info</summary>
+</details>
+<span id="final_result"></span><span id="final_result17"></span>
+<h4 id="final-result17">Final Result</h4>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/masterscoring-6.png" alt="masterscoring-6.png" loading="lazy" width="300"></p>
+<p><a href="https://plus.google.com/103320655754019011706/posts/efMijou5Fue" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br></p>
+<p>Total for the Resistance this Anomaly = 955. (Boston: 356 DC: 599.) <br> Total for the Enlightened this Anomaly = 831. (Boston: 342 DC: 489.) <br></p>
+<p>Resistance won <br></p>
+<span id="effect_in_the_story"></span><span id="effect_in_the_story15"></span>
+<h4 id="effect-in-the-story15">Effect in the story</h4>
+<p>See <a href="/niantic_wiki/page/investigation/apps/ingress/events.html#cassandra_-_chicago_new_york">final #Cassandra event</a></p>
+<hr>
+<span id="cassandra_-_manila"></span><span id="cassandra___manila"></span><span id="cassandra_manila"></span><span id="cassandra-manila"></span>
+<h2 id="cassandra---manila">#Cassandra - Manila</h2>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/manila.png" alt="manila.png" loading="lazy" width="300"> Manila, Philippines <br> August 18th 2013 <br></p>
+<p><a href="https://plus.google.com/events/c22uqpq3qqpvs72mrb1l82il9s8" class="urlextern" target="_blank" rel="noreferrer">Event page</a> <br> <a href="https://plus.google.com/u/0/+Ingress/posts/DyYqQBxX4is" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br></p>
+<details class="dw-fold"><summary>Hidden Info</summary>
+<p>On the line under Operation , you can see some dots. Lower dots =0 upper ones = 1 <br> <br> 00110010 01111000 01111000 01100110 00110011 01110000 01101111 01110010 01110100 01100001 01101100 01111010 00110101 00111001 00110011 01111010 <br> <br> Binary to ASCII - <strong>2xxf3portalz593z</strong></p>
+</details>
+<span id="final_result"></span><span id="final_result18"></span>
+<h4 id="final-result18">Final Result</h4>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/masterscoring-7.png" alt="masterscoring-7.png" loading="lazy" width="300"></p>
+<p><a href="https://plus.google.com/u/0/+Ingress/posts/XZwrPbQo1vD" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br></p>
+<p>Total for the Resistance this Anomaly = 231 <br> Total for the Enlightened this Anomaly = 177 <br></p>
+<p>Resistance won <br></p>
+<span id="effect_in_the_story"></span><span id="effect_in_the_story16"></span>
+<h4 id="effect-in-the-story16">Effect in the story</h4>
+<p>See <a href="/niantic_wiki/page/investigation/apps/ingress/events.html#cassandra_-_chicago_new_york">final #Cassandra event</a></p>
+<hr>
+<span id="cassandra_-_paris"></span><span id="cassandra___paris"></span><span id="cassandra_paris"></span><span id="cassandra-paris"></span>
+<h2 id="cassandra---paris">#Cassandra - Paris</h2>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/paris.png" alt="paris.png" loading="lazy" width="300"> Paris, France <br> August 20th 2013 <br></p>
+<p><a href="https://plus.google.com/events/cot1liv7u5sbsshsn1haleg134o" class="urlextern" target="_blank" rel="noreferrer">Event page</a> <br> <a href="https://plus.google.com/events/cot1liv7u5sbsshsn1haleg134o/103320655754019011706/5913920389838070418" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br></p>
+<details class="dw-fold"><summary>Hidden Info</summary>
+<p>Under Visur you can see some &gt; , &lt; and -<br> converting to morse <br> slash = &lt; <br> dot = &gt; <br> space = - <br> we get <br> ~ ..~~~ .~~~~ ..... ~ ~~.~ ~ .. ~... .. ~ ~. ..~. . .~. ..... ~. ~~.~ .~. ..~~~ <br> <br> Reverse the morse and decrypt - <strong>8rya5relativityt598t</strong></p>
+</details>
+<span id="final_result"></span><span id="final_result19"></span>
+<h4 id="final-result19">Final Result</h4>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/masterscoring-8.png" alt="masterscoring-8.png" loading="lazy" width="300"> <a href="https://plus.google.com/103320655754019011706/posts/L13FAg1ed5i" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br></p>
+<p>Total for the Resistance this Anomaly = 28 <br> Total for the Enlightened this Anomaly = 433 <br></p>
+<p>Enlightened won <br></p>
+<span id="effect_in_the_story"></span><span id="effect_in_the_story17"></span>
+<h4 id="effect-in-the-story17">Effect in the story</h4>
+<p>See <a href="/niantic_wiki/page/investigation/apps/ingress/events.html#cassandra_-_chicago_new_york">final #Cassandra event</a> <br></p>
+<hr>
+<span id="cassandra_-_so_paulo"></span><span id="cassandra___so_paulo"></span><span id="cassandra_so_paulo"></span><span id="cassandra-so-paulo"></span>
+<h2 id="cassandra---so-paulo">#Cassandra - São Paulo</h2>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/saopaulo.png" alt="saopaulo.png" loading="lazy" width="300"> São Paulo, Brazil <br> August 21st 2013 <br></p>
+<p><a href="https://plus.google.com/events/crmimdcjclri0qsrstrgdmjcmro" class="urlextern" target="_blank" rel="noreferrer">Event page</a> <br> <a href="https://plus.google.com/events/crmimdcjclri0qsrstrgdmjcmro/103320655754019011706/5914353036557793026" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a></p>
+<details class="dw-fold"><summary>Hidden Info</summary>
+<p>On the bottom you can see sbtwnefefev icofevtuo neirupdonrqenip <br> write as one string in groups of 5: <br></p>
+<p>sbtwn <br> efefe <br> vicof <br> evtuo <br> neiru <br> pdonr <br> qenip <br></p>
+<p>read down the columns - sevenpqbfivedetectionwfourninefourp <br></p>
+<p><strong>7pqb5detectionw494p﻿</strong></p>
+</details>
+<span id="final_result"></span><span id="final_result20"></span>
+<h4 id="final-result20">Final Result</h4>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/masterscoring-9.png" alt="masterscoring-9.png" loading="lazy" width="300"> <a href="https://plus.google.com/103320655754019011706/posts/Sx7gGjtd3FV" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br></p>
+<p>Total for the Resistance this Anomaly = 96 <br> Total for the Enlightened this Anomaly = 125 <br></p>
+<p>Enlightened Won <br></p>
+<span id="effect_in_the_story"></span><span id="effect_in_the_story18"></span>
+<h4 id="effect-in-the-story18">Effect in the story</h4>
+<p>See <a href="/niantic_wiki/page/investigation/apps/ingress/events.html#cassandra_-_chicago_new_york">final #Cassandra event</a></p>
+<hr>
+<span id="cassandra_-_hong_kong"></span><span id="cassandra___hong_kong"></span><span id="cassandra_hong_kong"></span><span id="cassandra-hong-kong"></span>
+<h2 id="cassandra---hong-kong">#Cassandra - Hong Kong</h2>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/hongkong.png" alt="hongkong.png" loading="lazy" width="300"> Hong Kong <br> August 22nd 2013 <br></p>
+<p><a href="https://plus.google.com/events/ckds1tmh78ce30bh9fbqj172urg" class="urlextern" target="_blank" rel="noreferrer">Event page</a> <br> <a href="https://plus.google.com/events/ckds1tmh78ce30bh9fbqj172urg/103320655754019011706/5914861201283305666" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br></p>
+<details class="dw-fold"><summary>Hidden Info</summary>
+<p>Hidden inside the logo one can see <strong>6vwa9bedlamv947y</strong></p>
+</details>
+<span id="final_result"></span><span id="final_result21"></span>
+<h4 id="final-result21">Final Result</h4>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/masterscoring-10.png" alt="masterscoring-10.png" loading="lazy" width="300"> <a href="https://plus.google.com/103320655754019011706/posts/FWvyLx9zErp" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br></p>
+<p><br> Total for the Resistance this Anomaly = 328 <br> Total for the Enlightened this Anomaly = 75 <br></p>
+<p>Resistance Won <br></p>
+<span id="effect_in_the_story"></span><span id="effect_in_the_story19"></span>
+<h4 id="effect-in-the-story19">Effect in the story</h4>
+<p>See <a href="/niantic_wiki/page/investigation/apps/ingress/events.html#cassandra_-_chicago_new_york">final #Cassandra event</a></p>
+<hr>
+<span id="cassandra_-_cologne"></span><span id="cassandra___cologne"></span><span id="cassandra_cologne"></span><span id="cassandra-cologne"></span>
+<h2 id="cassandra---cologne">#Cassandra - Cologne</h2>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/cologne.png" alt="cologne.png" loading="lazy" width="300"> Cologne, Germany <br> August 24th 2013 <br></p>
+<p><a href="https://plus.google.com/events/c3j0t0oea89mhag4ikj4v10feao" class="urlextern" target="_blank" rel="noreferrer">Event page</a> <br> <a href="https://plus.google.com/events/c3j0t0oea89mhag4ikj4v10feao/103320655754019011706/5915567662982804242" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a></p>
+<details class="dw-fold"><summary>Hidden Info</summary>
+<p>Messing with the levels one can see <strong>2sua8luizix743r</strong> <br> <img src="/niantic_wiki/media/investigation/apps/ingress/cologne_code.png" alt="cologne_code.png" loading="lazy" width="400"></p>
+</details>
+<span id="final_result"></span><span id="final_result22"></span>
+<h4 id="final-result22">Final Result</h4>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/masterscoring-11.png" alt="masterscoring-11.png" loading="lazy" width="300"> <a href="https://plus.google.com/103320655754019011706/posts/S2GJi3A6k4E" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br></p>
+<p><br> Total for the Resistance this Anomaly = 404 <br> Total for the Enlightened this Anomaly = 491 <br></p>
+<p>Enlightened Won <br></p>
+<span id="effect_in_the_story"></span><span id="effect_in_the_story20"></span>
+<h4 id="effect-in-the-story20">Effect in the story</h4>
+<p>See <a href="/niantic_wiki/page/investigation/apps/ingress/events.html#cassandra_-_chicago_new_york">final #Cassandra event</a></p>
+<hr>
+<span id="cassandra_-_chicago__new_york"></span><span id="cassandra___chicago__new_york"></span><span id="cassandra_-_chicago_new_york"></span><span id="cassandra_chicago_new_york"></span><span id="cassandra-chicago-new-york"></span>
+<h2 id="cassandra---chicago--new-york">#Cassandra - Chicago / New York</h2>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/nycchicago.png" alt="nycchicago.png" loading="lazy" width="300"> Chicago <br> New York <br> August 24th 2013 <br></p>
+<p><a href="https://plus.google.com/events/c6gbt3icp708f32mo8vrqrp1vog" class="urlextern" target="_blank" rel="noreferrer">Event page - Chicago</a> <br> <a href="https://plus.google.com/events/cl41lof83ce057skrmfnsfqsvcs" class="urlextern" target="_blank" rel="noreferrer">Event page - NY</a> <br> <a href="https://plus.google.com/events/cl41lof83ce057skrmfnsfqsvcs/103320655754019011706/5915741174457013634" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br></p>
+<details class="dw-fold"><summary>Hidden Info</summary>
+<p>File - TvTYSc obnAqcm L3X3bEm.</p>
+</details>
+<span id="final_result"></span><span id="final_result23"></span>
+<h4 id="final-result23">Final Result</h4>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/masterscoring-final.png" alt="masterscoring-final.png" loading="lazy" width="300"> <a href="https://plus.google.com/103320655754019011706/posts/FL4QhZix5Fo" class="urlextern" target="_blank" rel="noreferrer">G+ Post</a> <br></p>
+<p><br> Total for Resistance this Anomaly = 1,124. (New York: 813 Chicago: 311.) <br> Total for Enlightened this Anomaly = 1,377. (New York: 441 Chicago: 936.) <br></p>
+<p>Enlightened Won <br></p>
+<span id="effect_in_the_story"></span><span id="effect_in_the_story21"></span>
+<h4 id="effect-in-the-story21">Effect in the story</h4>
+<p>?????? <br></p>
+<hr>
+<span id="magnus"></span>
+<h2 id="13magnus">#13magnus</h2>
+<span id="1st_wave"></span>
+<h3 id="1st-wave">1st Wave</h3>
+<span id="2nd_event"></span>
+<h3 id="2nd-event">2nd Event</h3>
+<span id="3rd_event"></span>
+<h3 id="3rd-event">3rd Event</h3>
+<span id="4th_event"></span>
+<h3 id="4th-event">4th Event</h3>
+<span id="5th_event"></span>
+<h3 id="5th-event">5th Event</h3>
+<span id="6th_event"></span>
+<h3 id="6th-event">6th Event</h3>
+<p><a href="/niantic_wiki/page/events/13magnus.html">Detailed Dossier</a></p>
+<hr>
+<span id="the_jarvis_shards"></span>
+<h4 id="the-jarvis-shards">The Jarvis Shards</h4>
+<p><a href="/niantic_wiki/page/events/13magnus/jarvis_shards.html">The Jarvis Shards</a></p>
+<hr>
+<h2 id="recursion">Recursion</h2>
+<p>Some cryptic posts appeared before the name of the operation was revealed.</p>
+<p>The <a href="https://plus.google.com/u/0/+Ingress/posts/ZzG3nMwkZoG" class="urlextern" target="_blank" rel="noreferrer">first post</a> had some lines of code in ADA that allowed to create a fibonacci sequence.</p>
+<p>It also had a image of a page of <a href="http://en.wikipedia.org/wiki/Liber_Abaci" class="urlextern" target="_blank" rel="noreferrer">Liber Abaci</a> <br> <img src="/niantic_wiki/media/investigation/apps/ingress/liber_abbaci_magliab_f124r.jpg" alt="liber_abbaci_magliab_f124r.jpg" loading="lazy" width="200"> <br></p>
+<p>The <a href="https://plus.google.com/u/0/+Ingress/posts/7mz5bt6pTvp" class="urlextern" target="_blank" rel="noreferrer">second post</a> had some dots doing yet another fibonacci sequence.</p>
+<p>In that post the logo of Recursion anomalies was first shown <br> <img src="/niantic_wiki/media/investigation/apps/ingress/fibonacci.png" alt="fibonacci.png" loading="lazy" width="200"> <br></p>
+<hr>
+<h3 id="dice2014">#Dice2014</h3>
+<p><strong><a href="/niantic_wiki/page/investigation/timeline/02_2014.html#feb-05-2014">February 5, 2014</a></strong><br> <a href="https://plus.google.com/events/chkqqqnh6n9g4f0sftblpdggcuc" class="urlextern" target="_blank" rel="noreferrer">Original Link</a><br></p>
+<p>Anomaly held at the DICE Summit in Las Vegas, Nevada as a prelude to the Recursion anomaly sequence.<br></p>
+<p>Resistance win.<br></p>
+<p><a href="/niantic_wiki/page/events/recursion/dice2014.html">Detailed Dossier</a></p>
+<hr>
+<span id="recursion_artifacts"></span>
+<h3 id="recursion-artifacts">#Recursion Artifacts</h3>
+<p><a href="/niantic_wiki/page/events/recursion/artifacts.html">Detailed Dossier</a></p>
+<ul>
+<li><a href="/niantic_wiki/page/events/recursion/artifacts.html#artifact_1_-_creativity">Artifact 1: Creativity</a>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/artifacts.html#artifact_2_-_destiny">Artifact 2: Destiny</a>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/artifacts.html#artifact_3_-_finality">Artifact 3: Finality</a>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/artifacts.html#artifact_4_-_progression">Artifact 4: Progression</a>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/artifacts.html#artifact_5_-_loss">Artifact 5: Loss</a>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/artifacts.html#artifact_6">Artifact 6</a>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/artifacts.html#artifact_7_-_past">Artifact 7: Past</a>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/artifacts.html#artifact_8_-_future">Artifact 8: Future</a>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/artifacts.html#artifact_9">Artifact 9</a>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/artifacts.html#artifact_10_-_present">Artifact 10: Present</a>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/artifacts.html#artifact_11">Artifact 11</a>
+</li>
+</ul>
+<hr>
+<span id="1st_anomaly"></span>
+<h3 id="1st-anomaly">1st anomaly</h3>
+<p><strong><a href="/niantic_wiki/page/investigation/timeline/02_2014.html#feb-15-2014">February 15, 2014</a></strong></p>
+<p><a href="/niantic_wiki/page/events/recursion/01.html">Detailed page</a></p>
+<p>Recursion anomalies in Miami, USA(P), Louisville, USA(R), Colombus, USA.(R)</p>
+<ul>
+<li><a href="/niantic_wiki/page/events/recursion/01.html#miami">#Recursion Miami</a> <strong>(Primary)</strong><br>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/01.html#louisville">#Recursion Louisville</a><br>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/01.html#colombus">#Recursion Colombus</a>
+</li>
+</ul>
+<hr>
+<span id="2nd_anomaly"></span>
+<h3 id="2nd-anomaly">2nd anomaly</h3>
+<p><strong><a href="/niantic_wiki/page/investigation/timeline/02_2014.html#feb-22-2014">February 22, 2014</a></strong></p>
+<p><a href="/niantic_wiki/page/events/recursion/02.html">Detailed page</a></p>
+<p>Recursion anomalies in Bangalore, India (P) , Hyderabad , India (R) and New Dehli , India (R)</p>
+<ul>
+<li><a href="/niantic_wiki/page/events/recursion/02.html#bangalore">#Recursion Bangalore</a> <strong>(Primary)</strong><br>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/02.html#hyderabad">#Recursion Hyderabad</a>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/02.html#new_dehli">#Recursion New Dehli</a>
+</li>
+</ul>
+<hr>
+<span id="3rd_anomaly"></span>
+<h3 id="3rd-anomaly">3rd anomaly</h3>
+<p><strong><a href="/niantic_wiki/page/investigation/timeline/03_2014.html#mar-01-2014">March 1, 2014</a></strong></p>
+<p><a href="/niantic_wiki/page/events/recursion/03.html">Detailed page</a></p>
+<p>Recursion anomalies in Nashville, TN USA (P), Little Rock (R), Mobile (R)</p>
+<ul>
+<li><a href="/niantic_wiki/page/events/recursion/03.html#nashville">Nashville, TN USA</a> <strong>(Primary)</strong>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/03.html#little_rock">Little Rock, AR USA</a>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/03.html#mobile">Mobile, AL USA</a>
+</li>
+</ul>
+<hr>
+<span id="4th_anomaly"></span>
+<h3 id="4th-anomaly">4th anomaly</h3>
+<p><strong><a href="/niantic_wiki/page/investigation/timeline/03_2014.html#mar-08-2014">March 8, 2014</a></strong></p>
+<p><a href="/niantic_wiki/page/events/recursion/04.html">Detailed page</a></p>
+<p>Recursion anomalies in Austin, TX USA (P) , Mexico City (R) and St. Louis (R)</p>
+<ul>
+<li><a href="/niantic_wiki/page/events/recursion/04.html#austin">#Recursion Austin</a> <strong>(Primary)</strong><br>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/04.html#mexico_city">#Recursion Mexico City</a>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/04.html#st_louis">#Recursion St. Louis</a>
+</li>
+</ul>
+<hr>
+<span id="5th_anomaly"></span>
+<h3 id="5th-anomaly">5th anomaly</h3>
+<p><strong><a href="/niantic_wiki/page/investigation/timeline/03_2014.html#mar-15-2014">March 15, 2014</a></strong></p>
+<p><a href="/niantic_wiki/page/events/recursion/05.html">Detailed page</a></p>
+<p>Recursion anomalies in Zagreb, Croatia (P) , Cairo (R), Tel Aviv (R), Nice (R) and Cagliari (R)</p>
+<ul>
+<li><a href="/niantic_wiki/page/events/recursion/05.html#zagreb">#Recursion Zagreb</a> <strong>(Primary)</strong><br>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/05.html#cairo">#Recursion Cairo</a>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/05.html#tel_aviv">#Recursion Tel Aviv</a>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/05.html#nice">#Recursion Nice</a>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/05.html#cagliari">#Recursion Cagliari</a>
+</li>
+</ul>
+<hr>
+<span id="6th_anomaly"></span>
+<h3 id="6th-anomaly">6th anomaly</h3>
+<p><strong><a href="/niantic_wiki/page/investigation/timeline/03_2014.html#mar-22-2014">March 22, 2014</a></strong></p>
+<p><a href="/niantic_wiki/page/events/recursion/06.html">Detailed page</a></p>
+<p>Recursion anomalies in Boulder, CO USA (P) , Boise (R) and Provo (R)</p>
+<ul>
+<li><a href="/niantic_wiki/page/events/recursion/06.html#boulder">#Recursion Boulder</a> <strong>(Primary)</strong><br>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/06.html#boise">#Recursion Boise</a>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/06.html#provo">#Recursion Provo</a>
+</li>
+</ul>
+<hr>
+<p>.</p>
+<span id="recursion_07"></span><span id="recursion07"></span>
+<h3 id="recursion-07">Recursion 07</h3>
+<p><strong><a href="/niantic_wiki/page/investigation/timeline/03_2014.html#mar-29-2014">March 29, 2014</a></strong></p>
+<p><a href="/niantic_wiki/page/events/recursion/07.html">Detailed page</a></p>
+<p>Recursion anomalies in Berlin, Germany (P) Los Angeles, LA USA (P), Nantes (R), Brussels (R), Spokane (R) and Oakland (R)</p>
+<ul>
+<li><a href="/niantic_wiki/page/events/recursion/07.html#berlin">#Recursion Berlin</a> <strong>(Primary)</strong>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/07.html#los_angeles">#Recursion Los Angeles</a> <strong>(Primary)</strong>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/07.html#nantes">#Recursion Nantes</a>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/07.html#brussels">#Recursion Brussels</a>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/07.html#spokane">#Recursion Spokane</a>
+</li>
+<li><a href="/niantic_wiki/page/events/recursion/07.html#oakland">#Recursion Oakland</a>
+</li>
+</ul>
+<hr>
+<h1 id="interitus">Interitus</h1>
+<p>XM Anomaly events held in <a href="/niantic_wiki/page/investigation/timeline/04_2014.html">April</a>, <a href="/niantic_wiki/page/investigation/timeline/05_2014.html">May</a>, and <a href="/niantic_wiki/page/investigation/timeline/06_2014.html">June 2014</a><br></p>
+<p>Announced in <a href="/niantic_wiki/page/investigation/videos/ingressreportepisode52.html">Ingress Report Episode 52</a></p>
+<p><strong>The Resistance wins #Interitus allowing ADA to continue to grow unchecked.</strong></p>
+<p>Full information on each anomaly can be found in the <strong><a href="/niantic_wiki/page/events/interitus.html">Detailed Page</a></strong><br></p>
+<hr>
+<h1 id="ingressio">IngressIO</h1>
+<p>Ingress Burst anomaly Held on <strong><a href="/niantic_wiki/page/investigation/timeline/06_2014.html#ingressio">June 26, 2014</a></strong></p>
+<p><strong>The Resistance captured this Burst Op, outperforming the Enlightened by 1540.</strong></p>
+<p><strong><a href="/niantic_wiki/page/events/ingressio.html">Detailed Dossier</a></strong></p>
+<hr>
+<span id="new_agent_initiative"></span>
+<h1 id="new-agent-initiative">#New Agent Initiative</h1>
+<p><a href="https://plus.google.com/u/0/107849663787965375687/posts/PHxf1B5ENWQ" class="urlextern" target="_blank" rel="noreferrer">Original Link</a></p>
+<p>Info - <a href="http://niantic.schlarp.com/documents:montreal" class="urlextern" target="_blank" rel="noreferrer">http://niantic.schlarp.com/documents:montreal</a></p>
+<p>Subliminal image from last week&#x27;s #IngressReport .</p>
+<p>Agents: Prepare for what comes next.</p>
+<p>JULY 12</p>
+<ul>
+<li>Montreal (Primary) <a href="http://goo.gl/Uzy1fd" class="urlextern" target="_blank" rel="noreferrer">http://goo.gl/Uzy1fd</a>
+</li>
+<li>Chattanooga <a href="http://goo.gl/G5q423" class="urlextern" target="_blank" rel="noreferrer">http://goo.gl/G5q423</a>
+</li>
+<li>Toronto <a href="http://goo.gl/KkoG2g" class="urlextern" target="_blank" rel="noreferrer">http://goo.gl/KkoG2g</a>
+</li>
+</ul>
+<p><a href="/niantic_wiki/page/events/newagentsinitiative.html">Detailed Dossier</a></p>
+<hr>
+<h1 id="helios">#Helios</h1>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/helios/helios.png" alt="helios.png" loading="lazy" width="200"> Anomaly event sequence held <a href="/niantic_wiki/page/investigation/timeline/07_2014.html">July 2014</a>, <a href="/niantic_wiki/page/investigation/timeline/08_2014.html">August 2014</a> and <a href="/niantic_wiki/page/investigation/timeline/09_2014.html">September 2014</a></p>
+<p><strong><a href="/niantic_wiki/page/events/helios.html">Detailed Dossier</a></strong></p>
+<hr>
+<h1 id="shonin">#Shonin</h1>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/shonin.jpg" alt="shonin.jpg" loading="lazy" width="200"> Shōnin (japanese: 証人, english: witness) is an Anomaly Series on 21 <a href="/niantic_wiki/page/investigation/timeline/02_2015.html">February 2015</a> and 28 <a href="/niantic_wiki/page/investigation/timeline/03_2015.html">March 2015</a>.</p>
+<p><strong><a href="/niantic_wiki/page/events/shonin.html">Detailed Dossier</a></strong></p>
+<hr>
+<h1 id="persepolis">#Persepolis</h1>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/persepolis.png" alt="persepolis.png" loading="lazy" width="200"> Persepolis is an Anomaly Series on 30 <a href="/niantic_wiki/page/investigation/timeline/05_2015.html">May 2015</a> and 20 <a href="/niantic_wiki/page/investigation/timeline/06_2015.html">June 2015</a>.</p>
+<p><strong><a href="/niantic_wiki/page/events/persepolis.html">Detailed Dossier</a></strong></p>
+<hr>
+<h1 id="abaddon">#Abaddon</h1>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/abaddon.png" alt="abaddon.png" loading="lazy" width="200"> Abaddon is an Anomaly Series beginning October 2015 and running through December 2015.</p>
+<p><strong><a href="/niantic_wiki/page/events/abaddon.html">Detailed Dossier</a></strong> </p>
+<hr>
+<h1 id="obsidian">#Obsidian</h1>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/ingress_magnus_nest_concept_14_people.jpg" alt="ingress_magnus_nest_concept_14_people.jpg" loading="lazy" width="200"> Obsidian is an Anomaly Series beginning February 2016 and running through April 2016.</p>
+<p><a href="https://plus.google.com/u/0/+Ingress/posts/F2ckKTYZ1oc" class="urlextern" target="_blank" rel="noreferrer">https://plus.google.com/u/0/+Ingress/posts/F2ckKTYZ1oc</a></p>
+<p><strong><a href="/niantic_wiki/page/events/obsidian.html">Detailed Dossier</a></strong> </p>
+<hr>
+<span id="magnus_reawakens"></span>
+<h1 id="magnus-reawakens">#MAGNUS: REAWAKENS</h1>
+<p><img src="/niantic_wiki/media/events/phoenix.jpg" alt="phoenix.jpg" loading="lazy" width="200"></p>
+<p><a href="http://investigate.ingress.com/2017/04/09/magnus-transforming/" class="urlextern" target="_blank" rel="noreferrer">http://investigate.ingress.com/2017/04/09/magnus-transforming/</a></p>
+<p><strong><a href="/niantic_wiki/page/events/magnus_reawakens.html">Detailed Dossier</a></strong> </p>
+<hr>
+<p><a href="/niantic_wiki/page/investigation/apps/ingress/eventtimeline.html">test</a></p></div>
+        </div></main>
+        <nav id="dokuwiki__pagetools" aria-labelledby="dokuwiki__pagetools__heading">
+          <h3 class="a11y" id="dokuwiki__pagetools__heading">Page Tools</h3>
+          <div class="tools"><ul>
+            <li class="top"><a href="#dokuwiki__top" title="Back to top [t]" accesskey="t"><span>Back to top</span></a></li>
+          </ul></div>
+        </nav>
+      </div>
+      <footer id="dokuwiki__footer"><div class="pad">
+        <div class="license">This is an unofficial archive of the Ingress story wiki originally hosted at <a href="https://niantic.schlarp.com/" target="_blank" rel="noreferrer">https://niantic.schlarp.com/</a>.</div>
+        <div class="license">All original content belongs to its respective authors and contributors.</div>
+        <div class="license">This archive is provided to preserve access after the original site became unavailable.</div>
+      </div></footer>
+    </div>
+  </div>
+  <div id="screen__mode" class="no"></div>
+</body>
+</html>

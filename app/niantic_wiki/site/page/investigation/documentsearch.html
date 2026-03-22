@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Searching the Wiki [Niantic Project Wiki]</title>
+  <link rel="stylesheet" href="/niantic_wiki/styles.css">
+  <link rel="shortcut icon" href="/niantic_wiki/lib/tpl/dokuwiki/images/favicon.ico">
+  <script src="/niantic_wiki/script.js" defer></script>
+</head>
+<body class="dokuwiki">
+  <div id="dokuwiki__site">
+    <div id="dokuwiki__top" class="site dokuwiki mode_show tpl_dokuwiki home">
+      <header id="dokuwiki__header"><div class="pad group">
+        <div class="headings group">
+          <h1 class="logo"><a href="/niantic_wiki/page/start.html" accesskey="h" title="Home [h]"><img src="/niantic_wiki/lib/tpl/dokuwiki2/images/logo.png" width="364" height="98" alt=""><span>Niantic Project Wiki</span></a></h1>
+        </div>
+        <div class="tools group">
+          <div id="dokuwiki__sitetools">
+            <form action="/niantic_wiki/search" method="get" role="search" class="search"><input type="search" name="q" placeholder="Search" autocomplete="on"><button type="submit" title="Search">Search</button></form>
+            <ul>
+              <li><a href="/niantic_wiki/about">About this page</a></li>
+              <li><a href="/niantic_wiki/media-manager">Media Manager</a></li>
+              <li><a href="/niantic_wiki/">Sitemap</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="breadcrumbs"><div class="trace"><a href="/niantic_wiki/page/start.html">start</a> · <a href="/niantic_wiki/page/investigation.html">investigation</a> · <a href="/niantic_wiki/page/investigation/documentsearch.html">documentsearch</a></div></div>
+        <hr class="a11y">
+      </div></header>
+      <div class="wrapper group">
+        <main id="dokuwiki__content"><div class="pad group">
+          <div class="pageId"><span>investigation/documentsearch</span></div>
+          <div class="page group"><div id="dw__toc" class="dw_toc"><h3 class="toggle">Table of Contents</h3><div><ul class="toc"><li class="level1"><div class="li"><a href="/niantic_wiki/page/investigation/documentsearch.html#searching-the-wiki">Searching the Wiki</a></div><ul class="toc"><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/documentsearch.html#tag-search-feature">Tag Search Feature</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/documentsearch.html#advanced-tag-searching">Advanced Tag Searching</a></div></li></ul></li></ul></div></div><span id="section"></span>
+<span id="searching_the_wiki"></span>
+<h1 id="searching-the-wiki">Searching the Wiki</h1>
+<hr>
+<span id="tag_search_feature"></span>
+<h2 id="tag-search-feature">Tag Search Feature</h2>
+<p>Defaults to OR - use checkbox for AND</p>
+<p>searchtags&amp;nouser&amp;nodate</p>
+<hr>
+<span id="advanced_tag_searching"></span>
+<h2 id="advanced-tag-searching">Advanced Tag Searching</h2>
+<p>How to use tags which consist of multiple words? Just use an “_”, it gets automatically replaced by a ” ” i.e.: <div class="tags"><span><a href="/niantic_wiki/search?q=tag_with_multiple_words" rel="tag">tag_with_multiple_words</a></span></div> Also, quotes seem to work: <div class="tags"><span><a href="/niantic_wiki/search?q=%22tag" rel="tag">&quot;tag</a>, <a href="/niantic_wiki/search?q=with" rel="tag">with</a>, <a href="/niantic_wiki/search?q=multiple" rel="tag">multiple</a>, <a href="/niantic_wiki/search?q=words%22" rel="tag">words&quot;</a></span></div></p>
+<hr>
+<p>Example: topic&gt;[audio]&amp;[&amp;table&amp;showdate&amp;nouser&amp;sort] - lists all pages with the audio tag, sorted and showing date but not user topic&gt;tag1 -tag2 – Lists all pages tagged with tag1 but not with tag2. topic&gt;tag1 +tag2 – Lists all pages tagged with tag1 and tag2. topic&gt;tag1 tag2 – Lists all pages tagged with either tag1 or tag2 or both. topic&gt;ns1?tag1 tag2 – List all pages inside namespace ns1 tagged with either tag1 or tag2 topic&gt;.?tag1 tag2 – List all pages inside the current namespace tagged with either tag1 or tag2 topic&gt;tag1 tag2 tag3&amp;nodate&amp;desc&amp;sort (Adding pagelist options to change the design)</p>
+<div class="tags"><span><a href="/niantic_wiki/search?q=audio" rel="tag">audio</a>, <a href="/niantic_wiki/search?q=video" rel="tag">video</a>, <a href="/niantic_wiki/search?q=document" rel="tag">document</a></span></div></div>
+        </div></main>
+        <nav id="dokuwiki__pagetools" aria-labelledby="dokuwiki__pagetools__heading">
+          <h3 class="a11y" id="dokuwiki__pagetools__heading">Page Tools</h3>
+          <div class="tools"><ul>
+            <li class="top"><a href="#dokuwiki__top" title="Back to top [t]" accesskey="t"><span>Back to top</span></a></li>
+          </ul></div>
+        </nav>
+      </div>
+      <footer id="dokuwiki__footer"><div class="pad">
+        <div class="license">This is an unofficial archive of the Ingress story wiki originally hosted at <a href="https://niantic.schlarp.com/" target="_blank" rel="noreferrer">https://niantic.schlarp.com/</a>.</div>
+        <div class="license">All original content belongs to its respective authors and contributors.</div>
+        <div class="license">This archive is provided to preserve access after the original site became unavailable.</div>
+      </div></footer>
+    </div>
+  </div>
+  <div id="screen__mode" class="no"></div>
+</body>
+</html>

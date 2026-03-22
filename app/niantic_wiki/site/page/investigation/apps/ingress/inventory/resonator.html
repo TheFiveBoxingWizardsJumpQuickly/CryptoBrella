@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Resonator [Niantic Project Wiki]</title>
+  <link rel="stylesheet" href="/niantic_wiki/styles.css">
+  <link rel="shortcut icon" href="/niantic_wiki/lib/tpl/dokuwiki/images/favicon.ico">
+  <script src="/niantic_wiki/script.js" defer></script>
+</head>
+<body class="dokuwiki">
+  <div id="dokuwiki__site">
+    <div id="dokuwiki__top" class="site dokuwiki mode_show tpl_dokuwiki home">
+      <header id="dokuwiki__header"><div class="pad group">
+        <div class="headings group">
+          <h1 class="logo"><a href="/niantic_wiki/page/start.html" accesskey="h" title="Home [h]"><img src="/niantic_wiki/lib/tpl/dokuwiki2/images/logo.png" width="364" height="98" alt=""><span>Niantic Project Wiki</span></a></h1>
+        </div>
+        <div class="tools group">
+          <div id="dokuwiki__sitetools">
+            <form action="/niantic_wiki/search" method="get" role="search" class="search"><input type="search" name="q" placeholder="Search" autocomplete="on"><button type="submit" title="Search">Search</button></form>
+            <ul>
+              <li><a href="/niantic_wiki/about">About this page</a></li>
+              <li><a href="/niantic_wiki/media-manager">Media Manager</a></li>
+              <li><a href="/niantic_wiki/">Sitemap</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="breadcrumbs"><div class="trace"><a href="/niantic_wiki/page/start.html">start</a> · <a href="/niantic_wiki/page/investigation.html">investigation</a> · <a href="/niantic_wiki/page/investigation/apps.html">apps</a> · <span>ingress</span> · <a href="/niantic_wiki/page/investigation/apps/ingress/inventory.html">inventory</a> · <a href="/niantic_wiki/page/investigation/apps/ingress/inventory/resonator.html">resonator</a></div></div>
+        <hr class="a11y">
+      </div></header>
+      <div class="wrapper group">
+        <main id="dokuwiki__content"><div class="pad group">
+          <div class="pageId"><span>investigation/apps/ingress/inventory/resonator</span></div>
+          <div class="page group"><div id="dw__toc" class="dw_toc"><h3 class="toggle">Table of Contents</h3><div><ul class="toc"><li class="level1"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/inventory/resonator.html#resonator">Resonator</a></div><ul class="toc"><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/inventory/resonator.html#card">Card</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/inventory/resonator.html#level-1">Level 1</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/inventory/resonator.html#level-2">Level 2</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/inventory/resonator.html#level-3">Level 3</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/inventory/resonator.html#level-4">Level 4</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/inventory/resonator.html#level-5">Level 5</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/inventory/resonator.html#level-6">Level 6</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/inventory/resonator.html#level-7">Level 7</a></div></li><li class="level2"><div class="li"><a href="/niantic_wiki/page/investigation/apps/ingress/inventory/resonator.html#level-8">Level 8</a></div></li></ul></li></ul></div></div><span id="section"></span>
+<h1 id="resonator">Resonator</h1>
+<p>Each portal has 8 slots where you can deploy or upgrade a resonator. <br> Resonators are used to gain control of portal for your faction and it is what determines their level. This is calculated by the sum of the total levels of the resonators present divided by 8.  <br> Resonators also determine how far a portal can be linked and how much energy (XM) it will have. To calculate the maximum distance you can use the following formula. <br> <br> <em>Portal Range = 160 m x (Average Resonators Level ^ 4)</em></p>
+<h4 id="deployment">Deployment</h4>
+<p>The maximum level of the resonators you can deploy are limited by your level. With higher levels you are also limited on the amount of resonators you can deploy per portal. <br> Deploying the first resonator on a portal gives you 625 AP. All the following ones will grant you 125 AP , with the exception being the 8th one that grants you 375 AP. Upgrading a already deployed resonator by another player to a higher level grants you 65 AP. <br> Deploying a resonator will cost you 50 XM x the Resonator lvl</p>
+<h4 id="decay">Decay</h4>
+<p>Resonators are the only item that decays with time making the portal lose it&#x27;s energy (XM). They lose 15% of their maximum energy per day and if untouched they disappear after 7 days. The only way to prevent this is by recharging the resonators. This can be done remotely if holding the key to that portal. <br> Recharging a portal gives the portal regain 1000 XM of the XM lost at 100% efficiency and costs you the same. The farther you are from the portal the lower the efficiency might be. To calculate the efficiency the following formula is used <br> <br> <em>Efficiency (%) = 100 – (distance in km)/(5 x Player Level)</em></p>
+<h4 id="rarity">Rarity</h4>
+<p>The rarity of resonators is very common, meaning they can be easily obtained via hacking. The level you obtain is limited by your own level and the level of the portal. <br></p>
+<h4 id="recycling">Recycling</h4>
+<p>Recycling a resonator will give you 20 XM x the Resonator lvl <br></p>
+<hr>
+<h2 id="card">Card</h2>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/resonatorcard.jpg" alt="resonatorcard.jpg" loading="lazy" width="350"> <strong>Developer</strong> - Niantic Labs <br> <br> <strong>Description</strong> - The resonator is an XM object that amplifies and tunes the XM energy naturally occurring at Portal locations. Resonators can be used to increase the XM flow and align XM modulation to Enlightened or Resistance frequencies. Portals must be fully Resonated  to link to other Portals. Level 1-8 Resonators have been observed although more powerful Resonators are almost certainly possible. <br> <br> <strong>History</strong> - The Resonator was created during initial XM research studies conducted by the Niantic Project at CERN. The creation of the Resonator (and the initial insights into the ability to form XM into functional objects) is attributed to Dr. Oliver Lynton-Wolfe but the Niantic AI system (ADA) played a significant and not fully understand role in this process. Insight into XM properties were also provided by Dr. Devra Bogdanovich, Roland Jarvis, Carrie Campbell, and Enoch Dalby, among others. <br> <br> Thanks to <a href="https://plus.google.com/+PaulGettle/posts" class="urlextern" target="_blank" rel="noreferrer">Paul Gettle</a> for the scan</p>
+<hr>
+<span id="level_1"></span><span id="level1"></span>
+<h2 id="level-1">Level 1</h2>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/resonator1.png" alt="resonator1.png" loading="lazy" width="200"> <strong>Cost to deploy</strong> - 50 XM <br> <br> <strong>XM gained by recycling</strong> - 20 XM <br> <br> <strong>Energy given to portal</strong> - 1000 XM <br> <br> <strong>Maximum deployed per player, per portal</strong> - 8 <br> <br></p>
+<hr>
+<span id="level_2"></span><span id="level2"></span>
+<h2 id="level-2">Level 2</h2>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/resonator2.png" alt="resonator2.png" loading="lazy" width="200"> <strong>Cost to deploy</strong> - 100 XM <br> <br> <strong>XM gained by recycling</strong> - 40 XM <br> <br> <strong>Energy given to portal</strong> - 1500 XM <br> <br> <strong>Maximum deployed per player, per portal</strong> - 4 <br> <br></p>
+<hr>
+<span id="level_3"></span><span id="level3"></span>
+<h2 id="level-3">Level 3</h2>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/resonator3.png" alt="resonator3.png" loading="lazy" width="200"> <strong>Cost to deploy</strong> - 150 XM <br> <br> <strong>XM gained by recycling</strong> - 60 XM <br> <br> <strong>Energy given to portal</strong> - 2000 XM <br> <br> <strong>Maximum deployed per player, per portal</strong> - 4 <br> <br></p>
+<hr>
+<span id="level_4"></span><span id="level4"></span>
+<h2 id="level-4">Level 4</h2>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/resonator4.png" alt="resonator4.png" loading="lazy" width="200"> <strong>Cost to deploy</strong> - 200 XM <br> <br> <strong>XM gained by recycling</strong> - 80 XM <br> <br> <strong>Energy given to portal</strong> - 2500 XM <br> <br> <strong>Maximum deployed per player, per portal</strong> - 4 <br> <br></p>
+<hr>
+<span id="level_5"></span><span id="level5"></span>
+<h2 id="level-5">Level 5</h2>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/resonator5.png" alt="resonator5.png" loading="lazy" width="200"> <strong>Cost to deploy</strong> - 250 XM <br> <br> <strong>XM gained by recycling</strong> - 100 XM <br> <br> <strong>Energy given to portal</strong> - 3000 XM <br> <br> <strong>Maximum deployed per player, per portal</strong> - 2 <br> <br></p>
+<hr>
+<span id="level_6"></span><span id="level6"></span>
+<h2 id="level-6">Level 6</h2>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/resonator6.png" alt="resonator6.png" loading="lazy" width="200"> <strong>Cost to deploy</strong> - 300 XM <br> <br> <strong>XM gained by recycling</strong> - 120 XM <br> <br> <strong>Energy given to portal</strong> - 4000 XM <br> <br> <strong>Maximum deployed per player, per portal</strong> - 2 <br> <br></p>
+<hr>
+<span id="level_7"></span><span id="level7"></span>
+<h2 id="level-7">Level 7</h2>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/resonator7.png" alt="resonator7.png" loading="lazy" width="200"> <strong>Cost to deploy</strong> - 350 XM <br> <br> <strong>XM gained by recycling</strong> - 140 XM <br> <br> <strong>Energy given to portal</strong> - 5000 XM <br> <br> <strong>Maximum deployed per player, per portal</strong> - 1 <br> <br></p>
+<hr>
+<span id="level_8"></span><span id="level8"></span>
+<h2 id="level-8">Level 8</h2>
+<p><img src="/niantic_wiki/media/investigation/apps/ingress/resonator8.png" alt="resonator8.png" loading="lazy" width="200"> <strong>Cost to deploy</strong> - 400 XM <br> <br> <strong>XM gained by recycling</strong> - 160 XM <br> <br> <strong>Energy given to portal</strong> - 6000 XM <br> <br> <strong>Maximum deployed per player, per portal</strong> - 1 <br> <br></p>
+<hr></div>
+        </div></main>
+        <nav id="dokuwiki__pagetools" aria-labelledby="dokuwiki__pagetools__heading">
+          <h3 class="a11y" id="dokuwiki__pagetools__heading">Page Tools</h3>
+          <div class="tools"><ul>
+            <li class="top"><a href="#dokuwiki__top" title="Back to top [t]" accesskey="t"><span>Back to top</span></a></li>
+          </ul></div>
+        </nav>
+      </div>
+      <footer id="dokuwiki__footer"><div class="pad">
+        <div class="license">This is an unofficial archive of the Ingress story wiki originally hosted at <a href="https://niantic.schlarp.com/" target="_blank" rel="noreferrer">https://niantic.schlarp.com/</a>.</div>
+        <div class="license">All original content belongs to its respective authors and contributors.</div>
+        <div class="license">This archive is provided to preserve access after the original site became unavailable.</div>
+      </div></footer>
+    </div>
+  </div>
+  <div id="screen__mode" class="no"></div>
+</body>
+</html>

@@ -1,35 +1,3 @@
-import importlib
-import sys
-import types
-
-import pytest
-
-
-def _install_secret_stubs():
-    if "app.secret" not in sys.modules:
-        sys.modules["app.secret"] = types.ModuleType("app.secret")
-
-    cryptobrella = types.ModuleType("app.secret.cryptobrella")
-    cryptobrella.cb_challenge_contents = lambda mode="keys", pageid=None: [] if mode == "keys" else {}
-    cryptobrella.cb_contents = lambda mode="keys", pageid=None: [] if mode == "keys" else {}
-    sys.modules["app.secret.cryptobrella"] = cryptobrella
-
-
-@pytest.fixture()
-def client(monkeypatch):
-    _install_secret_stubs()
-    sys.modules.pop("app.app", None)
-
-    app_module = importlib.import_module("app.app")
-    app = app_module.app
-    app.config["TESTING"] = False
-
-    gear = importlib.import_module("app.gear")
-
-    with app.test_client() as c:
-        yield c
-
-
 def test_get_basic_pages(client):
     resp = client.get("/")
     assert resp.status_code == 200
@@ -62,6 +30,37 @@ def test_cipher_docs_page_renders(client):
     assert "ROT" in body
     assert "Can you decode?" in body
     assert "Cipher Tool: Rot" in body
+
+
+def test_niantic_wiki_index_renders(client):
+    resp = client.get("/niantic_wiki/")
+    assert resp.status_code == 200
+    body = resp.get_data(as_text=True)
+    assert "Niantic Project Wiki" in body
+    assert 'href="/niantic_wiki/page/start.html"' in body
+
+
+def test_niantic_wiki_page_renders(client):
+    resp = client.get("/niantic_wiki/page/start.html")
+    assert resp.status_code == 200
+    body = resp.get_data(as_text=True)
+    assert "Niantic Project Wiki" in body
+    assert 'src="/niantic_wiki/script.js"' in body
+
+
+def test_niantic_wiki_asset_renders(client):
+    resp = client.get("/niantic_wiki/script.js")
+    assert resp.status_code == 200
+    body = resp.get_data(as_text=True)
+    assert "fetch('/niantic_wiki/search-index.json')" in body
+
+
+def test_niantic_wiki_preserved_missing_page_stays_404(client):
+    resp = client.get("/niantic_wiki/page/the_sourcebook.html")
+    assert resp.status_code == 404
+    body = resp.get_data(as_text=True)
+    assert "Page not found" in body
+    assert 'href="/niantic_wiki/page/start.html"' in body
 
 
 def test_post_gear_rot_success(client):

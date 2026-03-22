@@ -1,12 +1,13 @@
 # CryptoBrella System Overview
 
-Last updated: 2026-03-16
+Last updated: 2026-03-22
 
 ## 1. System Summary
 - CryptoBrella is a Flask-based Crypto Functions service.
 - Core logic lives in pure functions under `app/cipher/*`.
 - Web request/response handling is implemented in `app/gear.py`.
 - Top-page catalog metadata is managed in `app/tool_catalog.py`.
+- Imported Niantic Wiki archive content is hosted under `app/niantic_wiki/`.
 - UI pages under `app/templates/Tools/*.html` call `POST /gear/<function>`.
 
 ## 2. Runtime Flow
@@ -18,6 +19,7 @@ Last updated: 2026-03-16
 
 ## 3. Main Modules
 - Routing and page rendering: `app/app.py`
+- Niantic Wiki archive routing: `app/niantic_wiki/__init__.py`
 - Crypto Functions API handlers: `app/gear.py`
 - General cipher/encoding logic: `app/cipher/fn.py`
 - Shared math helpers for cipher modules: `app/cipher/math_functions.py`
@@ -29,10 +31,11 @@ Last updated: 2026-03-16
 - Top-page metadata/catalog: `app/tool_catalog.py`
 
 ## 4. Endpoint Categories
-- Pages: `/`, `/<page>`, `/about`, `/challenge/*`, `/passcode/*`, `/cipher_docs/*`
+- Pages: `/`, `/<page>`, `/about`, `/challenge/*`, `/passcode/*`, `/cipher_docs/*`, `/niantic_wiki/*`
 - Crypto Functions API: `POST /gear/<function>`
 - Image API: `POST /g/resize/`, `GET /upload/`, `GET /modified_image/`
 
 ## 5. Not-Found Handling
 - Missing general pages and missing `challenge` / `cipher_docs` pages resolve to a shared custom 404 page.
 - The 404 page returns HTTP 404 explicitly and includes a simple route back to the top page.
+- Missing `niantic_wiki` pages and assets use a dedicated Niantic Wiki-themed 404 page that links back to `/niantic_wiki/page/start.html`.

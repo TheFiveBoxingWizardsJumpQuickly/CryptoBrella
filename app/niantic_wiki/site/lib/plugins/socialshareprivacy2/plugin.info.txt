@@ -1,0 +1,7 @@
+base   socialshareprivacy2
+author Robert Nitsch
+email  r.s.nitsch@gmail.com
+date   2013-05-24
+name   socialshareprivacy2 plugin
+desc   Provides two-click share buttons for FB, Twitter, G+, Flattr and many more. Based on the first socialshareprivacy plugin by Frank Schiebel.
+url    https://www.dokuwiki.org/plugin:socialshareprivacy2
