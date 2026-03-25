@@ -55,7 +55,7 @@ def rewrite_text(text: str) -> str:
     text = re.sub(r"(url\(['\"]?)/(?!/)", rf"\1{BASE_PATH}/", text)
     # JS fetch('/...') and similar string literals used in the generated site.
     text = re.sub(r"((?:fetch|location\.assign|location\.replace)\(['\"])/(?!/)", rf"\1{BASE_PATH}/", text)
-    text = re.sub(r'([("\'\s=])/(search-index\.json|page/|search\b|about\b|media-manager\b|styles\.css\b|script\.js\b|media/|lib/)', rf"\1{BASE_PATH}/\2", text)
+    text = re.sub(r'([("\'\s=])/(favicon\.ico\b|search-index\.json|page/|search\b|about\b|media-manager\b|styles\.css\b|script\.js\b|media/|lib/)', rf"\1{BASE_PATH}/\2", text)
     return text
 
 
@@ -67,6 +67,21 @@ def rewrite_tree(target_site: Path):
         rewritten = rewrite_text(original)
         if rewritten != original:
             path.write_text(rewritten, encoding="utf-8")
+
+
+def ensure_favicon_link(target_site: Path):
+    favicon_tag = f'  <link rel="shortcut icon" href="{BASE_PATH}/favicon.ico">\n'
+    for path in target_site.rglob("*.html"):
+        original = path.read_text(encoding="utf-8")
+        if 'rel="shortcut icon"' in original:
+            continue
+        updated = original.replace(
+            f'  <link rel="stylesheet" href="{BASE_PATH}/styles.css">\n',
+            f'  <link rel="stylesheet" href="{BASE_PATH}/styles.css">\n{favicon_tag}',
+            1,
+        )
+        if updated != original:
+            path.write_text(updated, encoding="utf-8")
 
 
 def get_source_commit(source_site: Path) -> str | None:
@@ -120,4 +135,5 @@ if __name__ == "__main__":
     shutil.copytree(source_site, TARGET_SITE)
     target_site = TARGET_SITE
     rewrite_tree(target_site)
+    ensure_favicon_link(target_site)
     build_manifest(source_site, target_site)

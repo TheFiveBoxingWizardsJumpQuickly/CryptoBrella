@@ -10,13 +10,16 @@ def test_niantic_wiki_about_page_renders(client):
     resp = client.get("/niantic_wiki/about")
     assert resp.status_code == 200
     body = resp.get_data(as_text=True)
-    assert "About this page" in body
+    assert "About this archive" in body
     assert 'action="/niantic_wiki/search"' in body
     assert 'href="/niantic_wiki/page/start.html"' in body
+    assert "This archive is hosted as part of Cryptobrella" in body
+    assert 'href="https://www.cryptobrella.app/"' in body
 
 
 def test_niantic_wiki_representative_assets_render(client):
     for path in [
+        "/niantic_wiki/favicon.ico",
         "/niantic_wiki/styles.css",
         "/niantic_wiki/search-index.json",
         "/niantic_wiki/lib/tpl/dokuwiki2/images/logo.png",

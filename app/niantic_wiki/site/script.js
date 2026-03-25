@@ -91,7 +91,7 @@
         }).sort(function (a, b) {
           if (b.score !== a.score) return b.score - a.score;
           return a.entry.slug.localeCompare(b.entry.slug);
-        }).slice(0, 50);
+        });
 
         status.textContent = matches.length + ' result' + (matches.length === 1 ? '' : 's') + ' for "' + query + '"';
         if (!matches.length) {

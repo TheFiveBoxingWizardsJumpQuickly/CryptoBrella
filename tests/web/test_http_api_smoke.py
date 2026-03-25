@@ -38,6 +38,7 @@ def test_niantic_wiki_index_renders(client):
     body = resp.get_data(as_text=True)
     assert "Niantic Project Wiki" in body
     assert 'href="/niantic_wiki/page/start.html"' in body
+    assert 'href="/niantic_wiki/favicon.ico"' in body
 
 
 def test_niantic_wiki_page_renders(client):
