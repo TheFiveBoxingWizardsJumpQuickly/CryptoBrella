@@ -88,3 +88,20 @@ body{background:transparent}
 .search-result-path{font-size:.85em;color:#666;margin:0 0 .25em}
 .search-result-snippet{margin:0;color:#333}
 @media (max-width:800px){.media-top-list{columns:1}.dw-table-inline{table-layout:auto}.media-file-item{flex-direction:column}.media-thumb{flex-basis:auto}}
+@media only screen and (max-width:480px){
+  #dokuwiki__sitetools ul{
+    display:flex;
+    flex-wrap:wrap;
+    gap:.35em .75em;
+    clear:both;
+    margin:.3em 0 0;
+    padding:0;
+    list-style:none;
+  }
+  #dokuwiki__sitetools li{margin:0}
+  #dokuwiki__sitetools a{
+    display:block;
+    font-size:.875em;
+    line-height:1.3;
+  }
+}
