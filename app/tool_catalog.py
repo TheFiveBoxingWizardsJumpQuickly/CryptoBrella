@@ -57,6 +57,7 @@ CATEGORY_TOOL_ORDER = {
         "rectangle_ex",
         "charcode_ex",
         "ingress_keywords",
+        "niantic_wiki",
     ],
     "extra-pages": [
         "challenge",
@@ -418,6 +419,15 @@ TOOL_CATALOG = [
         "aliases": ["ingress keywords"],
         "tags": ["ingress", "keywords", "reference"],
         "icon": "icon_ingress_keywords.png",
+    },
+    {
+        "id": "niantic_wiki",
+        "path": "/niantic_wiki/page/start.html",
+        "name": "Niantic Wiki",
+        "description": "Browse the imported Niantic Wiki archive.",
+        "aliases": ["niantic project wiki", "niantic wiki archive"],
+        "tags": ["ingress", "archive", "reference", "wiki","schlarp"],
+        "icon": "icon_niantic_wiki.png",
     },
     {
         "id": "challenge",

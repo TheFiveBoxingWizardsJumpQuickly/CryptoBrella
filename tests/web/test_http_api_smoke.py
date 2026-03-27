@@ -6,7 +6,14 @@ def test_get_basic_pages(client):
     assert 'type="search"' in body
     assert "Cryptography" in body
     assert "Remember Ingress" in body
-    assert client.get("/about").status_code == 200
+    assert "Niantic Wiki" in body
+    assert '"/niantic_wiki/page/start.html"' in body
+    assert '"icon_niantic_wiki.png"' in body
+    about_resp = client.get("/about")
+    assert about_resp.status_code == 200
+    about_body = about_resp.get_data(as_text=True)
+    assert "V1.2.0" in about_body
+    assert "Added hosting for the Niantic Project Wiki archive." in about_body
     link_resp = client.get("/link")
     assert link_resp.status_code == 200
     link_body = link_resp.get_data(as_text=True)

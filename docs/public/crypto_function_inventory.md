@@ -1,13 +1,13 @@
 # Crypto Function Inventory
 
-Last updated: 2026-03-16
+Last updated: 2026-03-28
 
 ## 1. Management Term
 - This project manages cipher transforms, analysis utilities, and encoding helpers under one term: **Crypto Functions**.
 - Utility pages previously treated as "Other Tools" are included in the same management scope.
 
 ## 2. Top-Page Counts
-- Managed pages: 38
+- Managed pages: 39
 - `gear/<function>` based pages: 36
 - Non-`gear` API page: 1 (`/resize` -> `POST /g/resize/`)
 - Client-only page: 1 (`/memo`)
@@ -59,5 +59,5 @@ Last updated: 2026-03-16
 | Remember Ingress | `ingress_keywords` | `ingress_keywords_gen` | `pattern` | `passcode_get_filtered_keywords(pattern)` |
 
 ## 4. Notes
-- `challenge`, `passcode`, `about`, and `link` are top-page entries but excluded from this inventory because they are not crypto transform APIs.
+- `challenge`, `passcode`, `about`, `link`, and `niantic_wiki` are top-page entries but excluded from this inventory because they are not crypto transform APIs.
 - The top page also provides in-page search over tool `name`, `aliases`, and `tags`.

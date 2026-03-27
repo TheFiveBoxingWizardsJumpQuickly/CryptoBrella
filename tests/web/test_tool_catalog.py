@@ -46,3 +46,14 @@ def test_home_catalog_covers_each_tool_once():
 
     assert len(catalog_tool_ids) == len(set(catalog_tool_ids))
     assert set(catalog_tool_ids) == {tool["id"] for tool in TOOL_CATALOG}
+
+
+def test_niantic_wiki_is_listed_under_remember_ingress():
+    sections = get_home_catalog()
+
+    ingress_section = next(
+        section for section in sections if section["id"] == "ingress-tools"
+    )
+    tool_ids = [tool["id"] for tool in ingress_section["categories"][0]["tools"]]
+
+    assert "niantic_wiki" in tool_ids
