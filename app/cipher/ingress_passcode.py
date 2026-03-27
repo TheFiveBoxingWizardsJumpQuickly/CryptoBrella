@@ -14,17 +14,35 @@ def dict_factory(cursor, row):
     return d
 
 
-def set_cursor():
-    conn = sqlite3.connect(os.path.join(
-        *Path(__file__).parts[:-2], 'secret', 'passcode.db'))
+PASSCODE_DB_PATH = Path(os.path.join(
+    *Path(__file__).parts[:-2], 'secret', 'passcode.db'
+))
+
+
+def _connect_db():
+    conn = sqlite3.connect(
+        # The passcode DB is shipped as a static read-only asset.
+        # `immutable=1` avoids filesystem locking assumptions that can fail
+        # when the app is run from Windows against the WSL share path.
+        f"file:{PASSCODE_DB_PATH}?mode=ro&immutable=1",
+        uri=True,
+    )
     conn.row_factory = dict_factory
-    return conn.cursor()
+    return conn
+
+
+def _fetch_all(query, params=()):
+    with _connect_db() as conn:
+        return conn.execute(query, params).fetchall()
+
+
+def _fetch_one(query, params=()):
+    rows = _fetch_all(query, params)
+    return rows[0]
 
 
 def passcode_get_record_by_id(id):
-    cursor = set_cursor()
-    cursor.execute('SELECT * FROM daily WHERE id=' + str(id))
-    return cursor.fetchall()[0]
+    return _fetch_one('SELECT * FROM daily WHERE id=?', (id,))
 
 
 def get_answer_by_id(id):
@@ -38,10 +56,7 @@ def get_format_by_id(id):
 
 
 def get_max_id():
-    cursor = set_cursor()
-    cursor.execute('SELECT MAX(id) FROM daily')
-    max_id = cursor.fetchone()['MAX(id)']
-    return max_id
+    return _fetch_one('SELECT MAX(id) AS max_id FROM daily')['max_id']
 
 
 def formatting_for_validation(txt):
@@ -227,9 +242,7 @@ def passcode_get_reward(id, index):
 
 
 def passcode_get_list():
-    cursor = set_cursor()
-    res = cursor.execute("SELECT id, date, code, tag FROM daily").fetchall()
-    return res
+    return _fetch_all("SELECT id, date, code, tag FROM daily")
 
 
 KEYWORDS = [
