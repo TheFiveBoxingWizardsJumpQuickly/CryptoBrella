@@ -84,10 +84,6 @@ from app.cipher.resize import resize_image
 from app.cipher.ingress_passcode import passcode_get_record_by_id, passcode_validate_answer, passcode_get_reward, passcode_get_today_id, passcode_get_random_id, passcode_get_list, passcode_get_filtered_keywords
 
 
-def gear_globals():
-    return globals()
-
-
 def rot_gen(request):
     input_text = request.json['input_text']
 
@@ -1328,3 +1324,53 @@ def kakushi_gen(request):
             results[17] = '\n'
 
     return results
+
+
+GEAR_HANDLERS = {
+    'affine_gen': affine_gen,
+    'base64_gen': base64_gen,
+    'bifid_gen': bifid_gen,
+    'braille_gen': braille_gen,
+    'braille_ja_gen': braille_ja_gen,
+    'charcode_ex_gen': charcode_ex_gen,
+    'charcode_gen': charcode_gen,
+    'charreplace_gen': charreplace_gen,
+    'columnar_gen': columnar_gen,
+    'enigma_gen': enigma_gen,
+    'frequency_gen': frequency_gen,
+    'hash_gen': hash_gen,
+    'ingress_keywords_gen': ingress_keywords_gen,
+    'kakushi_gen': kakushi_gen,
+    'morse_gen': morse_gen,
+    'number_conv_gen': number_conv_gen,
+    'passcode_list': passcode_list,
+    'passcode_random_id': passcode_random_id,
+    'passcode_today_id': passcode_today_id,
+    'passcode_validate': passcode_validate,
+    'phonetic_gen': phonetic_gen,
+    'playfair_gen': playfair_gen,
+    'polybius_gen': polybius_gen,
+    'prime_gen': prime_gen,
+    'purple_gen': purple_gen,
+    'pwgen_gen': pwgen_gen,
+    'railfence_gen': railfence_gen,
+    'rectangle_ex_gen': rectangle_ex_gen,
+    'rectangle_gen': rectangle_gen,
+    'reverse_gen': reverse_gen,
+    'riddle_tables_gen': riddle_tables_gen,
+    'rot_ex_gen': rot_ex_gen,
+    'rot_gen': rot_gen,
+    'rsa_gen': rsa_gen,
+    'simplesub_gen': simplesub_gen,
+    'skip_gen': skip_gen,
+    'split_text_gen': split_text_gen,
+    'subs_handsolve_gen': subs_handsolve_gen,
+    'swap_xy_gen': swap_xy_gen,
+    'vanity_gen': vanity_gen,
+    'vigenere_ex_gen': vigenere_ex_gen,
+    'vigenere_gen': vigenere_gen,
+}
+
+
+def get_gear_handler(function_name):
+    return GEAR_HANDLERS[function_name]

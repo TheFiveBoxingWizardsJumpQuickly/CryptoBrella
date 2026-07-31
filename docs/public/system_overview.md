@@ -1,6 +1,6 @@
 # CryptoBrella System Overview
 
-Last updated: 2026-03-22
+Last updated: 2026-07-31
 
 ## 1. System Summary
 - CryptoBrella is a Flask-based Crypto Functions service.
@@ -14,7 +14,8 @@ Last updated: 2026-03-22
 1. Open the top page `/` or a Crypto Functions page such as `/rot` or `/enigma`.
 2. On `/`, the top-page catalog is rendered from metadata in `app/tool_catalog.py` and filtered client-side by in-page search.
 3. Tool pages post JSON payloads to `POST /gear/<xxx_gen>`.
-4. `app/app.py:cipher_gear` dispatches via `gear.gear_globals()[function](request)`.
+4. `app/app.py:cipher_gear` resolves the requested name from the explicit
+   `app.gear.GEAR_HANDLERS` registry and invokes the registered handler.
 5. `app/gear.py` calls core functions in `app/cipher/*` and returns formatted results.
 
 ## 3. Main Modules

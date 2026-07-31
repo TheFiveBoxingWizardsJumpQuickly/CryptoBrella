@@ -105,6 +105,11 @@ def test_post_gear_unknown_handler_returns_500(client):
     assert resp.status_code == 500
 
 
+def test_post_gear_unregistered_module_function_returns_500(client):
+    resp = client.post("/gear/passcode_gen", json={"input_text": "abc"})
+    assert resp.status_code == 500
+
+
 def test_post_gear_missing_key_returns_500(client):
     resp = client.post("/gear/vigenere_gen", json={"input_text": "AttackAtDawn"})
     assert resp.status_code == 500

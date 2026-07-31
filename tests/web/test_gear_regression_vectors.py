@@ -103,13 +103,27 @@ def _request_handlers(gear):
 
 def test_fixture_covers_all_request_handlers(gear_module):
     fixture_functions = sorted({c["function"] for c in _load_fixture()})
-    handlers = [name for name in _request_handlers(gear_module) if name not in EXCLUDED_FUNCTIONS]
-    assert fixture_functions == handlers
+    registered_handlers = sorted(
+        name for name in gear_module.GEAR_HANDLERS if name not in EXCLUDED_FUNCTIONS
+    )
+    assert fixture_functions == registered_handlers
+
+
+def test_registry_covers_only_request_handlers(gear_module):
+    request_handlers = [
+        name for name in _request_handlers(gear_module) if name not in EXCLUDED_FUNCTIONS
+    ]
+    registered_handlers = sorted(
+        name for name in gear_module.GEAR_HANDLERS if name not in EXCLUDED_FUNCTIONS
+    )
+
+    assert registered_handlers == request_handlers
+    assert "passcode_gen" not in gear_module.GEAR_HANDLERS
 
 
 @pytest.mark.parametrize("case", _load_fixture(), ids=lambda c: c["id"])
 def test_gear_regression_vectors(case, gear_module, monkeypatch):
     _apply_stubs(monkeypatch, gear_module)
-    fn = getattr(gear_module, case["function"])
+    fn = gear_module.get_gear_handler(case["function"])
     result = fn(DummyRequest(case["json"]))
     assert _normalize(result) == case["expected"]

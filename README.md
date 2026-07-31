@@ -27,6 +27,11 @@ Examples:
 ./.venv/bin/python run_dev.py
 ```
 
+## Continuous Integration
+
+GitHub Actions runs the full pytest suite for pull requests and pushes to the
+default `master` branch.
+
 ## Notes
 
 - The system Python on this machine may not have required packages such as `Pillow`.

@@ -1,6 +1,6 @@
 # Test Coverage Audit (Current State)
 
-Last updated: 2026-03-16
+Last updated: 2026-07-31
 
 ## 1. Audit Scope
 - Internal core functions called from `app/gear.py` request handlers
@@ -8,12 +8,15 @@ Last updated: 2026-03-16
 - Parameter branch reachability based on fixture values
 
 ## 2. Summary
-- `app.gear` request handlers covered by web fixture: **44/44**
+- Registered `app.gear` request handlers covered by web fixture: **42/42**
 - Core functions reached through handler execution: **66/66**
+- Registry structure coverage confirms that every request handler is registered
+  and that non-handler module functions are not dispatchable.
 - Flask HTTP smoke coverage exists in `tests/web/test_http_api_smoke.py`
   - basic GET/POST success paths
   - custom 404 page path
   - unknown-handler 500 path
+  - unregistered module-function 500 path
   - missing-required-key 500 path
 
 ## 3. Remaining Gaps

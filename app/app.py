@@ -184,7 +184,7 @@ def show_cipher_doc_page(pageid):
 
 @app.route('/gear/<string:function>', methods=['post'])
 def cipher_gear(function):
-    return gear.gear_globals()[function](request)
+    return gear.get_gear_handler(function)(request)
 
 
 @app.route('/g/resize/', methods=['POST'])

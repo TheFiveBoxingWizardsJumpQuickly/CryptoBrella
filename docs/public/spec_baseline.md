@@ -1,6 +1,6 @@
 # CryptoBrella Baseline Specification
 
-Last updated: 2026-03-16
+Last updated: 2026-07-31
 
 ## 1. Purpose and Scope
 - This document captures current implementation behavior as the baseline specification.
@@ -12,8 +12,11 @@ Last updated: 2026-03-16
 - Request body: JSON expected.
 - Handlers access payload fields directly via `request.json[...]`.
 - Missing required keys currently raise uncaught exceptions (for example `KeyError`) and return HTTP 500.
-- Dispatcher: `app/app.py:cipher_gear` resolves handlers via `gear.gear_globals()[function]`.
-- Unknown handler names currently raise `KeyError` and return HTTP 500.
+- Dispatcher: `app/app.py:cipher_gear` resolves handlers through the explicit
+  `app.gear.GEAR_HANDLERS` registry via `get_gear_handler(function)`.
+- Only the 42 registered request handlers are dispatchable; other functions in
+  `app.gear` are not exposed through `/gear/<function>`.
+- Unknown or unregistered handler names currently raise `KeyError` and return HTTP 500.
 - Response type:
   - Most handlers return `dict[int, str]` (Flask JSON serialization stringifies keys).
   - Some handlers return plain strings (for example `passcode_validate`).
