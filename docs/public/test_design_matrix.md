@@ -11,7 +11,7 @@ Last updated: 2026-07-31
 
 | Priority | Scope | Goal |
 |---|---|---|
-| P0 | `enigma`, `purple`, `vigenere`, `affine`, transposition, `kakushi` | Immediate detection of core logic breakage |
+| P0 | `enigma`, `purple`, `vigenere`, `affine`, transposition, `kakushi`, `secom` | Immediate detection of core logic breakage |
 | P1 | `morse`, `braille`, `phonetic`, `polybius`, `bifid`, `vanity`, frequency utilities | Prevent regressions in surrounding crypto utilities |
 | P2 | passcode DB-dependent features | Staged checks for external dependency paths |
 
@@ -26,11 +26,17 @@ Last updated: 2026-07-31
   - `enigma_purple_vectors.json` (1711 cases)
 - `tests/cipher/test_transposition_kakushi_vectors.py`
   - `transposition_kakushi_vectors.json` (1116 cases)
+- `tests/cipher/test_secom.py`
+  - published key schedule and complete encryption vector
+  - Java reference vector and both transposition-width interpretations
+  - disrupted partial-row behavior through the additional reference vector
+  - encryption/decryption intermediate traces, padding behavior, round trip,
+    and invalid inputs
 
 ### Layer 2 (web regression)
 - `tests/web/test_gear_regression_vectors.py`
-  - `gear_regression_vectors.json` (82 cases)
-  - also validates fixture coverage of all 42 registered request handlers
+  - `gear_regression_vectors.json` (80 cases)
+  - also validates fixture coverage of all 43 registered request handlers
   - validates that the explicit registry covers only request handlers
 - `tests/web/test_http_api_smoke.py`
   - Flask `test_client` smoke checks for representative GET/POST, custom 404

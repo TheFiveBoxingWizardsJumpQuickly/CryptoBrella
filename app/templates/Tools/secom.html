@@ -1,0 +1,81 @@
+{% extends "base_apps_v2.html.jinja" %}
+{% block title %}SECOM{% endblock %}
+{% block h1 %}SECOM{% endblock %}
+{% block lead %}Straddling checkerboard and double transposition hand cipher{% endblock %}
+{% block input_area %}
+        <h6 class="small">Text</h6>
+        <div class="field textarea border fill large mono">
+            <textarea class="grey2 black-text" id="TXT" v-on:input="update"></textarea>
+        </div>
+        <h6 class="small">Key phrase (at least 20 letters)</h6>
+        <div class="field border fill mono">
+            <input type="text" class="grey2 black-text" id="KEY" v-on:input="update">
+        </div>
+        <div class="row">
+            <nav class="no-space">
+                <button v-bind:class=[[btn_toggle_encode_class]] v-on:click="click_encode">
+                    <span>Encode</span>
+                </button>
+                <button v-bind:class=[[btn_toggle_decode_class]] v-on:click="click_decode">
+                    <span>Decode</span>
+                </button>
+            </nav>
+            <nav class="no-space">
+                <button v-bind:class=[[btn_toggle_detail_on_class]] v-on:click="click_detail_on">
+                    <span>Detailed steps: ON</span>
+                </button>
+                <button v-bind:class=[[btn_toggle_detail_off_class]] v-on:click="click_detail_off">
+                    <span>OFF</span>
+                </button>
+            </nav>
+        </div>
+{% endblock %}
+{% block vue_app_data %}
+                        mode:"Encode",
+                        btn_toggle_encode_class:"border left-round cyan8 white-text",
+                        btn_toggle_decode_class:"border right-round grey-text",
+                        detail_mode:"OFF",
+                        btn_toggle_detail_on_class:"border left-round grey-text",
+                        btn_toggle_detail_off_class:"border right-round cyan8 white-text",
+{% endblock %}
+{% block vue_app_methods %}
+                    update: function () {
+                        input_text = document.getElementById( "TXT" ).value;
+                        key = document.getElementById( "KEY" ).value;
+                        if (input_text == "" || key == ""){
+                            this.results = [];
+                        } else {
+                            url = new URL('gear/secom_gen', {{BASEURL|tojson}});
+                            axios.post(url, {
+                                input_text: input_text,
+                                key: key,
+                                mode: this.mode,
+                                detail_mode: this.detail_mode,
+                            }).then(response => this.results = response.data);
+                        }
+                    },
+                    click_encode: function (){
+                        this.btn_toggle_encode_class="border left-round cyan8 white-text";
+                        this.btn_toggle_decode_class="border right-round grey-text";
+                        this.mode="Encode";
+                        this.update();
+                    },
+                    click_decode: function (){
+                        this.btn_toggle_encode_class="border left-round grey-text";
+                        this.btn_toggle_decode_class="border right-round cyan8 white-text";
+                        this.mode="Decode";
+                        this.update();
+                    },
+                    click_detail_on: function (){
+                        this.btn_toggle_detail_on_class="border left-round cyan8 white-text";
+                        this.btn_toggle_detail_off_class="border right-round grey-text";
+                        this.detail_mode="ON";
+                        this.update();
+                    },
+                    click_detail_off: function (){
+                        this.btn_toggle_detail_on_class="border left-round grey-text";
+                        this.btn_toggle_detail_off_class="border right-round cyan8 white-text";
+                        this.detail_mode="OFF";
+                        this.update();
+                    }
+{% endblock %}

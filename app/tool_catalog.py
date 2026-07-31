@@ -19,6 +19,7 @@ CATEGORY_TOOL_ORDER = {
         "polybius",
         "playfair",
         "bifid",
+        "secom",
         "purple",
         "enigma",
         "reverse",
@@ -131,6 +132,15 @@ TOOL_CATALOG = [
         "aliases": ["bifid cipher"],
         "tags": ["cipher", "fractionation", "classical"],
         "icon": "icon_bifid.png",
+    },
+    {
+        "id": "secom",
+        "path": "/secom",
+        "name": "SECOM",
+        "description": "Encode and decode the SECOM hand cipher.",
+        "aliases": ["secom cipher", "vic variant"],
+        "tags": ["cipher", "fractionation", "transposition", "classical"],
+        "icon": "icon_columnar.png",
     },
     {
         "id": "purple",

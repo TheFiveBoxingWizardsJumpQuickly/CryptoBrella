@@ -59,6 +59,8 @@ from app.cipher.fn import (
     rot,
     rsa_decode,
     rsa_encode,
+    secom_d,
+    secom_e,
     skip_d,
     skip_e,
     spelling_alphabet_icao_1947_1,
@@ -1216,6 +1218,49 @@ def bifid_gen(request):
     return results
 
 
+def secom_gen(request):
+    input_text = request.json['input_text']
+    key = request.json['key']
+    mode = request.json['mode']
+    detail_mode = request.json.get('detail_mode', 'OFF')
+
+    results = {}
+    try:
+        if detail_mode not in ('ON', 'OFF'):
+            raise ValueError("SECOM detail mode must be ON or OFF.")
+        trace = [] if detail_mode == 'ON' else None
+
+        if mode == 'Encode':
+            encoded = secom_e(input_text, key, trace=trace)
+            results[0] = 'SECOM Encode:'
+            results[1] = ' '.join(
+                encoded[i:i + 5] for i in range(0, len(encoded), 5)
+            )
+        elif mode == 'Decode':
+            decoded = secom_d(input_text, key, trace=trace).replace('*', ' ')
+            results[0] = 'SECOM Decode:'
+            results[1] = decoded
+        else:
+            raise ValueError("SECOM mode must be Encode or Decode.")
+
+        if trace is not None:
+            formatted_steps = [
+                label if value is None else f'{label}:\n{value}'
+                for label, value in trace
+            ]
+            results[2] = '\nDetailed steps:\n\n' + '\n\n'.join(
+                formatted_steps)
+            if mode == 'Decode':
+                results[len(results)] = (
+                    'Note: SECOM null padding can produce up to four ambiguous '
+                    'trailing characters.'
+                )
+    except ValueError as exc:
+        results[0] = 'Error: ' + str(exc)
+
+    return results
+
+
 def vanity_gen(request):
     input_text = request.json['input_text']
     mode = request.json['mode']
@@ -1361,6 +1406,7 @@ GEAR_HANDLERS = {
     'rot_ex_gen': rot_ex_gen,
     'rot_gen': rot_gen,
     'rsa_gen': rsa_gen,
+    'secom_gen': secom_gen,
     'simplesub_gen': simplesub_gen,
     'skip_gen': skip_gen,
     'split_text_gen': split_text_gen,

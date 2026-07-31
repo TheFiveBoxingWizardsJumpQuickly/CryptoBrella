@@ -57,3 +57,18 @@ def test_niantic_wiki_is_listed_under_remember_ingress():
     tool_ids = [tool["id"] for tool in ingress_section["categories"][0]["tools"]]
 
     assert "niantic_wiki" in tool_ids
+
+
+def test_secom_is_listed_under_cryptography():
+    sections = get_home_catalog()
+
+    cryptography_section = next(
+        section for section in sections if section["id"] == "cryptography"
+    )
+    tool_ids = [
+        tool["id"]
+        for category in cryptography_section["categories"]
+        for tool in category["tools"]
+    ]
+
+    assert "secom" in tool_ids

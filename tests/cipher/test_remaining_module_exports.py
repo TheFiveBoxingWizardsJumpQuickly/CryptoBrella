@@ -4,6 +4,7 @@ import app.cipher.fn as fn
 import app.cipher.math_functions as math_functions_module
 import app.cipher.morse as morse_module
 import app.cipher.rsa as rsa_module
+import app.cipher.secom as secom_module
 import app.cipher.tables as tables_module
 import app.cipher.text_utils as text_utils_module
 import app.cipher.uuencode as uuencode_module
@@ -17,6 +18,8 @@ def test_remaining_module_exports_match_fn_facade():
     assert fn.adfgvx_d is adfgvx_module.adfgvx_d
     assert fn.rsa_encode is rsa_module.rsa_encode
     assert fn.rsa_decode is rsa_module.rsa_decode
+    assert fn.secom_e is secom_module.secom_e
+    assert fn.secom_d is secom_module.secom_d
     assert fn.xgcd is math_functions_module.xgcd
     assert fn.kw is text_utils_module.kw
     assert fn.chemical_symbol_convert is text_utils_module.chemical_symbol_convert

@@ -100,6 +100,7 @@ from .transposition import (
     swap_xy_axes,
 )
 from .rsa import rsa_decode, rsa_encode
+from .secom import secom_d, secom_e
 from .uuencode import uu_decode, uu_encode
 from .vanity import auto_split_number_string, vanity_d, vanity_e
 
@@ -175,6 +176,8 @@ __all__ = [
     "rot_a",
     "rsa_decode",
     "rsa_encode",
+    "secom_d",
+    "secom_e",
     "skip_d",
     "skip_e",
     "spelling_alphabet_icao_1947_1",

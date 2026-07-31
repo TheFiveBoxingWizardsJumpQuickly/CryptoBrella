@@ -8,8 +8,8 @@ Last updated: 2026-07-31
 - Parameter branch reachability based on fixture values
 
 ## 2. Summary
-- Registered `app.gear` request handlers covered by web fixture: **42/42**
-- Core functions reached through handler execution: **66/66**
+- Registered `app.gear` request handlers covered by web fixture: **43/43**
+- Core functions reached through handler execution: **68/68**
 - Registry structure coverage confirms that every request handler is registered
   and that non-handler module functions are not dispatchable.
 - Flask HTTP smoke coverage exists in `tests/web/test_http_api_smoke.py`
@@ -18,6 +18,8 @@ Last updated: 2026-07-31
   - unknown-handler 500 path
   - unregistered module-function 500 path
   - missing-required-key 500 path
+  - SECOM published-vector success path, result-only default responses, and
+    detailed Encode/Decode response paths
 
 ## 3. Remaining Gaps
 
@@ -31,6 +33,9 @@ Last updated: 2026-07-31
   - `number_conv_gen`: `base == ""`
   - `pwgen_gen`: `char_type` range `0..8`
   - `split_text_gen`: `mode` values `space/comma/newline`
+- SECOM onboarding adds explicit published and Java-reference vectors,
+  width-interpretation, intermediate-trace, round-trip, invalid-input,
+  registry, page-rendering, and HTTP success coverage.
 
 ### 3.3 Input Diversity
 - Several handlers still rely on one or few representative cases (for example `enigma_gen`, `purple_gen`, `vigenere_gen`, `columnar_gen`, `playfair_gen`).

@@ -42,82 +42,53 @@ def columnar_d(c, col):
     return p
 
 
+def _disrupted_columnar_mask(size, col):
+    """Return True for triangular cells, including a partial final row."""
+    width = len(col)
+    row_count = (size + width - 1) // width
+    mask = [False] * size
+    row = 0
+
+    for order in range(1, width + 1):
+        start_col = col.index(order)
+        while start_col < width and row < row_count:
+            row_start = row * width
+            row_end = min(row_start + width, size)
+            for index in range(row_start + start_col, row_end):
+                mask[index] = True
+            row += 1
+            start_col += 1
+        # Leave one complete non-triangular row before the next triangle.
+        row += 1
+
+    return mask
+
+
+def make_disrupted_columnar_block(c, col):
+    """Fill a disrupted transposition block in the specified two passes."""
+    mask = _disrupted_columnar_mask(len(c), col)
+    fill_order = (
+        [i for i, is_triangle in enumerate(mask) if not is_triangle]
+        + [i for i, is_triangle in enumerate(mask) if is_triangle]
+    )
+    trans_pre = [0] * len(c)
+    for source_index, target_index in enumerate(fill_order):
+        trans_pre[target_index] = c[source_index]
+    return trans_pre
+
+
 def disrupted_columnar_e(c, col):
-    rows_full = int(len(c)/len(col))
-    lastrow_len = len(c) % len(col)
-
-    trans_pre = [0]*len(c)
-    ord_x = 0
-    curr_len = len(col)
-    cnt = 0
-    for i in range(rows_full):
-        if curr_len == len(col):
-            ord_x += 1
-            curr_len = col.index(ord_x)
-        else:
-            curr_len += 1
-        for j in range(curr_len):
-            trans_pre[i*len(col)+j] = c[cnt]
-            cnt += 1
-
-    if lastrow_len > 0:
-        for j in range(lastrow_len):
-            trans_pre[rows_full*len(col)+j] = c[cnt]
-            cnt += 1
-
-    ord_x = 0
-    curr_len = len(col)
-    for i in range(rows_full):
-        if curr_len == len(col):
-            ord_x += 1
-            curr_len = col.index(ord_x)
-        else:
-            curr_len += 1
-        for j in range(curr_len, len(col)):
-            trans_pre[i*len(col)+j] = c[cnt]
-            cnt += 1
-
-    p = columnar_e(trans_pre, col)
-    return p
+    return columnar_e(make_disrupted_columnar_block(c, col), col)
 
 
 def disrupted_columnar_d(c, col):
-    rows_full = int(len(c)/len(col))
-    lastrow_len = len(c) % len(col)
     trans_pre = columnar_d(c, col)
-
-    p = [0]*len(c)
-    ord_x = 0
-    curr_len = len(col)
-    cnt = 0
-    for i in range(rows_full):
-        if curr_len == len(col):
-            ord_x += 1
-            curr_len = col.index(ord_x)
-        else:
-            curr_len += 1
-        for j in range(curr_len):
-            p[cnt] = trans_pre[i*len(col)+j]
-            cnt += 1
-
-    if lastrow_len > 0:
-        for j in range(lastrow_len):
-            p[cnt] = trans_pre[rows_full*len(col)+j]
-            cnt += 1
-
-    ord_x = 0
-    curr_len = len(col)
-    for i in range(rows_full):
-        if curr_len == len(col):
-            ord_x += 1
-            curr_len = col.index(ord_x)
-        else:
-            curr_len += 1
-        for j in range(curr_len, len(col)):
-            p[cnt] = trans_pre[i*len(col)+j]
-            cnt += 1
-
-    return p
+    mask = _disrupted_columnar_mask(len(c), col)
+    read_order = (
+        [i for i, is_triangle in enumerate(mask) if not is_triangle]
+        + [i for i, is_triangle in enumerate(mask) if is_triangle]
+    )
+    return [trans_pre[index] for index in read_order]
 
 
 def railfence_e(text, rails, offset=0):

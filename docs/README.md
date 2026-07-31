@@ -27,6 +27,8 @@ This repository separates documentation into public/shareable documents and loca
 - `crypto_function_inventory.md`: page/API/function inventory.
 - `test_design_matrix.md`: test-layer goals and forward test plan.
 - `test_coverage_audit.md`: current coverage state and next hardening focus.
+- `new_crypto_function_checklist.md`: implementation, test, documentation, and
+  release gate for adding a user-facing Crypto Function.
 
 ## Local Documents
 

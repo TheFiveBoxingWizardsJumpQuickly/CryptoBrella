@@ -1,6 +1,6 @@
 # CryptoBrella Baseline Specification
 
-Last updated: 2026-07-31
+Last updated: 2026-08-01
 
 ## 1. Purpose and Scope
 - This document captures current implementation behavior as the baseline specification.
@@ -14,7 +14,7 @@ Last updated: 2026-07-31
 - Missing required keys currently raise uncaught exceptions (for example `KeyError`) and return HTTP 500.
 - Dispatcher: `app/app.py:cipher_gear` resolves handlers through the explicit
   `app.gear.GEAR_HANDLERS` registry via `get_gear_handler(function)`.
-- Only the 42 registered request handlers are dispatchable; other functions in
+- Only the 43 registered request handlers are dispatchable; other functions in
   `app.gear` are not exposed through `/gear/<function>`.
 - Unknown or unregistered handler names currently raise `KeyError` and return HTTP 500.
 - Response type:
@@ -80,6 +80,80 @@ Last updated: 2026-07-31
 - Behavior:
   - `debug_mode == OFF`: returns result text only.
   - `debug_mode == ON`: returns detailed blocks including binary intermediates.
+
+### 3.7 SECOM (`secom_gen`)
+- Inputs: `input_text`, `key`, `mode` (`Decode`/`Encode`), `detail_mode`
+  (`ON`/`OFF`, omitted values default to `OFF`)
+- Key normalization:
+  - removes non-letters and uppercases
+  - uses the first 20 letters
+  - rejects keys containing fewer than 20 letters
+- Encode:
+  - accepts letters A-Z, digits, and whitespace
+  - represents whitespace with the SECOM checkerboard space marker
+  - applies the extended straddling checkerboard, normal columnar
+    transposition, and disrupted columnar transposition
+  - pads the digit stream with zeroes to a multiple of five and returns
+    five-digit groups
+- Transposition-width variants:
+  - the internal cipher API accepts `width_mode="reset_each_width"` (default)
+    or `width_mode="continue_across_widths"`
+  - `reset_each_width` clears duplicate tracking before calculating each
+    width; it is the default to provide interoperability with the referenced
+    Java implementation
+  - `continue_across_widths` retains duplicate tracking across both widths;
+    it preserves the other plausible reading of "continue" in the published
+    specification
+  - both modes continue scanning digits from the point where the preceding
+    width ended
+  - the web UI does not expose this choice yet and therefore uses
+    `reset_each_width`
+- Decode:
+  - accepts digits and whitespace; the digit count must be a multiple of five
+  - restores checkerboard space markers as spaces in the handler response
+  - warns that null padding can yield up to four ambiguous trailing characters
+- Handler result messages:
+  - `detail_mode == OFF` returns only `SECOM Encode:`/`SECOM Decode:` and the
+    transformed text; it does not return a Note
+  - `detail_mode == ON` additionally returns the normalized inputs, key halves
+    and rankings, chain-addition seed, generated digits, checkerboard details,
+    width calculations, transposition keys, padding information, and the
+    intermediate outputs of each forward or reverse transposition
+  - detailed steps are separated by blank lines for visual verification; the
+    internal width-mode identifier is intentionally not displayed
+  - a blank line separates the transformed result from `Detailed steps:`
+  - Encode terminology and grouping follow the published four-step
+    explanation: calculating key phrase digits, the straddling checkerboard,
+    the first columnar transposition, and the second disrupted columnar
+    transposition; Decode presents the transpositions in reverse order
+  - successful detailed Decode ends with `Note: SECOM null padding can produce
+    up to four ambiguous trailing characters.` Ciphertext alone does not reveal
+    whether zero padding was added
+  - detailed Encode does not return the padding Note because the exact padding
+    count is included in its intermediate steps
+  - invalid input returns an `Error: ...` result instead of the success heading
+    and Note
+- Invalid SECOM values return an error message in the normal result dictionary.
+
+#### Specification rationale and references
+
+- Published specification and worked example:
+  https://www.ciphermachinesandcryptology.com/en/secom.htm
+- Java reference implementation:
+  https://github.com/asilichenko/secom-cipher-gui#the-secom-cipher
+- The published example produces widths 12 and 11 without repeating a digit
+  across the boundary, so it cannot determine whether duplicate tracking must
+  reset for the second width. Both interpretations remain available internally.
+- The default intentionally follows the Java interpretation so CryptoBrella can
+  reproduce its additional test vector. The mode names describe behavior and
+  do not identify an implementation.
+- Disrupted transposition uses triangular-cell masks through a partial final
+  row. This follows the published instruction to fill non-triangular cells
+  first and triangular cells second while leaving unavailable trailing cells
+  empty.
+- Detailed labels and blocks intentionally follow the terminology and worked
+  layout of the published specification rather than internal function or
+  variable names.
 
 ## 4. Test Synchronization Rule
 - Baseline fixtures lock current behavior.

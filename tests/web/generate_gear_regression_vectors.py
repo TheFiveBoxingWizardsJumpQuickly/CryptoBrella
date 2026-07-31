@@ -184,6 +184,26 @@ def _build_cases():
                 "json": {"char_type": str(char_type), "length": "12"},
             }
         )
+    cases.extend(
+        [
+            {
+                "function": "secom_gen",
+                "json": {
+                    "input_text": "ATTACK AT DAWN",
+                    "key": "MAKE NEW FRIENDS BUT KEEP THE OLD",
+                    "mode": "Encode",
+                },
+            },
+            {
+                "function": "secom_gen",
+                "json": {
+                    "input_text": "75973 09876 73066 39790",
+                    "key": "MAKE NEW FRIENDS BUT KEEP THE OLD",
+                    "mode": "Decode",
+                },
+            },
+        ]
+    )
     return cases
 
 

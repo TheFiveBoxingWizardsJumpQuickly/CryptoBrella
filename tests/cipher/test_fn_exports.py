@@ -45,6 +45,8 @@ EXPECTED_EXPORTS = {
     "rot",
     "rsa_decode",
     "rsa_encode",
+    "secom_d",
+    "secom_e",
     "skip_d",
     "skip_e",
     "spelling_alphabet_icao_2008",

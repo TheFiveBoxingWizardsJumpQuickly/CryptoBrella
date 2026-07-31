@@ -1,14 +1,14 @@
 # Crypto Function Inventory
 
-Last updated: 2026-03-28
+Last updated: 2026-07-31
 
 ## 1. Management Term
 - This project manages cipher transforms, analysis utilities, and encoding helpers under one term: **Crypto Functions**.
 - Utility pages previously treated as "Other Tools" are included in the same management scope.
 
 ## 2. Top-Page Counts
-- Managed pages: 39
-- `gear/<function>` based pages: 36
+- Managed pages: 40
+- `gear/<function>` based pages: 37
 - Non-`gear` API page: 1 (`/resize` -> `POST /g/resize/`)
 - Client-only page: 1 (`/memo`)
 - Top-page organization is metadata-driven from `app/tool_catalog.py`.
@@ -25,6 +25,7 @@ Last updated: 2026-03-28
 | Substitution ciphers | `polybius` | `polybius_gen` | `input_text`, `mode` | `polybius_d(text, table_keyword='')`, `polybius_e(text, table_keyword='')` |
 | Substitution ciphers | `playfair` | `playfair_gen` | `input_text` | `playfair_d(c)`, `playfair_e(c)` |
 | Substitution ciphers | `bifid` | `bifid_gen` | `input_text`, `key` | `bifid_d(text, table_keyword='')`, `bifid_e(text, table_keyword='')`, `mixed_alphabet(keyword, combined=False)` |
+| Fractionation/transposition | `secom` | `secom_gen` | `input_text`, `key`, `mode`, `detail_mode` | `secom_e(c, key, width_mode, trace)`, `secom_d(c, key, width_mode, trace)` |
 | Substitution ciphers | `purple` | `purple_gen` | `input_text`, `plugboard_full`, `sixes_switch_position`, `twenties_switch_1_position`, `twenties_switch_2_position`, `twenties_switch_3_position`, `rotor_motion_key` | `purple_decode(...)`, `purple_encode(...)` |
 | Substitution ciphers | `enigma` | `enigma_gen` | `input_text`, `left_rotor`, `mid_rotor`, `right_rotor`, `reflector`, `rotor_key`, `ring_key`, `plug_board` | `plugboard_gen(txt)`, `enigma(text, rotor_left_id, rotor_mid_id, rotor_right_id, reflector_id, rotor_key, ringsetting_key, plugboard)` |
 | Transposition ciphers | `reverse` | `reverse_gen` | `input_text` | `rev(c)` |

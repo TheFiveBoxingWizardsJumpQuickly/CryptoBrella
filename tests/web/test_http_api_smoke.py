@@ -14,6 +14,8 @@ def test_get_basic_pages(client):
     about_body = about_resp.get_data(as_text=True)
     assert "V1.2.0" in about_body
     assert "Added hosting for the Niantic Project Wiki archive." in about_body
+    assert "V1.3.0" in about_body
+    assert "Added the SECOM cipher tool." in about_body
     link_resp = client.get("/link")
     assert link_resp.status_code == 200
     link_body = link_resp.get_data(as_text=True)
@@ -37,6 +39,16 @@ def test_cipher_docs_page_renders(client):
     assert "ROT" in body
     assert "Can you decode?" in body
     assert "Cipher Tool: Rot" in body
+
+
+def test_secom_page_renders(client):
+    page_resp = client.get("/secom")
+    assert page_resp.status_code == 200
+    page_body = page_resp.get_data(as_text=True)
+    assert "SECOM" in page_body
+    assert "gear/secom_gen" in page_body
+    assert "Detailed steps: ON" in page_body
+    assert 'detail_mode:"OFF"' in page_body
 
 
 def test_niantic_wiki_index_renders(client):
@@ -77,6 +89,101 @@ def test_post_gear_rot_success(client):
     body = resp.get_json()
     assert "0" in body
     assert "00: Abc-123" in body["0"]
+
+
+def test_post_gear_secom_matches_published_vector(client):
+    resp = client.post(
+        "/gear/secom_gen",
+        json={
+            "input_text": "RV TOMORROW AT 1400PM TO COMPLETE TRANSACTION USE DEADDROP AS USUAL",
+            "key": "MAKE NEW FRIENDS BUT KEEP THE OLD",
+            "mode": "Encode",
+        },
+    )
+    assert resp.status_code == 200
+    body = resp.get_json()
+    assert set(body) == {"0", "1"}
+    assert body["1"] == (
+        "77719 38622 00032 04239 60038 29683 14608 06071 78016 73606 "
+        "06064 63536 06968 67403 69681 89001 40219 06662 60666 08631 60549"
+    )
+
+
+def test_post_gear_secom_detailed_encode_has_steps_without_decode_note(client):
+    resp = client.post(
+        "/gear/secom_gen",
+        json={
+            "input_text": "ATTACK AT DAWN",
+            "key": "MAKE NEW FRIENDS BUT KEEP THE OLD",
+            "mode": "Encode",
+            "detail_mode": "ON",
+        },
+    )
+    body = resp.get_json()
+
+    assert resp.status_code == 200
+    assert body["2"].startswith("\nDetailed steps:\n\n")
+    assert "Width mode:" not in body["2"]
+    assert "1. Calculating the key phrase digits\n\n" in body["2"]
+    assert (
+        "Number of columns for the two transpositions:\n"
+        "1st transposition: 7 + 2 + 3 = 12 columns\n"
+        "2nd transposition: 5 + 6 = 11 columns"
+    ) in body["2"]
+    assert (
+        "\n\nNull digits appended to complete a five-digit group:\nNone\n\n"
+    ) in body["2"]
+    assert not any(value.startswith("Note:") for value in body.values())
+
+
+def test_post_gear_secom_default_decode_has_no_padding_note(client):
+    resp = client.post(
+        "/gear/secom_gen",
+        json={
+            "input_text": "75973 09876 73066 39790",
+            "key": "MAKE NEW FRIENDS BUT KEEP THE OLD",
+            "mode": "Decode",
+        },
+    )
+
+    assert resp.status_code == 200
+    assert resp.get_json() == {
+        "0": "SECOM Decode:",
+        "1": "ATTACK AT DAWN",
+    }
+
+
+def test_post_gear_secom_detail_mode_returns_steps_and_decode_note(client):
+    resp = client.post(
+        "/gear/secom_gen",
+        json={
+            "input_text": "75973 09876 73066 39790",
+            "key": "MAKE NEW FRIENDS BUT KEEP THE OLD",
+            "mode": "Decode",
+            "detail_mode": "ON",
+        },
+    )
+    body = resp.get_json()
+
+    assert resp.status_code == 200
+    assert body["2"].startswith("\nDetailed steps:\n\n")
+    assert "\n\n50 digits generated through chain addition:\n" in body["2"]
+    assert "\n\nReversing the second disrupted transposition\n\n" in body["2"]
+    assert body["3"] == (
+        "Note: SECOM null padding can produce up to four ambiguous "
+        "trailing characters."
+    )
+
+
+def test_post_gear_secom_reports_short_key(client):
+    resp = client.post(
+        "/gear/secom_gen",
+        json={"input_text": "TEST", "key": "SHORT KEY", "mode": "Encode"},
+    )
+    assert resp.status_code == 200
+    assert resp.get_json()["0"] == (
+        "Error: SECOM key phrase must contain at least 20 letters."
+    )
 
 
 def test_post_gear_railfence_empty_offset_branch(client):

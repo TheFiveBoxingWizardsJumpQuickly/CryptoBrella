@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "case_count": 82,
+  "case_count": 80,
   "cases": [
     {
       "id": "rot_gen_001",
@@ -364,7 +364,7 @@
       }
     },
     {
-      "id": "braille_gen_031",
+      "id": "braille_gen_027",
       "function": "braille_gen",
       "json": {
         "b1": true,
@@ -377,7 +377,7 @@
       "expected": "A"
     },
     {
-      "id": "braille_ja_gen_032",
+      "id": "braille_ja_gen_028",
       "function": "braille_ja_gen",
       "json": {
         "bl1": true,
@@ -396,7 +396,7 @@
       "expected": ""
     },
     {
-      "id": "rsa_gen_033",
+      "id": "rsa_gen_029",
       "function": "rsa_gen",
       "json": {
         "m": "65",
@@ -414,7 +414,7 @@
       }
     },
     {
-      "id": "rsa_gen_034",
+      "id": "rsa_gen_030",
       "function": "rsa_gen",
       "json": {
         "m": "65",
@@ -429,7 +429,7 @@
       }
     },
     {
-      "id": "affine_gen_035",
+      "id": "affine_gen_031",
       "function": "affine_gen",
       "json": {
         "input_text": "AFFINECIPHER",
@@ -752,7 +752,7 @@
       }
     },
     {
-      "id": "affine_gen_036",
+      "id": "affine_gen_032",
       "function": "affine_gen",
       "json": {
         "input_text": "IHHWVCSWFRCP",
@@ -1075,7 +1075,7 @@
       }
     },
     {
-      "id": "split_text_gen_037",
+      "id": "split_text_gen_033",
       "function": "split_text_gen",
       "json": {
         "input_text": "ABCDEFGHIJ",
@@ -1088,7 +1088,7 @@
       }
     },
     {
-      "id": "split_text_gen_038",
+      "id": "split_text_gen_034",
       "function": "split_text_gen",
       "json": {
         "input_text": "ABCDEFGHIJ",
@@ -1101,7 +1101,7 @@
       }
     },
     {
-      "id": "split_text_gen_039",
+      "id": "split_text_gen_035",
       "function": "split_text_gen",
       "json": {
         "input_text": "ABCDEFGHIJ",
@@ -1114,7 +1114,7 @@
       }
     },
     {
-      "id": "number_conv_gen_040",
+      "id": "number_conv_gen_036",
       "function": "number_conv_gen",
       "json": {
         "input_text": "10,255",
@@ -1161,7 +1161,7 @@
       }
     },
     {
-      "id": "number_conv_gen_041",
+      "id": "number_conv_gen_037",
       "function": "number_conv_gen",
       "json": {
         "input_text": "10,255",
@@ -1208,7 +1208,7 @@
       }
     },
     {
-      "id": "phonetic_gen_042",
+      "id": "phonetic_gen_038",
       "function": "phonetic_gen",
       "json": {
         "input_text": "alpha bravo",
@@ -1230,7 +1230,7 @@
       }
     },
     {
-      "id": "phonetic_gen_043",
+      "id": "phonetic_gen_039",
       "function": "phonetic_gen",
       "json": {
         "input_text": "attack",
@@ -1252,7 +1252,7 @@
       }
     },
     {
-      "id": "polybius_gen_044",
+      "id": "polybius_gen_040",
       "function": "polybius_gen",
       "json": {
         "input_text": "2315313134",
@@ -1263,7 +1263,7 @@
       }
     },
     {
-      "id": "polybius_gen_045",
+      "id": "polybius_gen_041",
       "function": "polybius_gen",
       "json": {
         "input_text": "HELLO",
@@ -1274,7 +1274,7 @@
       }
     },
     {
-      "id": "riddle_tables_gen_046",
+      "id": "riddle_tables_gen_042",
       "function": "riddle_tables_gen",
       "json": {
         "mode": "jp_trad_month_name"
@@ -1296,7 +1296,7 @@
       }
     },
     {
-      "id": "riddle_tables_gen_047",
+      "id": "riddle_tables_gen_043",
       "function": "riddle_tables_gen",
       "json": {
         "mode": "zodiac"
@@ -1318,7 +1318,7 @@
       }
     },
     {
-      "id": "riddle_tables_gen_048",
+      "id": "riddle_tables_gen_044",
       "function": "riddle_tables_gen",
       "json": {
         "mode": "japanese_zodiac"
@@ -1340,7 +1340,7 @@
       }
     },
     {
-      "id": "riddle_tables_gen_049",
+      "id": "riddle_tables_gen_045",
       "function": "riddle_tables_gen",
       "json": {
         "mode": "keyboard_layout"
@@ -1356,7 +1356,7 @@
       }
     },
     {
-      "id": "swap_xy_gen_050",
+      "id": "swap_xy_gen_046",
       "function": "swap_xy_gen",
       "json": {
         "input_text": "A1B2C3"
@@ -1366,7 +1366,7 @@
       }
     },
     {
-      "id": "rot_ex_gen_051",
+      "id": "rot_ex_gen_047",
       "function": "rot_ex_gen",
       "json": {
         "input_text": "Abc123",
@@ -1381,7 +1381,7 @@
       }
     },
     {
-      "id": "rot_ex_gen_052",
+      "id": "rot_ex_gen_048",
       "function": "rot_ex_gen",
       "json": {
         "input_text": "Abc123",
@@ -1396,7 +1396,7 @@
       }
     },
     {
-      "id": "rot_ex_gen_053",
+      "id": "rot_ex_gen_049",
       "function": "rot_ex_gen",
       "json": {
         "input_text": "Abc123",
@@ -1411,7 +1411,7 @@
       }
     },
     {
-      "id": "rot_ex_gen_054",
+      "id": "rot_ex_gen_050",
       "function": "rot_ex_gen",
       "json": {
         "input_text": "Abc123",
@@ -1426,7 +1426,7 @@
       }
     },
     {
-      "id": "rectangle_ex_gen_055",
+      "id": "rectangle_ex_gen_051",
       "function": "rectangle_ex_gen",
       "json": {
         "input_text": "ABCDEFGH",
@@ -1453,7 +1453,7 @@
       }
     },
     {
-      "id": "rectangle_ex_gen_056",
+      "id": "rectangle_ex_gen_052",
       "function": "rectangle_ex_gen",
       "json": {
         "input_text": "ABCDEFGH",
@@ -1480,7 +1480,7 @@
       }
     },
     {
-      "id": "vigenere_ex_gen_057",
+      "id": "vigenere_ex_gen_053",
       "function": "vigenere_ex_gen",
       "json": {
         "input_text": "AttackAtDawn123",
@@ -1491,7 +1491,7 @@
       }
     },
     {
-      "id": "charcode_ex_gen_058",
+      "id": "charcode_ex_gen_054",
       "function": "charcode_ex_gen",
       "json": {
         "input_text": "656667 414243"
@@ -1515,19 +1515,19 @@
       }
     },
     {
-      "id": "passcode_random_id_059",
+      "id": "passcode_random_id_055",
       "function": "passcode_random_id",
       "json": {},
       "expected": "42"
     },
     {
-      "id": "passcode_today_id_060",
+      "id": "passcode_today_id_056",
       "function": "passcode_today_id",
       "json": {},
       "expected": "77"
     },
     {
-      "id": "passcode_list_061",
+      "id": "passcode_list_057",
       "function": "passcode_list",
       "json": {},
       "expected": {
@@ -1536,7 +1536,7 @@
       }
     },
     {
-      "id": "passcode_validate_062",
+      "id": "passcode_validate_058",
       "function": "passcode_validate",
       "json": {
         "id": "1",
@@ -1545,7 +1545,7 @@
       "expected": "<article class=\"border\"><h6 class=\"cyan-text\">Passcode confirmed.</h6><p class=\"large-text amber-text\">Gained:\n100 AP\n100 XM\nL1 Resonator\nL1 Xmp Burster\nL4 Power Cube</p>\n</article><p class=\"grey-text\">* Not actually gained in Ingress.</p>"
     },
     {
-      "id": "passcode_validate_063",
+      "id": "passcode_validate_059",
       "function": "passcode_validate",
       "json": {
         "id": "1",
@@ -1554,7 +1554,7 @@
       "expected": "<div class=\"mono orange-text results_area large-text\">Number part might be wrong.<div>"
     },
     {
-      "id": "passcode_validate_064",
+      "id": "passcode_validate_060",
       "function": "passcode_validate",
       "json": {
         "id": "1",
@@ -1563,7 +1563,7 @@
       "expected": "<div class=\"mono gray-text results_area large-text\">Invalid.<div>"
     },
     {
-      "id": "ingress_keywords_gen_065",
+      "id": "ingress_keywords_gen_061",
       "function": "ingress_keywords_gen",
       "json": {
         "pattern": "a"
@@ -1576,7 +1576,7 @@
       }
     },
     {
-      "id": "skip_gen_066",
+      "id": "skip_gen_062",
       "function": "skip_gen",
       "json": {
         "input_text": "WEAREDISCOVERED",
@@ -1587,7 +1587,7 @@
       }
     },
     {
-      "id": "skip_gen_067",
+      "id": "skip_gen_063",
       "function": "skip_gen",
       "json": {
         "input_text": "WEAREDISCOVERED",
@@ -1598,7 +1598,7 @@
       }
     },
     {
-      "id": "bifid_gen_068",
+      "id": "bifid_gen_064",
       "function": "bifid_gen",
       "json": {
         "input_text": "FLEEATONCE",
@@ -1611,7 +1611,7 @@
       }
     },
     {
-      "id": "vanity_gen_069",
+      "id": "vanity_gen_065",
       "function": "vanity_gen",
       "json": {
         "input_text": "HELLO",
@@ -1633,7 +1633,7 @@
       }
     },
     {
-      "id": "vanity_gen_070",
+      "id": "vanity_gen_066",
       "function": "vanity_gen",
       "json": {
         "input_text": "4433555",
@@ -1655,7 +1655,7 @@
       }
     },
     {
-      "id": "kakushi_gen_071",
+      "id": "kakushi_gen_067",
       "function": "kakushi_gen",
       "json": {
         "input_text": "HELLO",
@@ -1670,7 +1670,7 @@
       }
     },
     {
-      "id": "kakushi_gen_072",
+      "id": "kakushi_gen_068",
       "function": "kakushi_gen",
       "json": {
         "input_text": "HELLO",
@@ -1700,7 +1700,7 @@
       }
     },
     {
-      "id": "kakushi_gen_073",
+      "id": "kakushi_gen_069",
       "function": "kakushi_gen",
       "json": {
         "input_text": "HELLO",
@@ -1715,7 +1715,7 @@
       }
     },
     {
-      "id": "kakushi_gen_074",
+      "id": "kakushi_gen_070",
       "function": "kakushi_gen",
       "json": {
         "input_text": "HELLO",
@@ -1745,7 +1745,7 @@
       }
     },
     {
-      "id": "pwgen_gen_075",
+      "id": "pwgen_gen_071",
       "function": "pwgen_gen",
       "json": {
         "char_type": "1",
@@ -1756,7 +1756,7 @@
       }
     },
     {
-      "id": "pwgen_gen_076",
+      "id": "pwgen_gen_072",
       "function": "pwgen_gen",
       "json": {
         "char_type": "2",
@@ -1767,7 +1767,7 @@
       }
     },
     {
-      "id": "pwgen_gen_077",
+      "id": "pwgen_gen_073",
       "function": "pwgen_gen",
       "json": {
         "char_type": "3",
@@ -1778,7 +1778,7 @@
       }
     },
     {
-      "id": "pwgen_gen_078",
+      "id": "pwgen_gen_074",
       "function": "pwgen_gen",
       "json": {
         "char_type": "4",
@@ -1789,7 +1789,7 @@
       }
     },
     {
-      "id": "pwgen_gen_079",
+      "id": "pwgen_gen_075",
       "function": "pwgen_gen",
       "json": {
         "char_type": "5",
@@ -1800,7 +1800,7 @@
       }
     },
     {
-      "id": "pwgen_gen_080",
+      "id": "pwgen_gen_076",
       "function": "pwgen_gen",
       "json": {
         "char_type": "6",
@@ -1811,7 +1811,7 @@
       }
     },
     {
-      "id": "pwgen_gen_081",
+      "id": "pwgen_gen_077",
       "function": "pwgen_gen",
       "json": {
         "char_type": "7",
@@ -1822,7 +1822,7 @@
       }
     },
     {
-      "id": "pwgen_gen_082",
+      "id": "pwgen_gen_078",
       "function": "pwgen_gen",
       "json": {
         "char_type": "8",
@@ -1830,6 +1830,32 @@
       },
       "expected": {
         "0": "abcdefghijkl"
+      }
+    },
+    {
+      "id": "secom_gen_079",
+      "function": "secom_gen",
+      "json": {
+        "input_text": "ATTACK AT DAWN",
+        "key": "MAKE NEW FRIENDS BUT KEEP THE OLD",
+        "mode": "Encode"
+      },
+      "expected": {
+        "0": "SECOM Encode:",
+        "1": "75973 09876 73066 39790"
+      }
+    },
+    {
+      "id": "secom_gen_080",
+      "function": "secom_gen",
+      "json": {
+        "input_text": "75973 09876 73066 39790",
+        "key": "MAKE NEW FRIENDS BUT KEEP THE OLD",
+        "mode": "Decode"
+      },
+      "expected": {
+        "0": "SECOM Decode:",
+        "1": "ATTACK AT DAWN"
       }
     }
   ],

@@ -28,6 +28,7 @@ Last updated: 2026-07-31
 - Enigma implementation: `app/cipher/enigma.py`
 - Purple implementation: `app/cipher/purple.py`
 - Kakushi implementation: `app/cipher/kakushi.py`
+- SECOM implementation: `app/cipher/secom.py`
 - Passcode/DB access: `app/cipher/ingress_passcode.py`
 - Top-page metadata/catalog: `app/tool_catalog.py`
 
