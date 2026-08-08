@@ -124,24 +124,50 @@ def vigenere_gen(request):
     return results
 
 
+def _parse_enigma_key(value, key_length):
+    """Normalize letter keys or historical 01-26 ring/window settings."""
+    letters = re.sub(r"[^a-zA-Z]", "", str(value)).upper()
+    if letters:
+        return letters[:key_length].ljust(key_length, 'A')
+
+    number_tokens = re.findall(r"\d+", str(value))
+    if len(number_tokens) == 1 and len(number_tokens[0]) == key_length * 2:
+        number_tokens = [number_tokens[0][i:i + 2]
+                         for i in range(0, key_length * 2, 2)]
+
+    normalized = ''.join(
+        chr(ord('A') + int(token) - 1)
+        for token in number_tokens[:key_length]
+        if 1 <= int(token) <= 26)
+    return normalized.ljust(key_length, 'A')
+
+
 def enigma_gen(request):
     input_text = request.json['input_text']
+    machine_requested = 'machine' in request.json
+    machine = request.json.get('machine', 'wehrmacht')
     left_rotor = request.json['left_rotor']
     mid_rotor = request.json['mid_rotor']
     right_rotor = request.json['right_rotor']
     reflector = request.json['reflector']
+    fourth_rotor = request.json.get('fourth_rotor')
+    if machine == 'm4' and not fourth_rotor:
+        fourth_rotor = 'BETA'
     rotor_key = request.json['rotor_key']
     ring_key = request.json['ring_key']
     plug_board = request.json['plug_board']
 
     input_text = input_text.upper()
-    rotor_key = re.sub(r"[^a-zA-Z]", "", rotor_key).upper().ljust(3, 'A')
-    ring_key = re.sub(r"[^a-zA-Z]", "", ring_key).upper().ljust(3, 'A')
+    key_length = 4 if machine == 'm4' else 3
+    rotor_key = _parse_enigma_key(rotor_key, key_length)
+    ring_key = _parse_enigma_key(ring_key, key_length)
     plug_board = plugboard_gen(plug_board)
 
     results = {}
     results[0] = \
         'Text: ' + input_text + '\n' +\
+        (('Machine: ' + machine.upper() + '\n') if machine_requested else '') +\
+        (('Fourth Rotor: ' + fourth_rotor + '\n') if fourth_rotor else '') +\
         'Rotor Set: ' + left_rotor + ' ' + mid_rotor + ' ' + right_rotor + '\n' +\
         'Reflector: ' + reflector + '\n' +\
         'Rotator key: ' + rotor_key + '\n' +\
@@ -157,7 +183,10 @@ def enigma_gen(request):
                                    reflector_id=reflector,
                                    rotor_key=rotor_key,
                                    ringsetting_key=ring_key,
-                                   plugboard=plug_board) + '\n'
+                                   plugboard=plug_board,
+                                   fourth_rotor_id=(
+                                       fourth_rotor if machine == 'm4'
+                                       else None)) + '\n'
     return results
 
 

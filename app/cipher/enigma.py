@@ -37,6 +37,30 @@ rotor_gamma = {'wiring': 'FSOKANUERHMBTIYCWLQPZXVGJD',
 reflector_b_thin = 'ENKQAUYWJICOPBLMDXZVFTHRGS'
 reflector_c_thin = 'RDOBJNTKVEHMLFCWZAXGYIPSUQ'
 
+rotors = {
+    1: rotor_number_i,
+    2: rotor_number_ii,
+    3: rotor_number_iii,
+    4: rotor_number_iv,
+    5: rotor_number_v,
+    6: rotor_number_vi,
+    7: rotor_number_vii,
+    8: rotor_number_viii,
+}
+reflectors = {
+    'A': reflector_a,
+    'B': reflector_b,
+    'C': reflector_c,
+}
+thin_reflectors = {
+    'B': reflector_b_thin,
+    'C': reflector_c_thin,
+}
+fourth_rotors = {
+    'BETA': rotor_beta,
+    'GAMMA': rotor_gamma,
+}
+
 
 # Enigma machine emulation
 
@@ -108,7 +132,9 @@ def reflector_backward(level, reflector):
     return reflector.find(abc[level])
 
 
-def enigma_custom(text, rotor_left, rotor_mid, rotor_right, reflector, rotor_key, ringsetting_key, plugboard, ring=standard_ring, mode='encode'):
+def enigma_custom(text, rotor_left, rotor_mid, rotor_right, reflector,
+                  rotor_key, ringsetting_key, plugboard,
+                  ring=standard_ring, mode='encode', rotor_fourth=None):
     """
     Cipher stream for encoding:
     Input -> Plugboard -> Right rotor -> Middle rotor -> Left rotor -> Reflector 
@@ -117,19 +143,27 @@ def enigma_custom(text, rotor_left, rotor_mid, rotor_right, reflector, rotor_key
 
     If the reflector configuration is reversible, the decoding result is the same as the encoding. 
 
-    Assuming 
-    - rotor_key is set by Left-Mid-Right
-    - ringsetting_key is set by Left-Mid-Right
+    Keys are ordered left-to-right. For M4 this is
+    Greek-Left-Middle-Right; the Greek rotor never advances.
     """
 
     text = text.upper()
 
-    rotor_position_left = abc.find(rotor_key[0])
-    rotor_position_mid = abc.find(rotor_key[1])
-    rotor_position_right = abc.find(rotor_key[2])
-    ring_position_left = abc.find(ringsetting_key[0])
-    ring_position_mid = abc.find(ringsetting_key[1])
-    ring_position_right = abc.find(ringsetting_key[2])
+    required_key_length = 4 if rotor_fourth else 3
+    if len(rotor_key) != required_key_length:
+        raise ValueError(f'rotor_key must contain {required_key_length} letters')
+    if len(ringsetting_key) != required_key_length:
+        raise ValueError(
+            f'ringsetting_key must contain {required_key_length} letters')
+
+    moving_key = rotor_key[-3:]
+    moving_ring_key = ringsetting_key[-3:]
+    rotor_position_left = abc.find(moving_key[0])
+    rotor_position_mid = abc.find(moving_key[1])
+    rotor_position_right = abc.find(moving_key[2])
+    ring_position_left = abc.find(moving_ring_key[0])
+    ring_position_mid = abc.find(moving_ring_key[1])
+    ring_position_right = abc.find(moving_ring_key[2])
     turnover_left = [abc.find(t) for t in rotor_left['turnover']]
     turnover_mid = [abc.find(t) for t in rotor_mid['turnover']]
     turnover_right = [abc.find(t) for t in rotor_right['turnover']]
@@ -169,12 +203,30 @@ def enigma_custom(text, rotor_left, rotor_mid, rotor_right, reflector, rotor_key
                 direction='forward',
                 ring=ring)
 
+            if rotor_fourth:
+                level = unit_rotor_conversion(
+                    level=level,
+                    rotor_wiring=rotor_fourth['wiring'],
+                    rotor_position=abc.find(rotor_key[0]),
+                    ring_position=abc.find(ringsetting_key[0]),
+                    direction='forward',
+                    ring=ring)
+
             if mode == 'encode':
                 level = reflector_forward(level, reflector)
             elif mode == 'decode':
                 level = reflector_backward(level, reflector)
             else:
                 return 'No reflector'
+
+            if rotor_fourth:
+                level = unit_rotor_conversion(
+                    level=level,
+                    rotor_wiring=rotor_fourth['wiring'],
+                    rotor_position=abc.find(rotor_key[0]),
+                    ring_position=abc.find(ringsetting_key[0]),
+                    direction='backward',
+                    ring=ring)
 
             level = unit_rotor_conversion(
                 level=level,
@@ -206,24 +258,29 @@ def enigma_custom(text, rotor_left, rotor_mid, rotor_right, reflector, rotor_key
     return result
 
 
-def enigma(text, rotor_left_id, rotor_mid_id, rotor_right_id, reflector_id, rotor_key, ringsetting_key, plugboard):
-    standard_rotors = {
-        1: rotor_number_i,
-        2: rotor_number_ii,
-        3: rotor_number_iii,
-        4: rotor_number_iv,
-        5: rotor_number_v,
-    }
-    standard_reflectors = {
-        'A': reflector_a,
-        'B': reflector_b,
-        'C': reflector_c,
-    }
-    rotor_left = standard_rotors[rotor_left_id]
-    rotor_mid = standard_rotors[rotor_mid_id]
-    rotor_right = standard_rotors[rotor_right_id]
-    reflector = standard_reflectors[reflector_id]
-    return enigma_custom(text, rotor_left, rotor_mid, rotor_right, reflector, rotor_key, ringsetting_key, plugboard, ring=standard_ring, mode='decode')
+def enigma(text, rotor_left_id, rotor_mid_id, rotor_right_id, reflector_id,
+           rotor_key, ringsetting_key, plugboard, fourth_rotor_id=None):
+    """Simulate an Enigma I/M3, or an M4 when ``fourth_rotor_id`` is set.
+
+    Rotor and ring keys are ordered from left to right. M4 keys therefore
+    contain four letters (Greek, left, middle, right); only the rightmost
+    three rotors advance.
+    """
+    rotor_left = rotors[rotor_left_id]
+    rotor_mid = rotors[rotor_mid_id]
+    rotor_right = rotors[rotor_right_id]
+
+    rotor_fourth = None
+    if fourth_rotor_id:
+        rotor_fourth = fourth_rotors[str(fourth_rotor_id).upper()]
+        reflector = thin_reflectors[reflector_id]
+    else:
+        reflector = reflectors[reflector_id]
+
+    return enigma_custom(
+        text, rotor_left, rotor_mid, rotor_right, reflector,
+        rotor_key, ringsetting_key, plugboard,
+        ring=standard_ring, mode='decode', rotor_fourth=rotor_fourth)
 
 
 def plugboard_gen(txt):

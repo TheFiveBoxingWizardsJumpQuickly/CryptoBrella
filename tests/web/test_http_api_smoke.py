@@ -15,7 +15,7 @@ def test_get_basic_pages(client):
     assert "V1.2.0" in about_body
     assert "Added hosting for the Niantic Project Wiki archive." in about_body
     assert "V1.3.0" in about_body
-    assert "Added the SECOM cipher tool." in about_body
+    assert "Expanded the Enigma tool with Enigma I, Kriegsmarine M3/M4" in about_body
     link_resp = client.get("/link")
     assert link_resp.status_code == 200
     link_body = link_resp.get_data(as_text=True)

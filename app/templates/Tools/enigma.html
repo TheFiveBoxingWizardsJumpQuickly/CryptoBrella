@@ -8,6 +8,23 @@
 
             <h5>Rotors and Settings</h5>
             <div class="grid">
+                <div class="field no-margin label border small fill s6 m3 l2">
+                        <select required id="machine" v-model="machine" v-on:change="machineChanged">
+                            <option value="wehrmacht">Enigma I</option>
+                            <option value="m3">Kriegsmarine M3</option>
+                            <option value="m4">Kriegsmarine M4</option>
+                        </select>
+                        <label class="active">Machine</label>
+                        <i>arrow_drop_down</i>
+                </div>
+                <div v-if="machine === 'm4'" class="field no-margin label border small fill s6 m2 l2">
+                        <select required id="fourth_rotor" v-on:input="update">
+                            <option value="BETA" selected>Beta</option>
+                            <option value="GAMMA">Gamma</option>
+                        </select>
+                        <label class="active">Fourth (Greek)</label>
+                        <i>arrow_drop_down</i>
+                </div>
                 <div class="field no-margin label border small fill s3 m2 l1">
                         <select required id="left_rotor" v-on:input="update">
                             <option value="" hidden>Choose</option>
@@ -16,6 +33,9 @@
                             <option value="3">III</option>
                             <option value="4">IV</option>
                             <option value="5">V</option>
+                            <option v-if="machine !== 'wehrmacht'" value="6">VI</option>
+                            <option v-if="machine !== 'wehrmacht'" value="7">VII</option>
+                            <option v-if="machine !== 'wehrmacht'" value="8">VIII</option>
                         </select>
                         <label class="active">Left</label>
                         <i>arrow_drop_down</i>
@@ -28,6 +48,9 @@
                             <option value="3">III</option>
                             <option value="4">IV</option>
                             <option value="5">V</option>
+                            <option v-if="machine !== 'wehrmacht'" value="6">VI</option>
+                            <option v-if="machine !== 'wehrmacht'" value="7">VII</option>
+                            <option v-if="machine !== 'wehrmacht'" value="8">VIII</option>
                         </select>
                         <label class="active">Mid</label>
                         <i>arrow_drop_down</i>
@@ -40,6 +63,9 @@
                             <option value="3" selected>III</option>
                             <option value="4">IV</option>
                             <option value="5">V</option>
+                            <option v-if="machine !== 'wehrmacht'" value="6">VI</option>
+                            <option v-if="machine !== 'wehrmacht'" value="7">VII</option>
+                            <option v-if="machine !== 'wehrmacht'" value="8">VIII</option>
                         </select>
                         <label class="active">Right</label>
                       <i>arrow_drop_down</i>
@@ -47,7 +73,7 @@
                 <div class="field no-margin label border small fill s3 m2 l1">
                         <select required id="reflector" v-on:input="update">
                             <option value="" hidden>Choose</option>
-                            <option value="A">A</option>
+                            <option v-if="machine === 'wehrmacht'" value="A">A</option>
                             <option value="B" selected>B</option>
                             <option value="C">C</option>
                         </select>
@@ -58,12 +84,16 @@
 
             <div class="grid">
                 <div class="field no-margin label border fill small s6 m2 l2">
-                    <input type="text" maxlength="3" id="rotor_key" v-on:input="update">
-                    <label>Rotator Key</label>
+                    <input type="text" id="rotor_key" v-on:input="update"
+                           v-on:focus="focusedSetting = 'rotor'" v-on:blur="focusedSetting = null"
+                           v-bind:placeholder="focusedSetting === 'rotor' ? (machine === 'm4' ? 'AAAA / 01 01 01 01' : 'AAA / 01 01 01') : ''">
+                    <label>Rotor Position</label>
                 </div>
                 <div class="field no-margin label border fill small s6 m2 l2">
-                    <input maxlength="3" id="ring_key" v-on:input="update">
-                    <label>Ring Setting Key</label>
+                    <input id="ring_key" v-on:input="update"
+                           v-on:focus="focusedSetting = 'ring'" v-on:blur="focusedSetting = null"
+                           v-bind:placeholder="focusedSetting === 'ring' ? (machine === 'm4' ? 'AAAA / 01 01 01 01' : 'AAA / 01 01 01') : ''">
+                    <label>Ring Setting</label>
                 </div>
                 <div class="field no-margin label border fill small s12 m12 l4">
                     <input id="plug_board" v-on:input="update">
@@ -71,13 +101,28 @@
                 </div>
             </div>
 {% endblock %}
+{% block vue_app_data %}
+                        machine: 'wehrmacht',
+                        focusedSetting: null,
+{% endblock %}
 {% block vue_app_methods %}
+                    machineChanged: function () {
+                        if (this.machine === 'wehrmacht') {
+                            ['left_rotor', 'mid_rotor', 'right_rotor'].forEach(function (id, index) {
+                                const select = document.getElementById(id);
+                                if (Number(select.value) > 5) select.value = String(index + 1);
+                            });
+                        }
+                        this.$nextTick(() => this.update());
+                    },
                     update: function () {
                         input_text = document.getElementById( "TXT" ).value;
                         left_rotor = document.getElementById( "left_rotor" ).value;
                         mid_rotor = document.getElementById( "mid_rotor" ).value;
                         right_rotor = document.getElementById( "right_rotor" ).value;
                         reflector = document.getElementById( "reflector" ).value;
+                        fourth_rotor_element = document.getElementById( "fourth_rotor" );
+                        fourth_rotor = fourth_rotor_element ? fourth_rotor_element.value : null;
                         rotor_key = document.getElementById( "rotor_key" ).value;
                         ring_key = document.getElementById( "ring_key" ).value;
                         plug_board = document.getElementById( "plug_board" ).value;
@@ -87,10 +132,12 @@
                             url = new URL('gear/enigma_gen', {{BASEURL|tojson}});
                             axios.post(url, {
                                 input_text: input_text,
+                                machine: this.machine,
                                 left_rotor: left_rotor,
                                 mid_rotor: mid_rotor,
                                 right_rotor: right_rotor,
                                 reflector: reflector,
+                                fourth_rotor: fourth_rotor,
                                 rotor_key: rotor_key,
                                 ring_key: ring_key,
                                 plug_board: plug_board

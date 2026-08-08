@@ -121,6 +121,27 @@ def test_registry_covers_only_request_handlers(gear_module):
     assert "passcode_gen" not in gear_module.GEAR_HANDLERS
 
 
+def test_enigma_key_settings_accept_historical_numbers(gear_module):
+    assert gear_module._parse_enigma_key("06 22 14", 3) == "FVN"
+    assert gear_module._parse_enigma_key("01-01-01-22", 4) == "AAAV"
+
+
+def test_enigma_gen_m4_settings(gear_module):
+    result = gear_module.enigma_gen(DummyRequest({
+        "input_text": "NCZW",
+        "machine": "m4",
+        "fourth_rotor": "BETA",
+        "left_rotor": "2",
+        "mid_rotor": "4",
+        "right_rotor": "1",
+        "reflector": "B",
+        "rotor_key": "22 10 14 01",
+        "ring_key": "01-01-01-22",
+        "plug_board": "AT BL DF GJ HM NW OP QY RZ VX",
+    }))
+    assert result[1] == "------\nEnigma output: VONV\n"
+
+
 @pytest.mark.parametrize("case", _load_fixture(), ids=lambda c: c["id"])
 def test_gear_regression_vectors(case, gear_module, monkeypatch):
     _apply_stubs(monkeypatch, gear_module)

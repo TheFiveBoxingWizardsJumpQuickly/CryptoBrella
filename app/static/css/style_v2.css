@@ -19,6 +19,14 @@ h1, h2, h3, h4, h5 {
   word-wrap : break-word;
 }
 
+.secom-controls {
+  flex-wrap: wrap;
+}
+
+.secom-controls > nav {
+  flex: 0 0 auto;
+}
+
 .textOverFlowHidden{
   overflow: hidden;
 }
