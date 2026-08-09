@@ -45,7 +45,11 @@ def test_home_catalog_covers_each_tool_once():
     ]
 
     assert len(catalog_tool_ids) == len(set(catalog_tool_ids))
-    assert set(catalog_tool_ids) == {tool["id"] for tool in TOOL_CATALOG}
+    visible_tool_ids = {
+        tool["id"] for tool in TOOL_CATALOG if tool.get("show_on_home", True)
+    }
+
+    assert set(catalog_tool_ids) == visible_tool_ids
 
 
 def test_niantic_wiki_is_listed_under_remember_ingress():
@@ -59,7 +63,7 @@ def test_niantic_wiki_is_listed_under_remember_ingress():
     assert "niantic_wiki" in tool_ids
 
 
-def test_secom_is_listed_under_cryptography():
+def test_secom_is_not_listed_on_home_page():
     sections = get_home_catalog()
 
     cryptography_section = next(
@@ -71,4 +75,4 @@ def test_secom_is_listed_under_cryptography():
         for tool in category["tools"]
     ]
 
-    assert "secom" in tool_ids
+    assert "secom" not in tool_ids

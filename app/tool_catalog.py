@@ -141,6 +141,7 @@ TOOL_CATALOG = [
         "aliases": ["secom cipher", "vic variant"],
         "tags": ["cipher", "fractionation", "transposition", "classical"],
         "icon": "icon_columnar.png",
+        "show_on_home": False,
     },
     {
         "id": "purple",
@@ -501,6 +502,10 @@ def get_home_catalog():
     for section in sections:
         category = section["categories"][0]
         ordered_ids = CATEGORY_TOOL_ORDER[category["id"]]
-        category["tools"] = [tool_index[tool_id] for tool_id in ordered_ids]
+        category["tools"] = [
+            tool_index[tool_id]
+            for tool_id in ordered_ids
+            if tool_index[tool_id].get("show_on_home", True)
+        ]
 
     return sections
