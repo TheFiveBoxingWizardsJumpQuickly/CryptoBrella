@@ -12,6 +12,27 @@ Start with `docs/README.md`.
 
 ## Development Environment
 
+The supported runtime and development target is CPython 3.13, matching the
+PythonAnywhere web app. The host system Python does not need to be changed.
+
+Create the project virtual environment with Python 3.13 and install the
+development requirements:
+
+```bash
+python3.13 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements-dev.txt
+```
+
+If `python3.13` is not provided by the host OS, an isolated Python 3.13 can be
+downloaded with `uv` without replacing the system Python:
+
+```bash
+uv venv --python 3.13 --seed
+uv pip install -r requirements-dev.txt
+```
+
 Use the project virtual environment for all local commands.
 
 ```bash
@@ -30,7 +51,12 @@ Examples:
 ## Continuous Integration
 
 GitHub Actions runs the full pytest suite for pull requests and pushes to the
-default `master` branch.
+default `master` branch using Python 3.13.
+
+The production baseline is PythonAnywhere's `innit` system image with the web
+app configured for Python 3.13. Production currently uses the PythonAnywhere
+system environment rather than a project virtualenv; dependency changes must
+therefore remain compatible with the packages available for that image.
 
 ## Notes
 

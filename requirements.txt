@@ -1,2 +1,3 @@
+# Runtime target: CPython 3.13 (matching the PythonAnywhere web app).
 Flask>=3.0,<4.0
 Pillow>=10.0,<12.0
