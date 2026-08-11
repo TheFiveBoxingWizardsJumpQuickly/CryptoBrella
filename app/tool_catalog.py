@@ -31,6 +31,7 @@ CATEGORY_TOOL_ORDER = {
     "encoding": [
         "base64",
         "morse",
+        "pigpen",
         "charcode",
         "braille",
         "braille_ja",
@@ -96,6 +97,25 @@ TOOL_CATALOG = [
         "aliases": ["simple substitution", "monoalphabetic substitution","tables"],
         "tags": ["cipher", "substitution", "classical","A-a swap","Atbash","Morse","keyboard","Dvorak","MALTRON"],
         "icon": "icon_simplesub.png",
+    },
+    {
+        "id": "pigpen",
+        "path": "/pigpen",
+        "name": "Pigpen",
+        "description": "Encode and decode Pigpen symbols with selectable alphabet layouts.",
+        "aliases": [
+            "pig pen",
+            "freemason's cipher",
+            "grid cipher",
+        ],
+        "tags": [
+            "cipher",
+            "substitution",
+            "classical",
+            "symbol",
+            "grid",
+        ],
+        "icon": "icon_pigpen.png",
     },
     {
         "id": "affine",

@@ -1,16 +1,16 @@
 # Crypto Function Inventory
 
-Last updated: 2026-07-31
+Last updated: 2026-08-11
 
 ## 1. Management Term
 - This project manages cipher transforms, analysis utilities, and encoding helpers under one term: **Crypto Functions**.
 - Utility pages previously treated as "Other Tools" are included in the same management scope.
 
 ## 2. Top-Page Counts
-- Managed pages: 40
+- Managed pages: 41
 - `gear/<function>` based pages: 37
 - Non-`gear` API page: 1 (`/resize` -> `POST /g/resize/`)
-- Client-only page: 1 (`/memo`)
+- Client-only pages: 2 (`/memo`, `/pigpen`)
 - Top-page organization is metadata-driven from `app/tool_catalog.py`.
 - Current top-page groups are: `Cryptography`, `Encoding`, `Utility`, `Remember Ingress`, `Extra`.
 
@@ -21,6 +21,7 @@ Last updated: 2026-07-31
 | Substitution ciphers | `rot` | `rot_gen` | `input_text` | `rot(c, k, nc=False)` |
 | Substitution ciphers | `vigenere` | `vigenere_gen` | `input_text`, `key` | `vig_d(c, k, nc=False)`, `vig_e(c, k, nc=False)`, `beaufort(c, k, nc=False)`, `vig_d_auto(c, k, nc=False)`, `vig_e_auto(c, k, nc=False)` |
 | Substitution ciphers | `simplesub` | `simplesub_gen` | `input_text` | `table_subtitution(text, method)` |
+| Encodings | `pigpen` | client-only | none | browser-side selectable Pigpen mappings and SVG rendering |
 | Substitution ciphers | `affine` | `affine_gen` | `input_text`, `mode` | `affine_d(text, a, b)`, `affine_e(text, a, b)` |
 | Substitution ciphers | `polybius` | `polybius_gen` | `input_text`, `mode` | `polybius_d(text, table_keyword='')`, `polybius_e(text, table_keyword='')` |
 | Substitution ciphers | `playfair` | `playfair_gen` | `input_text` | `playfair_d(c)`, `playfair_e(c)` |
@@ -62,3 +63,4 @@ Last updated: 2026-07-31
 ## 4. Notes
 - `challenge`, `passcode`, `about`, `link`, and `niantic_wiki` are top-page entries but excluded from this inventory because they are not crypto transform APIs.
 - The top page also provides in-page search over tool `name`, `aliases`, and `tags`.
+- `pigpen` is a client-only Encoding entry with selectable symbol mappings and image export.

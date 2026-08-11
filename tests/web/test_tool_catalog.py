@@ -76,3 +76,33 @@ def test_secom_is_not_listed_on_home_page():
     ]
 
     assert "secom" not in tool_ids
+
+
+def test_pigpen_is_listed_under_encoding_with_search_metadata():
+    pigpen = next(tool for tool in TOOL_CATALOG if tool["id"] == "pigpen")
+
+    assert pigpen["path"] == "/pigpen"
+    assert pigpen.get("show_on_home", True) is True
+    assert pigpen["aliases"] == [
+        "pig pen",
+        "freemason's cipher",
+        "grid cipher",
+    ]
+    assert pigpen["tags"] == [
+        "cipher",
+        "substitution",
+        "classical",
+        "symbol",
+        "grid",
+    ]
+
+    sections = get_home_catalog()
+    encoding_section = next(
+        section for section in sections if section["id"] == "encoding"
+    )
+    encoding_tool_ids = [
+        tool["id"]
+        for category in encoding_section["categories"]
+        for tool in category["tools"]
+    ]
+    assert "pigpen" in encoding_tool_ids

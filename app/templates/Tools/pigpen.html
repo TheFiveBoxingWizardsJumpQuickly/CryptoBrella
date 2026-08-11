@@ -1,0 +1,571 @@
+{% extends "base_apps_v2.html.jinja" %}
+{% block title %}Pigpen{% endblock %}
+{% block h1 %}Pigpen{% endblock %}
+
+{% block input_area %}
+<section class="pigpen-panel">
+    <div v-if="mode === 'Encode'">
+        <div class="field textarea border fill large mono">
+            <textarea
+                id="pigpen-plain-input"
+                class="grey2 black-text"
+                v-model="encodeInput"
+                v-on:input="updateEncoded"
+                aria-label="Text to encode as Pigpen"
+            ></textarea>
+        </div>
+    </div>
+
+    <div v-else>
+        <p class="pigpen-decode-hint">Tap a cell</p>
+        <div class="pigpen-decoder" aria-label="Pigpen layout keyboard">
+        <div class="pigpen-board-group">
+            <div class="pigpen-grid-board" aria-label="Pigpen grid without dots">
+                <button
+                    v-for="glyph in glyphs.slice(0, 9)"
+                    v-bind:key="glyph.letter"
+                    class="pigpen-grid-cell"
+                    v-on:click="appendDecoded(glyph.letter)"
+                    v-bind:aria-label="'Append ' + glyph.letter"
+                >
+                    <span v-if="showLetters" class="pigpen-board-label">[[glyph.letter]]</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="pigpen-board-group">
+            <div class="pigpen-grid-board" aria-label="Pigpen dotted grid">
+                <button
+                    v-for="glyph in glyphs.slice(9, 18)"
+                    v-bind:key="glyph.letter"
+                    class="pigpen-grid-cell"
+                    v-on:click="appendDecoded(glyph.letter)"
+                    v-bind:aria-label="'Append ' + glyph.letter"
+                >
+                    <span class="pigpen-cell-dot" aria-hidden="true"></span>
+                    <span v-if="showLetters" class="pigpen-board-label">[[glyph.letter]]</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="pigpen-board-group">
+            <svg class="pigpen-x-board" viewBox="0 0 180 180" aria-label="Pigpen X without dots">
+                <polygon
+                    v-for="(area, index) in xAreas"
+                    v-bind:key="'plain-x-' + index"
+                    v-bind:points="area.points"
+                    class="pigpen-x-hit"
+                    role="button"
+                    tabindex="0"
+                    v-bind:aria-label="'Append ' + glyphs[18 + index].letter"
+                    v-on:click="appendDecoded(glyphs[18 + index].letter)"
+                    v-on:keydown.enter="appendDecoded(glyphs[18 + index].letter)"
+                    v-on:keydown.space.prevent="appendDecoded(glyphs[18 + index].letter)"
+                ></polygon>
+                <path class="pigpen-x-lines" d="M0 0L180 180M180 0L0 180"></path>
+                <text
+                    v-for="(area, index) in xAreas"
+                    v-if="showLetters"
+                    v-bind:key="'plain-label-' + index"
+                    v-bind:x="area.center[0]"
+                    v-bind:y="area.center[1]"
+                    class="pigpen-x-label"
+                >[[glyphs[18 + index].letter]]</text>
+            </svg>
+        </div>
+
+        <div class="pigpen-board-group">
+            <svg class="pigpen-x-board" viewBox="0 0 180 180" aria-label="Pigpen dotted X">
+                <polygon
+                    v-for="(area, index) in xAreas"
+                    v-bind:key="'dotted-x-' + index"
+                    v-bind:points="area.points"
+                    class="pigpen-x-hit"
+                    role="button"
+                    tabindex="0"
+                    v-bind:aria-label="'Append ' + glyphs[22 + index].letter"
+                    v-on:click="appendDecoded(glyphs[22 + index].letter)"
+                    v-on:keydown.enter="appendDecoded(glyphs[22 + index].letter)"
+                    v-on:keydown.space.prevent="appendDecoded(glyphs[22 + index].letter)"
+                ></polygon>
+                <path class="pigpen-x-lines" d="M0 0L180 180M180 0L0 180"></path>
+                <circle
+                    v-for="(area, index) in xAreas"
+                    v-bind:key="'x-dot-' + index"
+                    v-bind:cx="area.center[0]"
+                    v-bind:cy="area.center[1]"
+                    r="6"
+                    class="pigpen-x-dot"
+                ></circle>
+                <text
+                    v-for="(area, index) in xAreas"
+                    v-if="showLetters"
+                    v-bind:key="'dotted-label-' + index"
+                    v-bind:x="area.label[0]"
+                    v-bind:y="area.label[1]"
+                    class="pigpen-x-label"
+                >[[glyphs[22 + index].letter]]</text>
+            </svg>
+        </div>
+        </div>
+
+        <nav class="pigpen-actions pigpen-decode-actions">
+            <button class="border" aria-label="Space" title="Space" v-on:click="appendDecodedSpace"><i>space_bar</i><span>Space</span></button>
+            <button class="border" aria-label="Backspace" title="Backspace" v-on:click="backspaceDecoded"><i>backspace</i><span>Backspace</span></button>
+            <button class="border" aria-label="Clear" title="Clear" v-on:click="clearDecoded"><i>delete</i><span>Clear</span></button>
+            <button class="border" v-bind:aria-label="showLetters ? 'Hide letters' : 'Show letters'" v-bind:title="showLetters ? 'Hide letters' : 'Show letters'" v-on:click="showLetters = !showLetters">
+                <i>[[showLetters ? 'visibility_off' : 'visibility']]</i>
+                <span>[[showLetters ? 'Hide letters' : 'Show letters']]</span>
+            </button>
+        </nav>
+    </div>
+
+    <div class="row pigpen-controls">
+        <nav class="no-space pigpen-mode-switch" aria-label="Pigpen mode">
+            <button
+                v-bind:class="mode === 'Encode' ? 'border left-round cyan8 white-text' : 'border left-round grey-text'"
+                v-on:click="mode = 'Encode'"
+            >
+                <span>Encode</span>
+            </button>
+            <button
+                v-bind:class="mode === 'Decode' ? 'border right-round cyan8 white-text' : 'border right-round grey-text'"
+                v-on:click="mode = 'Decode'"
+            >
+                <span>Decode</span>
+            </button>
+        </nav>
+        <div class="field no-margin label border small fill pigpen-variant-field">
+            <select required v-model="variantId" v-on:change="applyVariant" aria-label="Pigpen variant">
+                <option v-for="variant in variants" v-bind:key="variant.id" v-bind:value="variant.id">
+                    [[variant.name]]
+                </option>
+            </select>
+            <label class="active">Variant</label>
+            <i>arrow_drop_down</i>
+        </div>
+    </div>
+    <p class="grey-text pigpen-variant-note">[[activeVariant.description]]</p>
+
+    <h5>Results</h5>
+    <div
+        v-if="mode === 'Encode' && normalizedInput.length > 0"
+        class="mono grey-text results_area large-text"
+        aria-live="polite"
+    >
+        <div>Input Text</div>
+        <div class="pigpen-result-row">[[normalizedInput]]</div>
+        <div>Pigpen symbol</div>
+        <div class="pigpen-symbol-result" aria-label="Pigpen symbol result">
+            <template v-for="(token, index) in encodedTokens">
+                <span v-if="token.space" v-bind:key="'encode-space-' + index" class="pigpen-symbol-space"></span>
+                <span
+                    v-else
+                    v-bind:key="token.glyph.letter + '-' + index"
+                    class="pigpen-glyph-wrap"
+                    v-bind:title="token.glyph.letter"
+                >
+                    <svg class="pigpen-glyph" viewBox="0 0 48 48" role="img" v-bind:aria-label="token.glyph.letter">
+                        <path v-for="(path, pathIndex) in token.glyph.paths" v-bind:key="pathIndex" v-bind:d="path"></path>
+                        <circle v-if="token.glyph.dot" v-bind:cx="token.glyph.dot[0]" v-bind:cy="token.glyph.dot[1]" r="2.8"></circle>
+                    </svg>
+                </span>
+            </template>
+        </div>
+    </div>
+    <div
+        v-if="mode === 'Decode' && decodedTokens.length > 0"
+        class="mono grey-text results_area large-text"
+        aria-live="polite"
+    >
+        <div>Input symbol</div>
+        <div class="pigpen-symbol-result pigpen-input-symbol-result" aria-label="Input Pigpen symbols">
+            <template v-for="(token, index) in decodedTokens">
+                <span v-if="token.space" v-bind:key="'decode-space-' + index" class="pigpen-symbol-space"></span>
+                <span
+                    v-else
+                    v-bind:key="token.glyph.letter + '-' + index"
+                    class="pigpen-glyph-wrap"
+                    v-bind:title="token.glyph.letter"
+                >
+                    <svg class="pigpen-glyph" viewBox="0 0 48 48" role="img" v-bind:aria-label="token.glyph.letter">
+                        <path v-for="(path, pathIndex) in token.glyph.paths" v-bind:key="pathIndex" v-bind:d="path"></path>
+                        <circle v-if="token.glyph.dot" v-bind:cx="token.glyph.dot[0]" v-bind:cy="token.glyph.dot[1]" r="2.8"></circle>
+                    </svg>
+                </span>
+            </template>
+        </div>
+        <div>Decoded text</div>
+        <div class="pigpen-result-row">[[decodedText]]</div>
+    </div>
+    <nav class="pigpen-actions">
+        <button
+            class="border"
+            v-on:click="downloadImage"
+            v-bind:disabled="(mode === 'Encode' ? encodedTokens : decodedTokens).length === 0"
+        >
+            <i>download</i><span>Download Image</span>
+        </button>
+    </nav>
+</section>
+{% endblock %}
+
+{% block standard_results_area %}{% endblock %}
+
+{% block vue_app_data %}
+    mode:"Encode",
+    encodeInput:"",
+    normalizedInput:"",
+    encodedTokens:[],
+    decodedText:"",
+    decodedTokens:[],
+    showLetters:false,
+    variantId:"standard",
+    activeVariant:{description:""},
+    variants:[
+        {
+            id:"standard",
+            name:"Standard — Grid, Grid dot, X, X dot",
+            description:"A–I use the grid, J–R the dotted grid, S–V the X, and W–Z the dotted X. X letters run top, left, right, bottom.",
+            slotLetters:"ABCDEFGHIJKLMNOPQRSUVTWYZX"
+        },
+        {
+            id:"alternating",
+            name:"Alternate — Grid, X, Grid dot, X dot",
+            description:"A–I use the grid, J–M the X, N–V the dotted grid, and W–Z the dotted X.",
+            slotLetters:"ABCDEFGHINOPQRSTUVJLMKWYZX"
+        },
+        {
+            id:"dotted-first",
+            name:"Dotted first",
+            description:"The dotted grid and dotted X receive the first letter groups before their undotted forms.",
+            slotLetters:"JKLMNOPQRABCDEFGHIWYZXSUVT"
+        },
+        {
+            id:"interleaved-dots",
+            name:"Interleaved dots",
+            description:"Each position receives consecutive letters: no dot first, then dotted.",
+            slotLetters:"ACEGIKMOQBDFHJLNPRSWYUTXZV"
+        },
+        {
+            id:"column-order",
+            name:"Column order",
+            description:"Grid letters run from top to bottom by column instead of left to right by row.",
+            slotLetters:"ADGBEHCFIJMPKNQLORSUVTWYZX"
+        },
+        {
+            id:"reverse",
+            name:"Reverse alphabet",
+            description:"The standard slots are filled from Z back to A.",
+            slotLetters:"ZYXWVUTSRQPONMLKJIHFEGDBAC"
+        }
+    ],
+    xAreas:[
+        {points:"0,0 180,0 90,90", center:[90,38], label:[90,28]},
+        {points:"180,0 180,180 90,90", center:[142,90], label:[152,90]},
+        {points:"180,180 0,180 90,90", center:[90,142], label:[90,158]},
+        {points:"0,180 0,0 90,90", center:[38,90], label:[28,90]}
+    ],
+    glyphs:[
+        {letter:"A", paths:["M36 8V36H8"], dot:null},
+        {letter:"B", paths:["M8 8V36H40V8"], dot:null},
+        {letter:"C", paths:["M12 8V36H40"], dot:null},
+        {letter:"D", paths:["M8 8H36V40H8"], dot:null},
+        {letter:"E", paths:["M8 8H40V40H8Z"], dot:null},
+        {letter:"F", paths:["M40 8H12V40H40"], dot:null},
+        {letter:"G", paths:["M8 12H36V40"], dot:null},
+        {letter:"H", paths:["M8 40V12H40V40"], dot:null},
+        {letter:"I", paths:["M40 12H12V40"], dot:null},
+        {letter:"J", paths:["M36 8V36H8"], dot:[23,23]},
+        {letter:"K", paths:["M8 8V36H40V8"], dot:[24,24]},
+        {letter:"L", paths:["M12 8V36H40"], dot:[27,23]},
+        {letter:"M", paths:["M8 8H36V40H8"], dot:[22,24]},
+        {letter:"N", paths:["M8 8H40V40H8Z"], dot:[24,24]},
+        {letter:"O", paths:["M40 8H12V40H40"], dot:[27,24]},
+        {letter:"P", paths:["M8 12H36V40"], dot:[22,27]},
+        {letter:"Q", paths:["M8 40V12H40V40"], dot:[24,27]},
+        {letter:"R", paths:["M40 12H12V40"], dot:[27,27]},
+        {letter:"S", paths:["M8 8L24 24L40 8"], dot:null},
+        {letter:"T", paths:["M40 8L24 24L40 40"], dot:null},
+        {letter:"U", paths:["M8 40L24 24L40 40"], dot:null},
+        {letter:"V", paths:["M8 8L24 24L8 40"], dot:null},
+        {letter:"W", paths:["M8 8L24 24L40 8"], dot:[24,13]},
+        {letter:"X", paths:["M40 8L24 24L40 40"], dot:[35,24]},
+        {letter:"Y", paths:["M8 40L24 24L40 40"], dot:[24,35]},
+        {letter:"Z", paths:["M8 8L24 24L8 40"], dot:[13,24]}
+    ],
+{% endblock %}
+
+{% block vue_app_methods %}
+    applyVariant: function () {
+        var selected = this.variants.find((variant) => variant.id === this.variantId);
+        if (!selected) return;
+        this.activeVariant = selected;
+        this.glyphs.forEach(function (glyph, index) {
+            glyph.letter = selected.slotLetters[index];
+        });
+        this.clearDecoded();
+        this.updateEncoded();
+    },
+    glyphFor: function (character) {
+        var upper = character.toUpperCase();
+        return this.glyphs.find(function (glyph) { return glyph.letter === upper; });
+    },
+    updateEncoded: function () {
+        this.normalizedInput = Array.from(this.encodeInput)
+            .filter(function (character) { return character === " " || /^[A-Za-z]$/.test(character); })
+            .join("")
+            .toUpperCase();
+        this.encodedTokens = Array.from(this.normalizedInput).map((character) => {
+            return character === " " ? {space:true} : {glyph:this.glyphFor(character)};
+        });
+    },
+    appendDecoded: function (value) {
+        var glyph = this.glyphFor(value);
+        if (!glyph) return;
+        this.decodedText += glyph.letter;
+        this.decodedTokens.push({glyph:glyph});
+    },
+    appendDecodedSpace: function () {
+        this.decodedText += " ";
+        this.decodedTokens.push({space:true});
+    },
+    backspaceDecoded: function () {
+        var characters = Array.from(this.decodedText);
+        characters.pop();
+        this.decodedText = characters.join("");
+        this.decodedTokens.pop();
+    },
+    clearDecoded: function () {
+        this.decodedText = "";
+        this.decodedTokens = [];
+    },
+    downloadImage: function () {
+        var tokens = this.mode === "Encode" ? this.encodedTokens : this.decodedTokens;
+        var inputText = this.mode === "Encode" ? this.normalizedInput : this.decodedText;
+        var width = Math.max(80, tokens.length * 56 + 16);
+        var height = 64;
+        var elements = ['<rect width="100%" height="100%" fill="white"/>'];
+
+        tokens.forEach((token, columnIndex) => {
+            if (token.space) return;
+            var glyph = token.glyph;
+            var x = 8 + columnIndex * 56;
+            var y = 8;
+            glyph.paths.forEach(function (path) {
+                elements.push('<path d="' + path + '" transform="translate(' + x + ' ' + y + ')" fill="none" stroke="#111827" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>');
+            });
+            if (glyph.dot) {
+                elements.push('<circle cx="' + (x + glyph.dot[0]) + '" cy="' + (y + glyph.dot[1]) + '" r="2.8" fill="#111827"/>');
+            }
+        });
+
+        var source = '<svg xmlns="http://www.w3.org/2000/svg" width="' + width + '" height="' + height + '" viewBox="0 0 ' + width + ' ' + height + '">' + elements.join("") + '</svg>';
+        var blob = new Blob([source], {type:"image/svg+xml;charset=utf-8"});
+        var objectUrl = URL.createObjectURL(blob);
+        var link = document.createElement("a");
+        link.href = objectUrl;
+        var filenamePart = Array.from(inputText)
+            .slice(0, 16)
+            .join("")
+            .trim()
+            .toLowerCase()
+            .replace(/ +/g, "_");
+        link.download = filenamePart ? "pigpen_" + filenamePart + ".svg" : "pigpen.svg";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(objectUrl);
+    },
+{% endblock %}
+
+{% block vue_app_created %}
+    this.applyVariant();
+{% endblock %}
+
+{% block extra_script %}
+<style>
+    .pigpen-panel {
+        border: 1px solid #455a64;
+        border-radius: 1rem;
+        margin: 1.5rem 0;
+        padding: 1rem;
+    }
+    .pigpen-controls {
+        align-items: center;
+        flex-wrap: wrap;
+        gap: .75rem;
+        margin: 1.25rem 0 .75rem;
+    }
+    .pigpen-controls > nav { flex: 0 0 auto; }
+    .pigpen-mode-switch { margin: 0; }
+    .pigpen-variant-field { min-width: 20rem; }
+    .pigpen-variant-note { margin-top: .5rem; }
+    .pigpen-decode-hint {
+        color: #8ce1f5;
+        font-weight: bold;
+        margin: 0 0 .5rem;
+    }
+    .pigpen-glyph-wrap {
+        align-items: center;
+        display: inline-flex;
+        height: 3.25rem;
+        justify-content: center;
+        width: 3.25rem;
+    }
+    .pigpen-glyph {
+        fill: currentColor;
+        height: 3rem;
+        stroke: currentColor;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 3;
+        width: 3rem;
+    }
+    .pigpen-glyph path { fill: none; }
+    .pigpen-result-row {
+        min-height: 2rem;
+        overflow-wrap: anywhere;
+        white-space: pre-wrap;
+    }
+    .pigpen-symbol-result {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        min-height: 3.5rem;
+    }
+    .pigpen-symbol-space {
+        display: inline-block;
+        height: 3.25rem;
+        width: 1.8rem;
+    }
+    .pigpen-input-symbol-result .pigpen-glyph-wrap {
+        height: 2rem;
+        width: 2rem;
+    }
+    .pigpen-input-symbol-result .pigpen-glyph {
+        height: 1.75rem;
+        width: 1.75rem;
+    }
+    .pigpen-input-symbol-result .pigpen-symbol-space {
+        height: 2rem;
+        width: 1rem;
+    }
+    .pigpen-decoder {
+        align-items: flex-start;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        margin: 1.5rem 0;
+    }
+    .pigpen-board-group {
+        --pigpen-board-size: 12rem;
+        text-align: center;
+    }
+    .pigpen-grid-board {
+        display: grid;
+        grid-template-columns: repeat(3, calc(var(--pigpen-board-size) / 3));
+        grid-template-rows: repeat(3, calc(var(--pigpen-board-size) / 3));
+        margin: 0 auto;
+    }
+    button.pigpen-grid-cell {
+        background: transparent;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        color: #e0f7fa;
+        height: calc(var(--pigpen-board-size) / 3);
+        margin: 0;
+        min-width: 0;
+        padding: 0;
+        position: relative;
+        width: calc(var(--pigpen-board-size) / 3);
+    }
+    button.pigpen-grid-cell:not(:nth-child(3n)) { border-right: 3px solid currentColor; }
+    button.pigpen-grid-cell:nth-child(-n + 6) { border-bottom: 3px solid currentColor; }
+    button.pigpen-grid-cell:hover,
+    button.pigpen-grid-cell:focus { background: rgba(0, 188, 212, .22); }
+    .pigpen-cell-dot {
+        background: currentColor;
+        border-radius: 50%;
+        height: .65rem;
+        left: 50%;
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: .65rem;
+    }
+    .pigpen-board-label {
+        background: #006064;
+        border-radius: 50%;
+        bottom: .2rem;
+        font-size: .7rem;
+        line-height: 1.25rem;
+        position: absolute;
+        right: .2rem;
+        width: 1.25rem;
+    }
+    .pigpen-x-board {
+        color: #e0f7fa;
+        height: var(--pigpen-board-size);
+        overflow: visible;
+        width: var(--pigpen-board-size);
+    }
+    .pigpen-x-hit {
+        cursor: pointer;
+        fill: transparent;
+        outline: none;
+    }
+    .pigpen-x-hit:hover,
+    .pigpen-x-hit:focus { fill: rgba(0, 188, 212, .22); }
+    .pigpen-x-lines {
+        fill: none;
+        pointer-events: none;
+        stroke: currentColor;
+        stroke-width: 3;
+    }
+    .pigpen-x-dot {
+        fill: currentColor;
+        pointer-events: none;
+    }
+    .pigpen-x-label {
+        dominant-baseline: middle;
+        fill: white;
+        font-size: 16px;
+        font-weight: bold;
+        pointer-events: none;
+        text-anchor: middle;
+    }
+    .pigpen-actions {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: .5rem;
+        margin: .75rem 0;
+    }
+    @media (max-width: 600px) {
+        .pigpen-decoder {
+            display: grid;
+            gap: 1rem .5rem;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            width: 100%;
+        }
+        .pigpen-board-group {
+            --pigpen-board-size: min(40vw, 9rem);
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            min-width: 0;
+        }
+        .pigpen-cell-dot {
+            height: .5rem;
+            width: .5rem;
+        }
+        .pigpen-decode-actions button span { display: none; }
+        .pigpen-decode-actions button {
+            min-width: 3rem;
+            padding: 0 .65rem;
+        }
+    }
+</style>
+{% endblock %}

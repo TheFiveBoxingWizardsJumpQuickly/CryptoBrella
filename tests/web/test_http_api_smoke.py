@@ -16,6 +16,8 @@ def test_get_basic_pages(client):
     assert "Added hosting for the Niantic Project Wiki archive." in about_body
     assert "V1.3.0" in about_body
     assert "Expanded the Enigma tool with Enigma I, Kriegsmarine M3/M4" in about_body
+    assert "V1.4.0" in about_body
+    assert "Added the Pigpen encoder, visual decoder" in about_body
     link_resp = client.get("/link")
     assert link_resp.status_code == 200
     link_body = link_resp.get_data(as_text=True)
@@ -49,6 +51,64 @@ def test_secom_page_renders(client):
     assert "gear/secom_gen" in page_body
     assert "Detailed steps: ON" in page_body
     assert 'detail_mode:"OFF"' in page_body
+
+
+def test_pigpen_page_renders_with_home_link(client):
+    page_resp = client.get("/pigpen")
+
+    assert page_resp.status_code == 200
+    page_body = page_resp.get_data(as_text=True)
+    assert "<title>Pigpen</title>" in page_body
+    assert "Pigpen Prototype" not in page_body
+    assert "Choose a 26-letter mapping" not in page_body
+    assert "Only A–Z letters and spaces are preserved" not in page_body
+    assert "Download Image" in page_body
+    assert "Download SVG" not in page_body
+    assert "Copy decoded text" not in page_body
+    assert 'class="mono grey-text results_area large-text"' in page_body
+    assert "Input Text" in page_body
+    assert "Pigpen symbol" in page_body
+    assert "Input symbol" in page_body
+    assert "Decoded text" in page_body
+    assert "space_bar" in page_body
+    assert "normalizedInput.length > 0" in page_body
+    assert "decodedTokens.length > 0" in page_body
+    assert "Standard — Grid, Grid dot, X, X dot" in page_body
+    assert "Alternate — Grid, X, Grid dot, X dot" in page_body
+    assert "Dotted first" in page_body
+    assert "Interleaved dots" in page_body
+    assert "Column order" in page_body
+    assert "Reverse alphabet" in page_body
+    assert 'variantId:"standard"' in page_body
+    assert 'slotLetters:"ABCDEFGHIJKLMNOPQRSUVTWYZX"' in page_body
+    assert 'slotLetters:"ABCDEFGHINOPQRSTUVJLMKWYZX"' in page_body
+    assert 'slotLetters:"ACEGIKMOQBDFHJLNPRSWYUTXZV"' in page_body
+    assert "X letters run top, left, right, bottom" in page_body
+    assert 'label class="active">Variant</label>' in page_body
+    assert "pigpen_\" + filenamePart + \".svg" in page_body
+    assert "downloadImage" in page_body
+    assert "Tap a cell" in page_body
+    assert ".pigpen-decode-actions button span { display: none; }" in page_body
+    assert "justify-content: center" in page_body
+    assert "Select a position on the same grid" not in page_body
+    assert "Grid — no dot" not in page_body
+    assert "Grid — dot" not in page_body
+    assert "X — no dot" not in page_body
+    assert "X — dot" not in page_body
+    assert "pigpen-input-symbol-result" in page_body
+    assert "--pigpen-board-size: min(40vw, 9rem)" in page_body
+    assert "grid-template-columns: repeat(2, minmax(0, 1fr))" in page_body
+    assert 'mode:"Encode"' in page_body
+    assert 'encodeInput:""' in page_body
+    assert 'letter:"A"' in page_body
+    assert 'letter:"Z"' in page_body
+
+    home_body = client.get("/").get_data(as_text=True)
+    assert '"path": "/pigpen"' in home_body
+    assert '"icon_pigpen.png"' in home_body
+
+    old_page_resp = client.get("/pigpen_prototype")
+    assert old_page_resp.status_code == 404
 
 
 def test_niantic_wiki_index_renders(client):
