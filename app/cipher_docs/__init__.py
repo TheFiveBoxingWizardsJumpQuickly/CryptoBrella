@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 
 
@@ -68,24 +69,38 @@ def _make_paragraph_blocks(lines):
     paragraph_lines = []
     index = 0
 
+    def append_paragraph():
+        nonlocal paragraph_lines
+        if not paragraph_lines:
+            return
+
+        first_line = paragraph_lines[0].strip()
+        numbered_item = re.fullmatch(r"(\d+\.)\s+(.+)", first_line)
+        if numbered_item and len(paragraph_lines) > 1:
+            blocks.append({
+                "type": "numbered_item",
+                "title": f"{numbered_item.group(1)} {numbered_item.group(2)}",
+                "text": " ".join(
+                    line.strip() for line in paragraph_lines[1:]
+                ),
+            })
+        else:
+            blocks.append({
+                "type": "paragraph",
+                "text": " ".join(line.strip() for line in paragraph_lines),
+            })
+        paragraph_lines = []
+
     while index < len(lines):
         stripped = lines[index].strip()
 
         if not stripped:
-            if paragraph_lines:
-                blocks.append(
-                    {"type": "paragraph", "text": " ".join(line.strip() for line in paragraph_lines)}
-                )
-                paragraph_lines = []
+            append_paragraph()
             index += 1
             continue
 
         if stripped == "::pre":
-            if paragraph_lines:
-                blocks.append(
-                    {"type": "paragraph", "text": " ".join(line.strip() for line in paragraph_lines)}
-                )
-                paragraph_lines = []
+            append_paragraph()
             index += 1
             pre_lines = []
             while index < len(lines) and lines[index].strip() != "::endpre":
@@ -99,8 +114,7 @@ def _make_paragraph_blocks(lines):
         paragraph_lines.append(lines[index])
         index += 1
 
-    if paragraph_lines:
-        blocks.append({"type": "paragraph", "text": " ".join(line.strip() for line in paragraph_lines)})
+    append_paragraph()
 
     return blocks
 

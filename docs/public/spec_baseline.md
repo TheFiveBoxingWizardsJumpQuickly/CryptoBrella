@@ -89,7 +89,8 @@ Last updated: 2026-08-01
   - uses the first 20 letters
   - rejects keys containing fewer than 20 letters
 - Encode:
-  - accepts letters A-Z, digits, and whitespace
+  - uppercases letters and removes characters outside A-Z, digits, and
+    whitespace
   - represents whitespace with the SECOM checkerboard space marker
   - applies the extended straddling checkerboard, normal columnar
     transposition, and disrupted columnar transposition
@@ -109,12 +110,19 @@ Last updated: 2026-08-01
   - the web UI does not expose this choice yet and therefore uses
     `reset_each_width`
 - Decode:
-  - accepts digits and whitespace; the digit count must be a multiple of five
+  - removes non-digits before processing; the remaining digit count must be a
+    non-zero multiple of five
   - restores checkerboard space markers as spaces in the handler response
   - warns that null padding can yield up to four ambiguous trailing characters
 - Handler result messages:
-  - `detail_mode == OFF` returns only `SECOM Encode:`/`SECOM Decode:` and the
+  - successful results begin with `Input text:` and the normalized input;
+    Encode keeps uppercase letters, digits, and whitespace while removing
+    other characters, and Decode keeps digits only and displays five-digit
+    groups
+  - `detail_mode == OFF` then returns `SECOM Encode:`/`SECOM Decode:` and the
     transformed text; it does not return a Note
+  - both modes insert a blank line between the normalized Input text and the
+    `SECOM Encode:`/`SECOM Decode:` heading
   - `detail_mode == ON` additionally returns the normalized inputs, key halves
     and rankings, chain-addition seed, generated digits, checkerboard details,
     width calculations, transposition keys, padding information, and the
@@ -131,9 +139,19 @@ Last updated: 2026-08-01
     whether zero padding was added
   - detailed Encode does not return the padding Note because the exact padding
     count is included in its intermediate steps
+  - detailed Encode omits the redundant `Plaintext written with * for spaces`
+    step; `Plaintext converted into numbers` and the first transposition's
+    `Digits read off in columns` are continuous digit strings
+  - detailed Decode omits the redundant `Ciphertext in five-digit groups`
+    step; both reverse-transposition `Digits read row by row` outputs are
+    continuous digit strings
   - invalid input returns an `Error: ...` result instead of the success heading
     and Note
 - Invalid SECOM values return an error message in the normal result dictionary.
+- Japanese and English explanation pages are available at
+  `/cipher_docs/secom-ja` and `/cipher_docs/secom-en`. Both link to the tool,
+  the original description, and the reference GUI implementation.
+- SECOM is listed on the top page with its dedicated icon.
 
 #### Specification rationale and references
 

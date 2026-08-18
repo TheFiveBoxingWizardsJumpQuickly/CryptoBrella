@@ -23,6 +23,8 @@
                             {% for block in about %}
                                 {% if block.type == 'paragraph' %}
                                     <p>{{ block.text }}</p>
+                                {% elif block.type == 'numbered_item' %}
+                                    <p><strong>{{ block.title }}</strong><br>{{ block.text }}</p>
                                 {% elif block.type == 'pre' %}
                                     <pre class="cipher-docs-pre">{{ block.text }}</pre>
                                 {% endif %}
@@ -41,6 +43,8 @@
                             {% for block in how_to_use_tool %}
                                 {% if block.type == 'paragraph' %}
                                     <p>{{ block.text }}</p>
+                                {% elif block.type == 'numbered_item' %}
+                                    <p><strong>{{ block.title }}</strong><br>{{ block.text }}</p>
                                 {% elif block.type == 'pre' %}
                                     <pre class="cipher-docs-pre">{{ block.text }}</pre>
                                 {% endif %}
@@ -55,6 +59,8 @@
                             {% for block in test_cases %}
                                 {% if block.type == 'paragraph' %}
                                     <p>{{ block.text }}</p>
+                                {% elif block.type == 'numbered_item' %}
+                                    <p><strong>{{ block.title }}</strong><br>{{ block.text }}</p>
                                 {% elif block.type == 'pre' %}
                                     <pre class="cipher-docs-pre">{{ block.text }}</pre>
                                 {% endif %}
@@ -69,6 +75,8 @@
                             {% for block in challenge %}
                                 {% if block.type == 'paragraph' %}
                                     <p>{{ block.text }}</p>
+                                {% elif block.type == 'numbered_item' %}
+                                    <p><strong>{{ block.title }}</strong><br>{{ block.text }}</p>
                                 {% elif block.type == 'pre' %}
                                     <pre class="cipher-docs-pre">{{ block.text }}</pre>
                                 {% endif %}

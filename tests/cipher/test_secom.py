@@ -9,7 +9,9 @@ from app.cipher.secom import (
     make_key_digits,
     make_key_trans,
     make_transposition_widths,
+    normalize_ciphertext,
     normalize_key_phrase,
+    normalize_plaintext,
     secom_d,
     secom_e,
 )
@@ -100,9 +102,12 @@ def test_encode_trace_exposes_verification_steps_without_changing_result():
         "1st transposition: 7 + 2 + 3 = 12 columns\n"
         "2nd transposition: 5 + 6 = 11 columns"
     )
-    assert "  | 8 1 3 9 0 6 5 4 2 7" in steps[
-        "Completed straddling checkerboard"
-    ]
+    checkerboard_lines = steps["Completed straddling checkerboard"].splitlines()
+    assert checkerboard_lines[0] == " | 8 1 3 9 0 6 5 4 2 7"
+    assert all(line.index("|") == 1 for line in checkerboard_lines if "|" in line)
+    assert "Plaintext written with * for spaces" not in steps
+    assert steps["Plaintext converted into numbers"].isdigit()
+    assert steps["Digits read off in columns"].isdigit()
     assert steps[
         "Null digits appended to complete a five-digit group"
     ] == "1 digit(s)"
@@ -117,8 +122,13 @@ def test_decode_trace_lists_reverse_transposition_steps():
     steps = dict(trace)
 
     assert decoded.endswith("USUALO")
+    assert "Ciphertext in five-digit groups" not in steps
     assert "Reversing the second disrupted transposition" in steps
     assert "Reversing the first columnar transposition" in steps
+    assert steps[
+        "Digits read row by row outside the triangular areas, then inside them"
+    ].isdigit()
+    assert steps["Digits read row by row"].isdigit()
     assert steps["Plaintext with * representing spaces"] == decoded
 
 
@@ -143,13 +153,23 @@ def test_key_requires_twenty_letters(key):
         secom_e("TEST", key)
 
 
-@pytest.mark.parametrize("plaintext", ["MEET @ NOON", "MEET*AT*NOON"])
-def test_plaintext_rejects_unsupported_punctuation(plaintext):
-    with pytest.raises(ValueError, match="letters, digits, and spaces"):
-        secom_e(plaintext, KEY_PHRASE)
+def test_plaintext_removes_unsupported_characters():
+    assert normalize_plaintext("Meet@Noon! 42") == "MEETNOON*42"
+    assert secom_e("Meet@Noon! 42", KEY_PHRASE) == secom_e(
+        "MEETNOON 42", KEY_PHRASE
+    )
 
 
-@pytest.mark.parametrize("ciphertext", ["1234", "1234A"])
+def test_ciphertext_removes_unsupported_characters_before_validation():
+    assert normalize_ciphertext("75973-a09876 73066/39790") == (
+        "75973098767306639790"
+    )
+    assert secom_d("75973-a09876 73066/39790", KEY_PHRASE) == (
+        "ATTACK*AT*DAWN"
+    )
+
+
+@pytest.mark.parametrize("ciphertext", ["1234", "1234A", "NO DIGITS"])
 def test_ciphertext_validation(ciphertext):
     with pytest.raises(ValueError):
         secom_d(ciphertext, KEY_PHRASE)

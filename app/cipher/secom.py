@@ -19,7 +19,6 @@ from .transposition import (
 )
 
 
-SUPPORTED_PLAINTEXT = re.compile(r"^[A-Z0-9\s]*$")
 WIDTH_MODE_RESET_EACH_WIDTH = "reset_each_width"
 WIDTH_MODE_CONTINUE_ACROSS_WIDTHS = "continue_across_widths"
 DEFAULT_WIDTH_MODE = WIDTH_MODE_RESET_EACH_WIDTH
@@ -37,16 +36,14 @@ def normalize_key_phrase(key):
 
 
 def normalize_plaintext(text):
-    normalized = text.upper()
-    if not SUPPORTED_PLAINTEXT.fullmatch(normalized):
-        raise ValueError("SECOM plaintext supports only letters, digits, and spaces.")
+    normalized = re.sub(r"[^A-Z0-9\s]", "", text.upper())
     return re.sub(r"\s", "*", normalized)
 
 
 def normalize_ciphertext(text):
-    normalized = re.sub(r"\s", "", text)
-    if not re.fullmatch(r"[0-9]+", normalized):
-        raise ValueError("SECOM ciphertext must contain digits and whitespace only.")
+    normalized = re.sub(r"[^0-9]", "", text)
+    if not normalized:
+        raise ValueError("SECOM ciphertext must contain at least one digit.")
     if len(normalized) % 5:
         raise ValueError("SECOM ciphertext length must be a multiple of five digits.")
     return normalized
@@ -76,8 +73,8 @@ def _format_checkerboard(checkerboard_numbers, checkerboard):
     rows = [checkerboard[i:i + 10] for i in range(0, 40, 10)]
     prefixes = [" ", str(checkerboard_numbers[2]),
                 str(checkerboard_numbers[5]), str(checkerboard_numbers[8])]
-    lines = ["  | " + " ".join(str(x) for x in checkerboard_numbers)]
-    lines.append("  +-" + "-" * 19)
+    lines = [" | " + " ".join(str(x) for x in checkerboard_numbers)]
+    lines.append(" +-" + "-" * 19)
     lines.extend(
         f"{prefix}| " + " ".join(row)
         for prefix, row in zip(prefixes, rows)
@@ -302,7 +299,6 @@ def secom_e(c, key, width_mode=DEFAULT_WIDTH_MODE, trace=None):
         key_digits, key_b_digits, checkerboard_numbers, width_mode)
     _trace_key_phrase_digits(trace, key, key_b_digits, key_digits)
     _trace_checkerboard(trace, checkerboard_numbers, checkerboard)
-    _trace_step(trace, "Plaintext written with * for spaces", c)
 
     # Checkerboard
     plain_numbers = ""
@@ -314,7 +310,7 @@ def secom_e(c, key, width_mode=DEFAULT_WIDTH_MODE, trace=None):
     padding = "0" * (-len(plain_numbers) % 5)
     _trace_step(
         trace, "Plaintext converted into numbers",
-        group_digits(plain_numbers))
+        plain_numbers)
     _trace_transposition_keys(
         trace,
         key_b_digits,
@@ -342,7 +338,7 @@ def secom_e(c, key, width_mode=DEFAULT_WIDTH_MODE, trace=None):
         plain_numbers, assign_digits(zero2ten(first_trans_key)))
     _trace_step(
         trace, "Digits read off in columns",
-        group_digits("".join(numbers_trans1)))
+        "".join(numbers_trans1))
 
     # Second disrupted columnar transposition
     second_key_order = assign_digits(zero2ten(second_trans_key))
@@ -381,8 +377,6 @@ def secom_d(c, key, width_mode=DEFAULT_WIDTH_MODE, trace=None):
         second_trans_key,
         width_mode,
     )
-    _trace_step(trace, "Ciphertext in five-digit groups", group_digits(c))
-
     # Second disrupted columnar transposition
     second_key_order = assign_digits(zero2ten(second_trans_key))
     disrupted_block = columnar_d(c, second_key_order)
@@ -396,7 +390,7 @@ def secom_d(c, key, width_mode=DEFAULT_WIDTH_MODE, trace=None):
     _trace_step(
         trace,
         "Digits read row by row outside the triangular areas, then inside them",
-        group_digits("".join(numbers_trans1)))
+        "".join(numbers_trans1))
 
     # First columnar transposition
     first_key_order = assign_digits(zero2ten(first_trans_key))
@@ -407,8 +401,7 @@ def secom_d(c, key, width_mode=DEFAULT_WIDTH_MODE, trace=None):
         "First transposition block reconstructed column by column",
         _format_transposition_block(plain_numbers, first_trans_key),
     )
-    _trace_step(
-        trace, "Digits read row by row", group_digits("".join(plain_numbers)))
+    _trace_step(trace, "Digits read row by row", "".join(plain_numbers))
 
     # Checkerboard
     p = ""

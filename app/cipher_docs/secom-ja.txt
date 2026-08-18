@@ -1,0 +1,93 @@
+title: SECOM Cipher
+lang: Ja
+
+[about]
+SECOMは、紙とペンだけで暗号化・復号を行うことのできる Hand cipher の一つの到達点ともいえる暗号です。
+
+20世紀の暗号技術はEnigmaに代表される機械式暗号、そして現代的な計算機暗号へと発展していきました。しかしそれとは別に、計算機を使わず、人間が紙の上で計算するという条件で、暗号をどこまで強固にできるかという方向の発展もありました。SECOMは、そうしたHand cipherの可能性を追求した暗号の一つです。
+
+紙とペンだけで扱う暗号では、強度を高めるために処理を複雑にすれば、それだけ暗号化や復号を行う負担も増えていきます。重要なのは、単純に複雑な方式を作ることではなく、人が現実的な手数で処理できる範囲に収めながら、暗号解析に必要な労力をできる限り大きくすることです。
+
+SECOMは、このバランスを非常に高い水準まで押し進めて、単純な総当たりや、文字頻度などを利用した統計的解析を困難にする構造を備えています。
+
+SECOMは、実際に軍や諜報機関で使用された歴史的暗号ではなく、Dirk Rijmenantsによって上記のような目的で考案されたHand cipherです。その基本的な構造は、冷戦期にソ連の諜報活動で実際に使用されたVIC Cipherと共通しており、Straddling Checkerboardによって平文を数字列へ変換し、その数字列に二段階のColumnar Transpositionを施します。
+
+VIC Cipherでは、鍵を生成するためにKey Phraseだけでなく、DateやPersonal Numberなど複数の情報を使用します。これは諜報活動における運用を前提とした仕組みですが、一般的な暗号方式として使うには、あらかじめ共有・管理しなければならない情報が多くなります。
+
+SECOMでは、この部分を大きく整理し、必要な鍵をすべて単一のKey Phraseから導出します。Straddling Checkerboardの配置、二つのColumnar Transpositionの幅と鍵も、最終的にはすべて同じKey Phraseから生成されます。VIC Cipherの複雑な変換構造を受け継ぎながら、秘密情報として管理するものを一つのKey Phraseだけにしたことが、SECOMの大きな特徴です。
+
+なお、SECOMという名前の由来は、Dirk Rijmenantsの説明には特に書かれていないようです。個人的には Secure Communication あたりの略ではないかと思っています。
+
+
+
+SECOMの鍵生成と暗号化は、概略として次のように進みます。
+
+1. Key Phraseの最初の20文字を取り出す 
+Key Phraseからスペースを除き、最初の20文字を使用します。これを前半10文字と後半10文字に分割します。
+
+2. 二つの10桁の数列を作る 
+それぞれの10文字について、文字をアルファベット順に順位付けします。同じ文字がある場合は左側から順番を付け、1から9、最後を0として表します。これによって、Key Phraseの前半と後半からそれぞれ10桁の数列が得られます。
+
+3. 二つの数列から新しい数列を生成する 
+二つの10桁の数列を桁ごとに加算して新たな10桁の数列を作ります。この10桁を出発点として、Chain Additionと呼ばれる計算を繰り返し、さらに50桁の数列を生成します。
+
+4. Straddling Checkerboardを作る 
+生成した数列の最後の10桁からCheckerboardの鍵を作り、これを使って文字・数字・空白を数字列へ変換します。頻出する文字には1桁、それ以外の文字には2桁の符号が割り当てられます。
+
+5. 二つのColumnar Transpositionの鍵を作る 
+生成済みの数列から二つの転置で使用する列数を決定します。さらに、Key Phraseの後半から得た数列、Checkerboardの鍵、50桁の数列から、それぞれの転置に使用する鍵を生成します。
+
+6. 二段階のTransposition 
+Checkerboardで得られた数字列に、まず通常のColumnar Transposition、続いてDisrupted Columnar Transpositionを行います。
+
+最終的な数字列を5桁単位に区切ったものがSECOMの暗号文となります。
+
+詳細については、Dirk Rijmenantsによるオリジナルの解説を参照してください。
+
+Dirk Rijmenants — The SECOM Cipher
+
+https://www.ciphermachinesandcryptology.com/en/secom.htm
+
+また、Oleksii SylichenkoによるSECOMの実装と解説も参考になるでしょう。
+
+Oleksii Sylichenko — SECOM cipher GUI
+
+https://github.com/asilichenko/secom-cipher-gui
+
+[how_to_use_tool]
+Encodeの平文には英字A–Z、数字0–9、およびスペースを使用できます。Key Phraseに使用できるのは英字A–Zです。それ以外の文字は変換前に取り除かれます。英字はすべて大文字として処理されます。
+
+Key Phraseは20文字以上必要です。
+
+Decodeの数字暗号文は5桁ずつ空白で区切っていても区切っていなくても受け付けます。ただし、暗号文の桁数は5の倍数である必要があります。
+
+Detailed stepsをONにすると暗号・復号プロセスの各段階を確認できます。
+
+[test_cases]
+
+::pre
+
+Plaintext:
+RENDEZVOUS AT THE OLD BRIDGE AT DAWN
+
+Key phrase:
+PAPER AND PENCIL ARE ALL YOU NEED
+
+Ciphertext:
+76759 73353 10938 89707 37117 16899 33296 02797 63075 77707 79377 27049
+::endpre
+
+[challenge]
+::pre
+Key phrase: ___ IS THE MONTH I TRUST LEAST.
+
+13263 12961 84391 43260 71266 83333 80366 49390 61381 12043 
+96690 23336 03049 10413 17143 63161 61303 33106 87644 61444 
+12263 96203 76873 71244 48116 61610 61311 22443 16892 13103 
+31312 13013 41061 26604
+::endpre
+
+[related_links]
+- Cipher Tool: SECOM | ../secom
+- Dirk Rijmenants: The SECOM Cipher | https://www.ciphermachinesandcryptology.com/en/secom.htm
+- Oleksii Sylichenko: SECOM Cipher GUI implementation | https://github.com/asilichenko/secom-cipher-gui

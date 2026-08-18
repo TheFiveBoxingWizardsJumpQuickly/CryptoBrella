@@ -3,6 +3,11 @@ import hashlib
 import re
 import html
 from math import ceil
+from app.cipher.secom import (
+    group_digits,
+    normalize_ciphertext as normalize_secom_ciphertext,
+    normalize_plaintext as normalize_secom_plaintext,
+)
 from app.cipher.fn import (
     affine_d,
     affine_e,
@@ -1260,15 +1265,25 @@ def secom_gen(request):
         trace = [] if detail_mode == 'ON' else None
 
         if mode == 'Encode':
-            encoded = secom_e(input_text, key, trace=trace)
-            results[0] = 'SECOM Encode:'
-            results[1] = ' '.join(
+            normalized_input = normalize_secom_plaintext(input_text).replace(
+                '*', ' '
+            )
+            encoded = secom_e(normalized_input, key, trace=trace)
+            results[0] = 'Input text:'
+            results[1] = normalized_input
+            results[2] = '\nSECOM Encode:'
+            results[3] = ' '.join(
                 encoded[i:i + 5] for i in range(0, len(encoded), 5)
             )
         elif mode == 'Decode':
-            decoded = secom_d(input_text, key, trace=trace).replace('*', ' ')
-            results[0] = 'SECOM Decode:'
-            results[1] = decoded
+            normalized_input = normalize_secom_ciphertext(input_text)
+            decoded = secom_d(normalized_input, key, trace=trace).replace(
+                '*', ' '
+            )
+            results[0] = 'Input text:'
+            results[1] = group_digits(normalized_input)
+            results[2] = '\nSECOM Decode:'
+            results[3] = decoded
         else:
             raise ValueError("SECOM mode must be Encode or Decode.")
 
@@ -1277,7 +1292,7 @@ def secom_gen(request):
                 label if value is None else f'{label}:\n{value}'
                 for label, value in trace
             ]
-            results[2] = '\nDetailed steps:\n\n' + '\n\n'.join(
+            results[len(results)] = '\nDetailed steps:\n\n' + '\n\n'.join(
                 formatted_steps)
             if mode == 'Decode':
                 results[len(results)] = (

@@ -1841,8 +1841,10 @@
         "mode": "Encode"
       },
       "expected": {
-        "0": "SECOM Encode:",
-        "1": "75973 09876 73066 39790"
+        "0": "Input text:",
+        "1": "ATTACK AT DAWN",
+        "2": "\nSECOM Encode:",
+        "3": "75973 09876 73066 39790"
       }
     },
     {
@@ -1854,8 +1856,10 @@
         "mode": "Decode"
       },
       "expected": {
-        "0": "SECOM Decode:",
-        "1": "ATTACK AT DAWN"
+        "0": "Input text:",
+        "1": "75973 09876 73066 39790",
+        "2": "\nSECOM Decode:",
+        "3": "ATTACK AT DAWN"
       }
     }
   ],

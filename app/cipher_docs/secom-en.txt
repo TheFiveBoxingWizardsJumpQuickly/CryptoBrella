@@ -1,0 +1,93 @@
+title: SECOM Cipher
+lang: En
+
+[about]
+SECOM can be considered one of the high points of hand cipher design: a cipher that can be encrypted and decrypted using only pencil and paper.
+
+During the twentieth century, cryptography developed toward mechanical ciphers represented by Enigma and then toward modern computer cryptography. Alongside that development, however, there was another path: exploring how strong a cipher could be made under the constraint that a person, without a computer, had to perform its calculations on paper. SECOM is one attempt to push the possibilities of the hand cipher in this direction.
+
+With a cipher operated using only pencil and paper, making the process more complex to increase its strength also increases the burden of encryption and decryption. 
+The important goal is not simply to create a complex system, but to keep the amount of work within what a person can realistically perform by hand while making the effort required for cryptanalysis as great as possible.
+
+SECOM pushes this balance to a very high level. Its structure makes straightforward brute-force attacks and statistical analysis based on properties such as letter frequency difficult.
+
+SECOM is not a historical cipher that was actually used by a military or intelligence agency. It is a hand cipher devised by Dirk Rijmenants for the purpose described above. Its basic structure has much in common with the VIC Cipher, which was actually used in Soviet intelligence operations during the Cold War: a Straddling Checkerboard converts plaintext into a sequence of digits, and that sequence then undergoes two stages of Columnar Transposition.
+
+To generate its keys, the VIC Cipher uses not only a Key Phrase but also several other pieces of information, including a Date and a Personal Number. This makes sense in the context of intelligence operations, but for more general use it means that several pieces of information have to be shared and managed in advance.
+
+SECOM greatly simplifies this part of the system by deriving every required key from a single Key Phrase. The arrangement of the Straddling Checkerboard, as well as the widths and keys of the two Columnar Transpositions, are all ultimately generated from the same Key Phrase. One of SECOM's key features is that it retains the VIC Cipher's complex transformation structure while reducing the secret information that must be managed to a single Key Phrase.
+
+Dirk Rijmenants does not appear to explain the origin of the name SECOM. My guess is that it might stand for something like "Secure Communication."
+
+
+SECOM key generation and encryption proceed roughly as follows.
+
+1. Take the first 20 letters of the Key Phrase
+Remove spaces from the Key Phrase, take the first 20 letters, and divide them into two groups of 10.
+
+2. Create two 10-digit sequences
+Rank the 10 letters in each half in alphabetical order. When a letter occurs more than once, assign its ranks from left to right. The ranks are represented by 1 through 9, with the final rank represented by 0. This produces one 10-digit sequence from each half of the Key Phrase.
+
+3. Generate a new sequence from the two sequences
+Add the two 10-digit sequences one digit at a time to produce a new 10-digit sequence. Starting with these 10 digits, repeatedly perform a calculation called Chain Addition to generate an additional sequence of 50 digits.
+
+4. Create the Straddling Checkerboard
+Use the final 10 digits of the generated sequence to make the Checkerboard key, then use the Checkerboard to convert letters, digits, and spaces into a sequence of digits. Frequently occurring letters receive one-digit codes, while the remaining characters receive two-digit codes.
+
+5. Create the keys for the two Columnar Transpositions
+Determine the number of columns used by the two transpositions from the generated sequences. Then generate the keys for each transposition from the sequence derived from the second half of the Key Phrase, the Checkerboard key, and the 50-digit sequence.
+
+6. Perform two stages of Transposition
+Apply a normal Columnar Transposition to the digit sequence produced by the Checkerboard, followed by a Disrupted Columnar Transposition.
+
+The resulting digit sequence, divided into five-digit groups, is the SECOM ciphertext.
+
+For full details, refer to the original description by Dirk Rijmenants.
+
+Dirk Rijmenants — The SECOM Cipher
+
+https://www.ciphermachinesandcryptology.com/en/secom.htm
+
+The SECOM implementation and explanation by Oleksii Sylichenko are also useful references.
+
+Oleksii Sylichenko — SECOM cipher GUI
+
+https://github.com/asilichenko/secom-cipher-gui
+
+[how_to_use_tool]
+The Encode plaintext may contain letters A–Z, digits 0–9, and spaces. The Key Phrase may contain only letters A–Z. Other characters are removed before conversion. All letters are processed as uppercase.
+
+The Key Phrase must contain at least 20 letters after spaces are removed.
+
+Decode accepts numeric ciphertext either with or without spaces between five-digit groups. The ciphertext must contain a multiple of five digits.
+
+Turn Detailed steps ON to inspect each stage of the encryption or decryption process.
+
+[test_cases]
+
+::pre
+
+Plaintext:
+RENDEZVOUS AT THE OLD BRIDGE AT DAWN
+
+Key phrase:
+PAPER AND PENCIL ARE ALL YOU NEED
+
+Ciphertext:
+76759 73353 10938 89707 37117 16899 33296 02797 63075 77707 79377 27049
+::endpre
+
+[challenge]
+::pre
+Key phrase: ___ IS THE MONTH I TRUST LEAST.
+
+13263 12961 84391 43260 71266 83333 80366 49390 61381 12043
+96690 23336 03049 10413 17143 63161 61303 33106 87644 61444
+12263 96203 76873 71244 48116 61610 61311 22443 16892 13103
+31312 13013 41061 26604
+::endpre
+
+[related_links]
+- Cipher Tool: SECOM | ../secom
+- Dirk Rijmenants: The SECOM Cipher | https://www.ciphermachinesandcryptology.com/en/secom.htm
+- Oleksii Sylichenko: SECOM Cipher GUI implementation | https://github.com/asilichenko/secom-cipher-gui

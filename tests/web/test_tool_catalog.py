@@ -63,7 +63,7 @@ def test_niantic_wiki_is_listed_under_remember_ingress():
     assert "niantic_wiki" in tool_ids
 
 
-def test_secom_is_not_listed_on_home_page():
+def test_secom_is_listed_on_home_page_with_dedicated_icon():
     sections = get_home_catalog()
 
     cryptography_section = next(
@@ -75,7 +75,11 @@ def test_secom_is_not_listed_on_home_page():
         for tool in category["tools"]
     ]
 
-    assert "secom" not in tool_ids
+    assert "secom" in tool_ids
+
+    secom = next(tool for tool in TOOL_CATALOG if tool["id"] == "secom")
+    assert secom["icon"] == "icon_secom.png"
+    assert secom.get("show_on_home", True) is True
 
 
 def test_pigpen_is_listed_under_encoding_with_search_metadata():
