@@ -1,14 +1,14 @@
 # Crypto Function Inventory
 
-Last updated: 2026-08-11
+Last updated: 2026-08-22
 
 ## 1. Management Term
 - This project manages cipher transforms, analysis utilities, and encoding helpers under one term: **Crypto Functions**.
 - Utility pages previously treated as "Other Tools" are included in the same management scope.
 
 ## 2. Top-Page Counts
-- Managed pages: 41
-- `gear/<function>` based pages: 37
+- Managed pages: 42
+- `gear/<function>` based pages: 38
 - Non-`gear` API page: 1 (`/resize` -> `POST /g/resize/`)
 - Client-only pages: 2 (`/memo`, `/pigpen`)
 - Top-page organization is metadata-driven from `app/tool_catalog.py`.
@@ -33,6 +33,7 @@ Last updated: 2026-08-11
 | Transposition ciphers | `rectangle` | `rectangle_gen` | `input_text`, `mode` | `rect(text, col)` |
 | Transposition ciphers | `railfence` | `railfence_gen` | `input_text`, `mode`, `offset` | `railfence_d(text, rails, offset=0)`, `railfence_e(text, rails, offset=0)` |
 | Transposition ciphers | `columnar` | `columnar_gen` | `input_text`, `key` | `assign_digits(x)`, `columnar_d(c, col)`, `columnar_e(c, col)` |
+| Transposition ciphers | `double_columnar` | `double_columnar_gen` | `input_text`, `key1`, `key2`, `type1`, `type2`, `mode` | `parse_columnar_key(key)`, `double_columnar_encode(text, key1, key2, type1, type2)`, `double_columnar_decode(text, key1, key2, type1, type2)` |
 | Transposition ciphers | `skip` | `skip_gen` | `input_text`, `mode` | `skip_d(text, step)`, `skip_e(text, step)` |
 | Transposition ciphers | `swap_xy` | `swap_xy_gen` | `input_text` | `swap_xy_axes(text)` |
 | Encodings | `base64` | `base64_gen` | `input_text`, `mode` | `uu_decode(text)`, `uu_encode(byte)` + Python `base64` stdlib |
@@ -64,3 +65,4 @@ Last updated: 2026-08-11
 - `challenge`, `passcode`, `about`, `link`, and `niantic_wiki` are top-page entries but excluded from this inventory because they are not crypto transform APIs.
 - The top page also provides in-page search over tool `name`, `aliases`, and `tags`.
 - `pigpen` is a client-only Encoding entry with selectable symbol mappings and image export.
+- `double_columnar` is listed under Cryptography with its dedicated icon.

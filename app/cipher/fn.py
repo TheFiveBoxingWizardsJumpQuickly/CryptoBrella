@@ -45,6 +45,11 @@ from .common import (
     unique_list,
 )
 from .enigma import enigma, plugboard_gen
+from .double_columnar import (
+    double_columnar_decode,
+    double_columnar_encode,
+    parse_columnar_key,
+)
 from .purple import purple_decode, purple_encode
 from .kakushi import kakushi_encode, kakushi_decode
 from .math_functions import factorize, xgcd
@@ -130,6 +135,8 @@ __all__ = [
     "codepoint_to_char",
     "columnar_d",
     "columnar_e",
+    "double_columnar_decode",
+    "double_columnar_encode",
     "enigma",
     "extract_integer_only",
     "factorize",
@@ -150,6 +157,7 @@ __all__ = [
     "morse_wabun_e",
     "ngram_distance",
     "password_generate",
+    "parse_columnar_key",
     "phonetic_alphabet_d",
     "phonetic_alphabet_e",
     "playfair_d",

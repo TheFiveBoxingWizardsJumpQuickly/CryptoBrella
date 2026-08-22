@@ -26,6 +26,7 @@ CATEGORY_TOOL_ORDER = {
         "rectangle",
         "railfence",
         "columnar",
+        "double_columnar",
         "skip",
     ],
     "encoding": [
@@ -215,6 +216,15 @@ TOOL_CATALOG = [
         "aliases": ["columnar transposition"],
         "tags": ["transposition", "cipher", "classical"],
         "icon": "icon_columnar.png",
+    },
+    {
+        "id": "double_columnar",
+        "path": "/double_columnar",
+        "name": "Double Columnar",
+        "description": "Apply two columnar transpositions.",
+        "aliases": ["double transposition", ],
+        "tags": ["transposition", "cipher", "classical", "disrupted"],
+        "icon": "icon_double_columnar.png",
     },
     {
         "id": "skip",

@@ -1,5 +1,6 @@
 import app.cipher.adfgvx as adfgvx_module
 import app.cipher.braille as braille_module
+import app.cipher.double_columnar as double_columnar_module
 import app.cipher.fn as fn
 import app.cipher.math_functions as math_functions_module
 import app.cipher.morse as morse_module
@@ -12,6 +13,15 @@ import app.cipher.vanity as vanity_module
 
 
 def test_remaining_module_exports_match_fn_facade():
+    assert (
+        fn.double_columnar_encode
+        is double_columnar_module.double_columnar_encode
+    )
+    assert (
+        fn.double_columnar_decode
+        is double_columnar_module.double_columnar_decode
+    )
+    assert fn.parse_columnar_key is double_columnar_module.parse_columnar_key
     assert fn.adfgx_e is adfgvx_module.adfgx_e
     assert fn.adfgx_d is adfgvx_module.adfgx_d
     assert fn.adfgvx_e is adfgvx_module.adfgvx_e

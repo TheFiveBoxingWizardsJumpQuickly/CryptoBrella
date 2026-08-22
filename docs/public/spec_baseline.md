@@ -1,6 +1,6 @@
 # CryptoBrella Baseline Specification
 
-Last updated: 2026-08-01
+Last updated: 2026-08-22
 
 ## 1. Purpose and Scope
 - This document captures current implementation behavior as the baseline specification.
@@ -14,7 +14,7 @@ Last updated: 2026-08-01
 - Missing required keys currently raise uncaught exceptions (for example `KeyError`) and return HTTP 500.
 - Dispatcher: `app/app.py:cipher_gear` resolves handlers through the explicit
   `app.gear.GEAR_HANDLERS` registry via `get_gear_handler(function)`.
-- Only the 43 registered request handlers are dispatchable; other functions in
+- Only the 44 registered request handlers are dispatchable; other functions in
   `app.gear` are not exposed through `/gear/<function>`.
 - Unknown or unregistered handler names currently raise `KeyError` and return HTTP 500.
 - Response type:
@@ -64,12 +64,30 @@ Last updated: 2026-08-01
   - `b` iterates `0..25`
   - Returns all 312 combinations.
 
-### 3.5 Transposition (`railfence_gen`, `columnar_gen`, `skip_gen`, `swap_xy_gen`)
+### 3.5 Transposition (`railfence_gen`, `columnar_gen`, `double_columnar_gen`, `skip_gen`, `swap_xy_gen`)
 - `railfence_gen`:
   - `offset == ""` treated as `0`.
   - rail count iterates `2..min(len(input_text), 100)-1`.
 - `columnar_gen`:
   - decode/encode computed from `assign_digits(key)`.
+- `double_columnar_gen`:
+  - inputs are `input_text`, `key1`, `key2`, `type1`, `type2`, and `mode`
+  - each type is independently `standard` or `disrupted`
+  - keys accept ASCII letters and digits; spaces and commas are removed, and
+    at least two symbols must remain
+  - key symbols are uppercased and ranked as `0-9` before `A-Z`; duplicate
+    symbols receive increasing ranks from left to right
+  - Encode applies the first selected transposition and then the second;
+    Decode reverses the second and then the first
+  - input characters are preserved and no padding is added
+  - successful results include the final output, intermediate output, selected
+    types, normalized keys, resolved key orders, and transformation grids
+  - Disrupted grids additionally show whether each cell is filled outside or
+    inside the triangular areas; whitespace and empty cells use fixed-width
+    ASCII markers documented once at the end of Results
+  - invalid keys, types, or modes return `Input error:` and an explanatory
+    message in the normal result dictionary
+  - the tool is listed on the top page with its dedicated icon
 - `skip_gen`:
   - step iterates `2..min(len(input_text), 100)-1`.
 - `swap_xy_gen`:

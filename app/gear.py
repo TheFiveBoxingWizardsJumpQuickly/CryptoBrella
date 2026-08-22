@@ -26,6 +26,8 @@ from app.cipher.fn import (
     codepoint_to_char,
     columnar_d,
     columnar_e,
+    double_columnar_decode,
+    double_columnar_encode,
     enigma,
     extract_integer_only,
     factorize,
@@ -684,6 +686,68 @@ def columnar_gen(request):
         ''.join(columnar_e(input_text, assign_digits(key)))
 
     return results
+
+
+def double_columnar_gen(request):
+    payload = request.json
+    input_text = payload['input_text']
+    key1 = payload['key1']
+    key2 = payload['key2']
+    type1 = payload.get('type1', 'standard')
+    type2 = payload.get('type2', 'standard')
+    mode = payload.get('mode', 'Encode')
+
+    try:
+        if mode == 'Encode':
+            trace = double_columnar_encode(
+                input_text, key1, key2, type1, type2)
+        elif mode == 'Decode':
+            trace = double_columnar_decode(
+                input_text, key1, key2, type1, type2)
+        else:
+            raise ValueError("Mode must be Encode or Decode.")
+    except ValueError as error:
+        return {0: 'Input error:', 1: str(error)}
+
+    type_labels = {
+        'standard': 'Standard',
+        'disrupted': 'Disrupted',
+    }
+    notes = (
+        'Duplicate symbols are ranked from left to right.\n'
+        'SP = space, NL = newline, CR = carriage return, '
+        'TB = tab, -- = empty cell'
+    )
+    if mode == 'Encode':
+        return {
+            0: 'Double Columnar Encode:',
+            1: trace.output,
+            2: '\nFirst Transposition:',
+            3: 'Type: ' + type_labels[type1],
+            4: trace.first_table,
+            5: '\nOutput after First Transposition:',
+            6: trace.intermediate,
+            7: '\nSecond Transposition:',
+            8: 'Type: ' + type_labels[type2],
+            9: trace.second_table,
+            10: '\nNotes:',
+            11: notes,
+        }
+
+    return {
+        0: 'Double Columnar Decode:',
+        1: trace.output,
+        2: '\nReverse Second Transposition:',
+        3: 'Type: ' + type_labels[type2],
+        4: trace.second_table,
+        5: '\nOutput after reversing Second Transposition:',
+        6: trace.intermediate,
+        7: '\nReverse First Transposition:',
+        8: 'Type: ' + type_labels[type1],
+        9: trace.first_table,
+        10: '\nNotes:',
+        11: notes,
+    }
 
 
 def hash_gen(request):
@@ -1425,6 +1489,7 @@ GEAR_HANDLERS = {
     'charcode_gen': charcode_gen,
     'charreplace_gen': charreplace_gen,
     'columnar_gen': columnar_gen,
+    'double_columnar_gen': double_columnar_gen,
     'enigma_gen': enigma_gen,
     'frequency_gen': frequency_gen,
     'hash_gen': hash_gen,

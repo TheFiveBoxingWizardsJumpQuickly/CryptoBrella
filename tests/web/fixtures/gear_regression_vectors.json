@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "case_count": 80,
+  "case_count": 81,
   "cases": [
     {
       "id": "rot_gen_001",
@@ -1860,6 +1860,32 @@
         "1": "75973 09876 73066 39790",
         "2": "\nSECOM Decode:",
         "3": "ATTACK AT DAWN"
+      }
+    },
+    {
+      "id": "double_columnar_gen_081",
+      "function": "double_columnar_gen",
+      "json": {
+        "input_text": "WEAREDISCOVEREDFLEEATONCE",
+        "key1": "ZEBRA",
+        "key2": "3 1 4 2",
+        "type1": "standard",
+        "type2": "disrupted",
+        "mode": "Encode"
+      },
+      "expected": {
+        "0": "Double Columnar Encode:",
+        "1": "EDERIOCDVNFCEOASELTEWAEER",
+        "2": "\nFirst Transposition:",
+        "3": "Type: Standard",
+        "4": "Key:\nZ  E  B  R  A\nKey order:\n5  3  2  4  1\nData grid:\nW  E  A  R  E\nD  I  S  C  O\nV  E  R  E  D\nF  L  E  E  A\nT  O  N  C  E",
+        "5": "\nOutput after First Transposition:",
+        "6": "EODAEASRENEIELORCEECWDVFT",
+        "7": "\nSecond Transposition:",
+        "8": "Type: Disrupted",
+        "9": "Key:\n3  1  4  2\nKey order:\n3  1  4  2\nData grid:\nE  E  E  C\nO  D  W  D\nA  E  A  V\nS  R  E  N\nE  I  E  F\nL  O  R  C\nT  -- -- --\nDisrupted fill order (1 = outside triangular areas, 2 = triangular areas):\n1  2  2  2\n1  1  2  2\n1  1  1  2\n1  1  1  1\n1  1  1  2\n1  1  1  1\n2  -- -- --",
+        "10": "\nNotes:",
+        "11": "Duplicate symbols are ranked from left to right.\nSP = space, NL = newline, CR = carriage return, TB = tab, -- = empty cell"
       }
     }
   ],

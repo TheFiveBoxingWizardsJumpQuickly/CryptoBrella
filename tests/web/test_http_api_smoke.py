@@ -18,6 +18,8 @@ def test_get_basic_pages(client):
     assert "Expanded the Enigma tool with Enigma I, Kriegsmarine M3/M4" in about_body
     assert "V1.4.0" in about_body
     assert "Added the Pigpen encoder, visual decoder" in about_body
+    assert "V1.6.0" in about_body
+    assert "Added Double Columnar." in about_body
     link_resp = client.get("/link")
     assert link_resp.status_code == 200
     link_body = link_resp.get_data(as_text=True)
@@ -191,6 +193,106 @@ def test_post_gear_rot_success(client):
     body = resp.get_json()
     assert "0" in body
     assert "00: Abc-123" in body["0"]
+
+
+def test_double_columnar_page_home_link_icon_and_api(client):
+    page_resp = client.get("/double_columnar")
+    assert page_resp.status_code == 200
+    page_body = page_resp.get_data(as_text=True)
+    assert "<title>Double Columnar</title>" in page_body
+    assert "Double Columnar Prototype" not in page_body
+    assert "Two independently selectable columnar transpositions" not in page_body
+    assert "Combine two independently selectable" not in page_body
+    assert "text is preserved as entered" not in page_body
+    assert page_body.index('id="TYPE1"') < page_body.index('id="KEY1"')
+    assert page_body.index('id="TYPE2"') < page_body.index('id="KEY2"')
+    assert "First Transposition" in page_body
+    assert "Second Transposition" in page_body
+    assert "Stage 1" not in page_body
+    assert "Stage 2" not in page_body
+    assert page_body.count('class="field label border small fill"') == 2
+    assert page_body.count("double-columnar-key") == 2
+    assert page_body.count("Key (alphabetic or numeric)") == 4
+    assert "Letters or 3 1 4 2" not in page_body
+    assert "ZEBRA" not in page_body
+    assert "CARGO" not in page_body
+    assert page_body.count("arrow_drop_down") == 2
+    assert ">Disrupted</option>" in page_body
+    assert "SECOM pattern" not in page_body
+    assert "gear/double_columnar_gen" in page_body
+
+    home_body = client.get("/").get_data(as_text=True)
+    assert '"path": "/double_columnar"' in home_body
+    assert '"icon_double_columnar.png"' in home_body
+
+    icon_resp = client.get("/static/image/icon_double_columnar.png")
+    assert icon_resp.status_code == 200
+    assert icon_resp.mimetype == "image/png"
+
+    css_resp = client.get("/static/css/style_v2.css")
+    assert css_resp.status_code == 200
+    css_body = css_resp.get_data(as_text=True)
+    assert ".double-columnar-key input:focus::placeholder" in css_body
+    assert "color: transparent" in css_body
+
+    encode_resp = client.post(
+        "/gear/double_columnar_gen",
+        json={
+            "input_text": (
+                "YOURMOTHERWASAHAMSTERANDYOURFATHERSMELTOFELDERBERRIES"
+            ),
+            "key1": "DESCRIBE",
+            "key2": "2 7 1 8 9 5 4 6 3",
+            "type1": "standard",
+            "type2": "standard",
+            "mode": "Encode",
+        },
+    )
+    assert encode_resp.status_code == 200
+    body = encode_resp.get_json()
+    assert body["1"] == (
+        "NDODRWTRFHASEERAERMROFLBEOERSAYEAEIHMRALUTERHMTTYSOSU"
+    )
+    assert body["2"] == "\nFirst Transposition:"
+    assert body["3"] == "Type: Standard"
+    assert "Key:\nD  E  S  C  R  I  B  E" in body["4"]
+    assert "Key order:\n3  4  8  2  7  6  1  5" in body["4"]
+    assert "Data grid:\nY  O  U  R  M  O  T  H" in body["4"]
+    assert body["5"] == "\nOutput after First Transposition:"
+    assert body["6"] == (
+        "THNTTBRAERMDEYEMYEFRORSORERHADHOEOAAALRMSRFEESUWTUSLI"
+    )
+    assert body["7"] == "\nSecond Transposition:"
+    assert body["8"] == "Type: Standard"
+    assert "Key order:\n2  7  1  8  9  5  4  6  3" in body["9"]
+    assert body["10"] == "\nNotes:"
+    assert body["11"].count(
+        "Duplicate symbols are ranked from left to right."
+    ) == 1
+    assert body["11"].count("SP = space") == 1
+    assert "Input table before reading columns:" not in body.values()
+    assert "Intermediate table before reading columns:" not in body.values()
+    assert all("Stage" not in value for value in body.values())
+
+
+def test_double_columnar_reports_invalid_numeric_key(client):
+    resp = client.post(
+        "/gear/double_columnar_gen",
+        json={
+            "input_text": "TEST",
+            "key1": "1-1-2",
+            "key2": "KEY",
+            "type1": "standard",
+            "type2": "disrupted",
+            "mode": "Encode",
+        },
+    )
+
+    assert resp.status_code == 200
+    assert resp.get_json() == {
+        "0": "Input error:",
+        "1": "Key may contain letters, digits, spaces, and commas only.",
+    }
 
 
 def test_post_gear_secom_matches_published_vector(client):

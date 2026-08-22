@@ -1,6 +1,6 @@
 # Test Design Matrix
 
-Last updated: 2026-07-31
+Last updated: 2026-08-22
 
 ## 1. Goals
 - Layer 1: regression detection for Crypto Functions logic (known vectors, boundaries, exception behavior).
@@ -32,11 +32,16 @@ Last updated: 2026-07-31
   - disrupted partial-row behavior through the additional reference vector
   - encryption/decryption intermediate traces, padding behavior, round trip,
     and invalid inputs
+- `tests/cipher/test_double_columnar.py`
+  - independent published Standard/Standard vector and reverse verification
+  - round trips for all four Standard/Disrupted type combinations
+  - alphabetic, numeric, mixed, and duplicate-symbol key ranking
+  - transformation-grid markers, disrupted fill order, and invalid inputs
 
 ### Layer 2 (web regression)
 - `tests/web/test_gear_regression_vectors.py`
-  - `gear_regression_vectors.json` (80 cases)
-  - also validates fixture coverage of all 43 registered request handlers
+  - `gear_regression_vectors.json` (81 cases)
+  - also validates fixture coverage of all 44 registered request handlers
   - validates that the explicit registry covers only request handlers
 - `tests/web/test_http_api_smoke.py`
   - Flask `test_client` smoke checks for representative GET/POST, custom 404

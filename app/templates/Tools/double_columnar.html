@@ -1,0 +1,90 @@
+{% extends "base_apps_v2.html.jinja" %}
+{% block title %}Double Columnar{% endblock %}
+{% block h1 %}Double Columnar{% endblock %}
+{% block input_area %}
+        <h6 class="small">Text</h6>
+        <div class="field textarea border fill large mono">
+            <textarea class="grey2 black-text" id="TXT" v-on:input="update"></textarea>
+        </div>
+        <div class="grid">
+            <div class="s12 m6">
+                <h6 class="small">First Transposition</h6>
+                <div class="field label border small fill">
+                    <select required id="TYPE1" v-on:change="update">
+                        <option value="standard">Standard</option>
+                        <option value="disrupted">Disrupted</option>
+                    </select>
+                    <label class="active">Type</label>
+                    <i>arrow_drop_down</i>
+                </div>
+                <div class="field label border small fill mono double-columnar-key">
+                    <input type="text" class="grey2 black-text" id="KEY1"
+                           placeholder="Key (alphabetic or numeric)" v-on:input="update">
+                    <label class="active">Key (alphabetic or numeric)</label>
+                </div>
+            </div>
+            <div class="s12 m6">
+                <h6 class="small">Second Transposition</h6>
+                <div class="field label border small fill">
+                    <select required id="TYPE2" v-on:change="update">
+                        <option value="standard">Standard</option>
+                        <option value="disrupted">Disrupted</option>
+                    </select>
+                    <label class="active">Type</label>
+                    <i>arrow_drop_down</i>
+                </div>
+                <div class="field label border small fill mono double-columnar-key">
+                    <input type="text" class="grey2 black-text" id="KEY2"
+                           placeholder="Key (alphabetic or numeric)" v-on:input="update">
+                    <label class="active">Key (alphabetic or numeric)</label>
+                </div>
+            </div>
+        </div>
+        <nav class="no-space">
+            <button v-bind:class=[[btn_toggle_encode_class]] v-on:click="click_encode">
+                <span>Encode</span>
+            </button>
+            <button v-bind:class=[[btn_toggle_decode_class]] v-on:click="click_decode">
+                <span>Decode</span>
+            </button>
+        </nav>
+{% endblock %}
+{% block vue_app_data %}
+                        mode:"Encode",
+                        btn_toggle_encode_class:"border left-round cyan8 white-text",
+                        btn_toggle_decode_class:"border right-round grey-text",
+{% endblock %}
+{% block vue_app_methods %}
+                    update: function () {
+                        input_text = document.getElementById("TXT").value;
+                        key1 = document.getElementById("KEY1").value;
+                        key2 = document.getElementById("KEY2").value;
+                        type1 = document.getElementById("TYPE1").value;
+                        type2 = document.getElementById("TYPE2").value;
+                        if (input_text == "" || key1 == "" || key2 == "") {
+                            this.results = [];
+                        } else {
+                            url = new URL('gear/double_columnar_gen', {{BASEURL|tojson}});
+                            axios.post(url, {
+                                input_text: input_text,
+                                key1: key1,
+                                key2: key2,
+                                type1: type1,
+                                type2: type2,
+                                mode: this.mode
+                            }).then(response => this.results = response.data);
+                        }
+                    },
+                    click_encode: function () {
+                        this.btn_toggle_encode_class="border left-round cyan8 white-text";
+                        this.btn_toggle_decode_class="border right-round grey-text";
+                        this.mode="Encode";
+                        this.update();
+                    },
+                    click_decode: function () {
+                        this.btn_toggle_encode_class="border left-round grey-text";
+                        this.btn_toggle_decode_class="border right-round cyan8 white-text";
+                        this.mode="Decode";
+                        this.update();
+                    }
+{% endblock %}

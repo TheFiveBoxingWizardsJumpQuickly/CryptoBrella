@@ -82,6 +82,28 @@ def test_secom_is_listed_on_home_page_with_dedicated_icon():
     assert secom.get("show_on_home", True) is True
 
 
+def test_double_columnar_is_listed_after_columnar_with_dedicated_icon():
+    sections = get_home_catalog()
+
+    cryptography_section = next(
+        section for section in sections if section["id"] == "cryptography"
+    )
+    tool_ids = [
+        tool["id"]
+        for category in cryptography_section["categories"]
+        for tool in category["tools"]
+    ]
+
+    assert tool_ids.index("double_columnar") == tool_ids.index("columnar") + 1
+
+    double_columnar = next(
+        tool for tool in TOOL_CATALOG if tool["id"] == "double_columnar"
+    )
+    assert double_columnar["path"] == "/double_columnar"
+    assert double_columnar["icon"] == "icon_double_columnar.png"
+    assert double_columnar.get("show_on_home", True) is True
+
+
 def test_pigpen_is_listed_under_encoding_with_search_metadata():
     pigpen = next(tool for tool in TOOL_CATALOG if tool["id"] == "pigpen")
 

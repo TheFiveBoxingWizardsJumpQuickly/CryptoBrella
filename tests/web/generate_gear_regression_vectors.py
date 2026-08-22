@@ -202,6 +202,17 @@ def _build_cases():
                     "mode": "Decode",
                 },
             },
+            {
+                "function": "double_columnar_gen",
+                "json": {
+                    "input_text": "WEAREDISCOVEREDFLEEATONCE",
+                    "key1": "ZEBRA",
+                    "key2": "3 1 4 2",
+                    "type1": "standard",
+                    "type2": "disrupted",
+                    "mode": "Encode",
+                },
+            },
         ]
     )
     return cases
@@ -236,7 +247,10 @@ def main():
     }
     fixture_path = Path(__file__).parent / "fixtures" / "gear_regression_vectors.json"
     fixture_path.parent.mkdir(parents=True, exist_ok=True)
-    fixture_path.write_text(json.dumps(output, ensure_ascii=False, indent=2), encoding="utf-8")
+    fixture_path.write_text(
+        json.dumps(output, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
     print(f"wrote {len(out_cases)} cases to {fixture_path}")
 
 

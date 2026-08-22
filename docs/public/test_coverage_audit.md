@@ -1,6 +1,6 @@
 # Test Coverage Audit (Current State)
 
-Last updated: 2026-07-31
+Last updated: 2026-08-22
 
 ## 1. Audit Scope
 - Internal core functions called from `app/gear.py` request handlers
@@ -8,8 +8,9 @@ Last updated: 2026-07-31
 - Parameter branch reachability based on fixture values
 
 ## 2. Summary
-- Registered `app.gear` request handlers covered by web fixture: **43/43**
-- Core functions reached through handler execution: **68/68**
+- Registered `app.gear` request handlers covered by web fixture: **44/44**
+- Previously audited core functions remain covered; Double Columnar adds
+  explicit parser, encode, and decode coverage.
 - Registry structure coverage confirms that every request handler is registered
   and that non-handler module functions are not dispatchable.
 - Flask HTTP smoke coverage exists in `tests/web/test_http_api_smoke.py`
@@ -20,6 +21,8 @@ Last updated: 2026-07-31
   - missing-required-key 500 path
   - SECOM published-vector success path, result-only default responses, and
     detailed Encode/Decode response paths
+  - Double Columnar page, catalog/icon discovery, known-vector API response,
+    and invalid-input response
 
 ## 3. Remaining Gaps
 
@@ -36,6 +39,10 @@ Last updated: 2026-07-31
 - SECOM onboarding adds explicit published and Java-reference vectors,
   width-interpretation, intermediate-trace, round-trip, invalid-input,
   registry, page-rendering, and HTTP success coverage.
+- Double Columnar onboarding adds an independent published vector, all four
+  Standard/Disrupted combinations, round trips, mixed and duplicate key
+  ranking, visible grids, invalid input, registry, page, catalog, icon, and
+  HTTP coverage.
 
 ### 3.3 Input Diversity
 - Several handlers still rely on one or few representative cases (for example `enigma_gen`, `purple_gen`, `vigenere_gen`, `columnar_gen`, `playfair_gen`).
