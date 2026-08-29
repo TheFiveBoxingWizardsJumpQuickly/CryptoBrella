@@ -53,6 +53,7 @@ id_ed25519
 # Local runtime artifacts
 app/temporary/
 /var/
+/reports/
 *.log
 *.sqlite
 *.sqlite3

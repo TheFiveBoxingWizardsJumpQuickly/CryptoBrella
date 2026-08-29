@@ -1,64 +1,55 @@
 # CryptoBrella
 
-Flask-based crypto utility application with regression tests for cipher and web handler behavior.
+CryptoBrella is a browser-based collection of tools for classical ciphers,
+encodings, text analysis, and puzzle solving. It is implemented as a Flask
+application and brings small, focused utilities together behind a searchable
+catalog.
+
+## Features
+
+- Classical cipher encoding, decoding, and simulation, including ROT,
+  Vigenere, Affine, Playfair, Bifid, transposition ciphers, Enigma, PURPLE,
+  and SECOM.
+- Encoding and notation helpers for Base64, Morse code, character codes,
+  Braille, phonetic alphabets, Pigpen, and related formats.
+- Analysis and puzzle utilities such as character frequency, hashes, number
+  conversion, prime factorization, text splitting, and image resizing.
+- WordQuery: JP, a Japanese candidate search tool supporting readable
+  patterns, exact anagrams, and regular expressions over an attributed
+  lexicon.
+- Preserved puzzle- and Ingress-related reference pages maintained separately
+  from the general-purpose tool set.
+
+These tools are intended for learning, historical cipher exploration, word
+play, and puzzle solving. They are not a substitute for modern cryptographic
+software and should not be used to protect sensitive information.
+
+## Requirements
+
+- CPython 3.13
+- Flask 3.x
+- Pillow 10.x or 11.x
+- `regex`
+- `lxml`
+
+The supported dependency ranges are declared in `requirements.txt`.
+
+WordQuery requires a generated SQLite lexicon assembled from separately
+licensed source dictionaries. The generated database and original dictionary
+archives are not included in this repository.
 
 ## Documentation
 
-Start with `docs/README.md`.
+- [Crypto function inventory](docs/public/crypto_function_inventory.md)
+- [System overview](docs/public/system_overview.md)
+- [WordQuery: JP](docs/public/wordquery/README.md)
+- [WordQuery data sources and license boundaries](docs/public/wordquery/data_sources.md)
 
-- Public/shareable technical docs live in `docs/public/`.
-- Local-only operation and handover docs live in `docs/local/` and are intentionally not pushed to GitHub.
-- If you are working locally, read `docs/local/README.md` first when it exists.
+## Rights and third-party material
 
-## Development Environment
-
-The supported runtime and development target is CPython 3.13, matching the
-PythonAnywhere web app. The host system Python does not need to be changed.
-
-Create the project virtual environment with Python 3.13 and install the
-development requirements:
-
-```bash
-python3.13 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -r requirements-dev.txt
-```
-
-If `python3.13` is not provided by the host OS, an isolated Python 3.13 can be
-downloaded with `uv` without replacing the system Python:
-
-```bash
-uv venv --python 3.13 --seed
-uv pip install -r requirements-dev.txt
-```
-
-Use the project virtual environment for all local commands.
-
-```bash
-source .venv/bin/activate
-```
-
-If you do not want to activate the shell environment, call tools through `.venv/bin/...` directly.
-
-Examples:
-
-```bash
-./.venv/bin/python -m pytest -q
-./.venv/bin/python run_dev.py
-```
-
-## Continuous Integration
-
-GitHub Actions runs the full pytest suite for pull requests and pushes to the
-default `master` branch using Python 3.13.
-
-The production baseline is PythonAnywhere's `innit` system image with the web
-app configured for Python 3.13. Production currently uses the PythonAnywhere
-system environment rather than a project virtualenv; dependency changes must
-therefore remain compatible with the packages available for that image.
-
-## Notes
-
-- The system Python on this machine may not have required packages such as `Pillow`.
-- Test and app verification should be run with the interpreter from `.venv`.
+No reuse license is granted for author-owned CryptoBrella code and
+documentation unless an individual file explicitly states otherwise.
+Dictionary data, archived content, images, and copied notices remain subject to
+their respective rights and licenses. WordQuery source attribution and license
+boundaries are documented in its
+[data-source documentation](docs/public/wordquery/data_sources.md).

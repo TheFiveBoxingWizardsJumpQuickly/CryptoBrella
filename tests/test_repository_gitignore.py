@@ -36,6 +36,7 @@ def test_private_local_files_are_ignored():
         "lexicon.sqlite3",
         "lexicon.sqlite3-wal",
         "local.db",
+        "reports/formal-human-gate.json",
     )
 
     assert all(is_ignored(path) for path in private_paths)

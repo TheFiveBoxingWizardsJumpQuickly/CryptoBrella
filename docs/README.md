@@ -1,41 +1,28 @@
-# CryptoBrella Documentation Guide
+# CryptoBrella technical documentation
 
-This repository separates documentation into public/shareable documents and local-only operation notes.
+This index describes the architecture, supported tools, behavior, and test
+strategy of CryptoBrella.
 
-## Read This First
+## System and application
 
-- GitHub/public readers:
-  - Use `docs/public/`.
-- Local maintainers:
-  - Start here, then read `docs/local/README.md` if that directory exists in your local checkout.
+- [System overview](public/system_overview.md): application structure and endpoint flow.
+- [Specification baseline](public/spec_baseline.md): current implementation behavior.
+- [Archive integration](public/archive_integration.md): separation and hosting of imported archive content.
 
-## Scope
+## Crypto functions
 
-- `docs/public/`
-  - Git-tracked and GitHub-shared.
-  - Holds implementation-aligned technical documents that are safe to publish.
-- `docs/local/`
-  - Local-only operational notes.
-  - Not intended for GitHub publication.
-  - Holds handover notes, backlog, decisions, risk logs, and session-operation documents.
+- [Crypto function inventory](public/crypto_function_inventory.md): pages, APIs, inputs, and core functions.
+- [New crypto function checklist](public/new_crypto_function_checklist.md): implementation and compatibility requirements for adding a tool.
 
-## Public Documents
+## Testing
 
-- `system_overview.md`: runtime structure and endpoint flow.
-- `archive_integration.md`: how imported archive content is hosted under the Flask app.
-- `spec_baseline.md`: current implementation behavior used as the baseline spec.
-- `crypto_function_inventory.md`: page/API/function inventory.
-- `test_design_matrix.md`: test-layer goals and forward test plan.
-- `test_coverage_audit.md`: current coverage state and next hardening focus.
-- `new_crypto_function_checklist.md`: implementation, test, documentation, and
-  release gate for adding a user-facing Crypto Function.
+- [Test design matrix](public/test_design_matrix.md): test-layer responsibilities and goals.
+- [Test coverage audit](public/test_coverage_audit.md): current coverage and identified hardening areas.
 
-## Local Documents
+## WordQuery: JP
 
-Local-only guidance is defined by:
-
-- `docs/local/documentation_scope_policy.md`
-- `docs/local/development_policy.md`
-- `docs/local/README.md`
-
-Do not add links from `docs/public/` documents to `docs/local/` documents.
+- [WordQuery documentation](public/wordquery/README.md): product scope and document index.
+- [Architecture](public/wordquery/architecture.md): component and data boundaries.
+- [Pattern search](public/wordquery/pattern_search.md): readable pattern grammar.
+- [Lexicon policy](public/wordquery/lexicon_policy.md): inclusion and evidence rules.
+- [Data sources and licenses](public/wordquery/data_sources.md): sources, transformations, and third-party terms.
