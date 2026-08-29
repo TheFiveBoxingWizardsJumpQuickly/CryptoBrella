@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>データ出典 — WordQuery: JP</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='wordquery/wordquery.css') }}">
+  </head>
+  <body>
+    <main class="prose">
+      <a href="{{ url_for('wordquery.index') }}">← WordQuery: JP</a>
+      <h1>データ出典・ライセンス</h1>
+      <p>本サービスは複数の辞書データを加工・統合しています。作者保有のソフトウェアと文書には
+        再利用許諾を付与していません。各構成データには、それぞれの第三者ライセンスが適用されます。</p>
+      <h2>JMdict</h2>
+      <p>James William BreenおよびElectronic Dictionary Research and Development Group
+        (EDRDG)によるJMdictを利用しています。{% if jmdict_version %}
+        現在使用中のデータ版は{{ jmdict_version }}です。{% endif %}</p>
+      <p><a href="https://www.edrdg.org/jmdict/j_jmdict.html">プロジェクト</a> ·
+        <a href="https://www.edrdg.org/edrdg/licence.html">CC BY-SA 4.0 利用条件</a></p>
+      <p>表記・読み・品詞・タグを抽出し、かな正規化、検索用記号変換、重複統合、除外、
+        優先度変換およびSQLite化を行っています。JMdict由来データとその翻案部分には
+        CC BY-SA 4.0が適用されます。許諾された再利用・再配布へ追加制限やDRMを課しません。</p>
+      <h2>SudachiDict</h2>
+      <p>Works Applications Co., Ltd.によるSudachiDict small＋core {{ sudachi_version }}を加工して
+        利用しています。SudachiDict由来部分にはApache License 2.0と第三者通知が適用され、
+        JMdict由来部分とはライセンスが異なります。</p>
+      <p><a href="https://github.com/WorksApplications/SudachiDict">プロジェクト</a> ·
+        <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License 2.0全文</a> ·
+        <a href="{{ url_for('static', filename='wordquery/legal/SudachiDict-LEGAL.txt') }}">LEGAL・第三者通知全文</a></p>
+      <h2>検索結果のライセンス境界</h2>
+      <p>JMdict由来部分にはCC BY-SA 4.0、SudachiDict由来部分にはApache License 2.0と
+        LEGAL・第三者通知が適用されます。複数の出典に由来する検索結果には、
+        それぞれの由来元に応じた条件が適用されます。</p>
+    </main>
+  </body>
+</html>

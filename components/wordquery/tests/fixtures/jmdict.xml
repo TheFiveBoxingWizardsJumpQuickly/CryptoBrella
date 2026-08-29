@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE JMdict [
+  <!ENTITY n "noun (common) (futsuumeishi)">
+  <!ENTITY pn "proper noun">
+  <!ENTITY prt "particle">
+  <!ENTITY char "character">
+]>
+<JMdict>
+  <entry>
+    <ent_seq>1001</ent_seq>
+    <k_ele><keb>犬</keb><ke_pri>ichi1</ke_pri></k_ele>
+    <r_ele><reb>いぬ</reb><re_pri>news1</re_pri></r_ele>
+    <sense><pos>&n;</pos><field>zoology</field></sense>
+  </entry>
+  <entry>
+    <ent_seq>1002</ent_seq>
+    <k_ele><keb>大阪</keb></k_ele>
+    <r_ele><reb>おおさか</reb></r_ele>
+    <sense><pos>&pn;</pos></sense>
+  </entry>
+  <entry>
+    <ent_seq>1003</ent_seq>
+    <r_ele><reb>へ</reb></r_ele>
+    <sense><pos>&prt;</pos></sense>
+  </entry>
+  <entry>
+    <ent_seq>1004</ent_seq>
+    <k_ele><keb>仮名</keb></k_ele>
+    <r_ele><reb>かな</reb><re_nokanji/></r_ele>
+    <sense><pos>&n;</pos></sense>
+  </entry>
+  <entry>
+    <ent_seq>1005</ent_seq>
+    <r_ele><reb>サワムラー</reb></r_ele>
+    <sense><pos>&n;</pos><misc>&char;</misc></sense>
+  </entry>
+  <entry>
+    <ent_seq>1006</ent_seq>
+    <r_ele><reb>トランスアクセル</reb></r_ele>
+    <sense><pos>&n;</pos></sense>
+  </entry>
+  <entry>
+    <ent_seq>1007</ent_seq>
+    <k_ele><keb>甲</keb></k_ele>
+    <k_ele><keb>乙</keb></k_ele>
+    <r_ele><reb>こう</reb></r_ele>
+    <r_ele><reb>おつ</reb><re_restr>乙</re_restr></r_ele>
+    <sense><pos>&n;</pos><stagk>甲</stagk><stagr>こう</stagr><field>restricted</field></sense>
+    <sense><stagk>乙</stagk><field>inherited-pos</field></sense>
+  </entry>
+</JMdict>

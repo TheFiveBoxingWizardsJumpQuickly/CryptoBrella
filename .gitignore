@@ -26,8 +26,36 @@ Thumbs.db
 
 # AI agent / local operation notes
 AGENTS.md
+.agents/
 .codex/
 docs/local/
+*.local.md
+*.private.md
+*handoff*.md
+*handover*.md
+*HANDOFF*.md
+*HANDOVER*.md
+
+# Local environment and credentials
+.env
+.env.*
+!.env.example
+credentials.json
+secrets.json
+service-account*.json
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_ed25519
 
 # Local runtime artifacts
 app/temporary/
+/var/
+*.log
+*.sqlite
+*.sqlite3
+*.sqlite3-*
+*.db
+*.db-*

@@ -7,6 +7,7 @@ from app.cipher_docs import get_cipher_doc_page
 from app.link_catalog import get_link_sections
 from app.niantic_wiki import niantic_wiki
 from app.tool_catalog import get_home_catalog
+from app.wordquery.blueprint import register_wordquery
 from flask import Flask, abort, render_template, request, send_from_directory, url_for, jsonify
 
 
@@ -28,6 +29,7 @@ def create_app():
 
 app = create_app()
 app.register_blueprint(niantic_wiki)
+register_wordquery(app)
 app.config['IMAGE_UPLOAD_FOLDER'] = os.path.join(
     app.root_path, 'temporary', 'upload')
 app.config['IMAGE_RESULT_FOLDER'] = os.path.join(

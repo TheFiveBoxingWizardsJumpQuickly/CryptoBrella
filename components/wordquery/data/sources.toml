@@ -1,0 +1,18 @@
+[jmdict]
+kind = "jmdict_xml_gz"
+url = "https://www.edrdg.org/pub/Nihongo/JMdict_e.gz"
+license = "CC-BY-SA-4.0"
+
+[sudachidict_small]
+kind = "sudachi_csv_archive"
+url = "http://sudachi.s3-website-ap-northeast-1.amazonaws.com/sudachidict-raw/20260428/small_lex.zip"
+version = "20260428"
+sha256 = "0c8cc6febab6beac3bb3d7374d74e0123fc16bd93024759808358f63d74b3c09"
+license = "Apache-2.0"
+
+[sudachidict_core]
+kind = "sudachi_csv_archive"
+url = "http://sudachi.s3-website-ap-northeast-1.amazonaws.com/sudachidict-raw/20260428/core_lex.zip"
+version = "20260428"
+sha256 = "e826394f06b19a699811058f3096629193cf90c8a9b37e2edeaf1e30c76a71d1"
+license = "Apache-2.0"

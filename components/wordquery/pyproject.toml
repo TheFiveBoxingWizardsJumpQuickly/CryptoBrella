@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wordquery-jp"
+version = "0.1.0"
+description = "Japanese reading-based regex and anagram search"
+requires-python = ">=3.12"
+dependencies = ["regex>=2024.11,<2027"]
+
+[project.optional-dependencies]
+build = ["lxml>=5.3,<7"]
+dev = [
+  "pip-tools>=7.4,<8",
+  "pytest>=8.3,<10",
+  "pytest-cov>=6,<8",
+  "ruff>=0.9,<1",
+]
+
+[project.scripts]
+wordquery-jp = "wordquery_jp.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "-q --strict-markers"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]

@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>WordQuery: JP</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='wordquery/wordquery.css') }}">
+  </head>
+  <body>
+    <main>
+      <header class="site-header">
+        <h1><span>WordQuery</span><span class="product-suffix">: JP</span></h1>
+      </header>
+
+      {% if lexicon_error %}
+        <section class="notice error" role="alert">
+          <strong>現在、検索を利用できません。</strong>
+          <span>しばらく時間をおいてから、もう一度お試しください。</span>
+        </section>
+      {% else %}
+        <section class="search-card">
+          <div class="tabs" role="tablist" aria-label="用途を選ぶ">
+            <button class="tab active" id="reading-tab" type="button" role="tab"
+              aria-selected="true" aria-controls="search-panel"
+              data-mode="reading">パターン</button>
+            <button class="tab" id="anagram-tab" type="button" role="tab" tabindex="-1"
+              aria-selected="false" aria-controls="search-panel"
+              data-mode="anagram">アナグラム</button>
+            <button class="tab" id="regex-tab" type="button" role="tab" tabindex="-1"
+              aria-selected="false" aria-controls="search-panel"
+              data-mode="regex">Regex</button>
+          </div>
+
+          <div id="search-panel" role="tabpanel" aria-labelledby="reading-tab">
+            <form id="search-form">
+              <div id="query-field">
+                <label for="query" id="query-label">検索パターン</label>
+                <div class="query-row">
+                  <input id="query" name="query" type="text" autocomplete="off"
+                    autocapitalize="off" spellcheck="false" placeholder="例: ねこ">
+                  <button id="submit-button" type="submit">検索</button>
+                </div>
+                <p id="query-error" class="field-error hidden" role="alert"></p>
+              </div>
+
+              <div id="primary-options" class="primary-options">
+                <label for="match-type" id="match-type-field">一致
+                  <select id="match-type" name="match-type">
+                    <option value="contains">含む</option>
+                    <option value="prefix">前方一致</option>
+                    <option value="suffix">後方一致</option>
+                    <option value="exact">完全一致</option>
+                  </select>
+                </label>
+                <label for="reading-length" id="length-field">文字数
+                  <input id="reading-length" name="reading-length" type="number"
+                    inputmode="numeric" min="1" max="{{ max_query_length }}"
+                    placeholder="指定なし">
+                </label>
+                <label for="length-unit" id="length-unit-field">数え方
+                  <select id="length-unit" name="length-unit">
+                    <option value="kana">読みの文字数</option>
+                    <option value="mora">拍（モーラ）</option>
+                    <option value="surface">表記の文字数</option>
+                  </select>
+                </label>
+              </div>
+
+              <div id="condition-bar" class="condition-bar hidden">
+                <span id="condition-label">適用中の条件</span>
+                <div id="condition-chips" class="condition-chips"
+                  aria-labelledby="condition-label" aria-live="polite"></div>
+              </div>
+
+              <div class="search-tools">
+                <details id="condition-options" class="condition-options">
+                  <summary>その他の条件</summary>
+                  <div class="condition-options-content">
+                    <div class="refine-grid">
+                      <label for="must-include">追加で含む
+                        <input id="must-include" name="must-include" type="text"
+                          autocomplete="off" placeholder="例: こう">
+                      </label>
+                      <label for="must-exclude">含まない
+                        <input id="must-exclude" name="must-exclude" type="text"
+                          autocomplete="off" placeholder="例: しゃ">
+                      </label>
+                      <label for="major-category">分類
+                        <select id="major-category" name="major-category">
+                          <option value="">指定なし</option>
+                          <option value="proper_type:person">人名</option>
+                          <option value="proper_type:place">地名</option>
+                          <option value="proper_type:organization">組織名</option>
+                          <option value="proper_type:character">キャラクター</option>
+                          <option value="proper_type:work">作品名</option>
+                          <option value="proper_type:product">商品名</option>
+                          <option value="proper_type:other">その他の固有名</option>
+                          <option value="domain:computing">IT・コンピューター</option>
+                        </select>
+                      </label>
+                      <label for="tag-treatment">絞り方
+                        <select id="tag-treatment" name="tag-treatment">
+                          <option value="filter">選んだ分類だけ表示</option>
+                          <option value="deprioritize">選んだ分類を後に表示</option>
+                        </select>
+                      </label>
+                      <p id="refine-error" class="field-error hidden" role="alert"></p>
+                    </div>
+                  </div>
+                </details>
+
+                <details id="search-guide" class="guide">
+                  <summary>記法</summary>
+                  <div class="guide-content">
+                    <section>
+                      <h2>パターン記法</h2>
+                      <p>入力に記号を含めると、検索パターン全体の形を指定できます。</p>
+                      <dl class="syntax-list">
+                        <div><dt><code>?</code></dt><dd>任意の1文字</dd></div>
+                        <div><dt><code>*</code></dt><dd>任意の0文字以上</dd></div>
+                        <div><dt><code>[かき]</code></dt><dd>か・きのいずれか1文字</dd></div>
+                        <div><dt><code>[!かき]</code></dt><dd>か・き以外の1文字</dd></div>
+                      </dl>
+                    </section>
+                    <section>
+                      <h2>正規表現検索</h2>
+                      <p>RegexモードではPythonのregexモジュール互換のパターンを使用できます。</p>
+                      <dl class="syntax-list">
+                        <div><dt><code>.</code></dt><dd>任意の1文字</dd></div>
+                        <div><dt><code>.*</code></dt><dd>任意の0文字以上</dd></div>
+                        <div><dt><code>[あいう]</code></dt><dd>いずれか1文字</dd></div>
+                        <div><dt><code>(ねこ|いぬ)</code></dt><dd>いずれかの並び</dd></div>
+                        <div><dt><code>^…$</code></dt><dd>文字列全体に一致</dd></div>
+                      </dl>
+                    </section>
+                    <section>
+                      <h2>共通仕様</h2>
+                      <ul>
+                        <li>ひらがな・カタカナ、全角・半角は検索時に統一します。</li>
+                        <li>結果は300件ずつ、最大{{ result_limit }}件まで表示します。</li>
+                      </ul>
+                    </section>
+                  </div>
+                </details>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <section aria-live="polite" aria-busy="false" id="result-region">
+          <div id="result-header" class="result-header hidden">
+            <div id="summary" class="summary"></div>
+            <div id="result-display-options" class="result-display-options hidden">
+              <div class="result-display-controls">
+                <label>
+                  <input id="readings-only" type="checkbox">
+                  表記を隠す
+                </label>
+                <label id="highlight-control">
+                  <input id="highlight-match" type="checkbox" checked>
+                  一致強調
+                </label>
+                <label for="sort-mode">並び順
+                  <select id="sort-mode" name="sort-mode">
+                    <option value="commonness">一般的な語を優先</option>
+                    <option value="dictionary_priority">辞書で優先される語</option>
+                    <option value="kana">読み順</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+          </div>
+          <p id="condition-summary" class="condition-summary hidden"></p>
+          <button id="refine-trigger" class="refine-trigger hidden" type="button">その他の条件</button>
+          <div id="message" class="notice hidden" role="status"></div>
+          <ol id="results" class="results"></ol>
+          <button id="show-more" class="show-more hidden" type="button" aria-controls="results"></button>
+        </section>
+      {% endif %}
+
+      <footer>
+        <a href="{{ url_for('wordquery.sources') }}">使用データとライセンス</a>
+      </footer>
+    </main>
+    <footer class="site-footer">
+      辞書データはJMdict、SudachiDict等を加工・統合しています。
+      <a href="{{ url_for('wordquery.sources') }}">出典・ライセンス・変更内容</a>
+    </footer>
+
+    {% if not lexicon_error %}
+    <script>
+      const state = {
+        mode: "reading",
+        queries: {
+          reading: "",
+          regex: "",
+          anagram: "",
+        },
+      };
+      const tabs = document.querySelectorAll(".tab");
+      const form = document.querySelector("#search-form");
+      const query = document.querySelector("#query");
+      const queryError = document.querySelector("#query-error");
+      const matchType = document.querySelector("#match-type");
+      const matchTypeField = document.querySelector("#match-type-field");
+      const readingLength = document.querySelector("#reading-length");
+      const lengthUnit = document.querySelector("#length-unit");
+      const primaryOptions = document.querySelector("#primary-options");
+      const conditionBar = document.querySelector("#condition-bar");
+      const conditionChips = document.querySelector("#condition-chips");
+      const conditionOptions = document.querySelector("#condition-options");
+      const refineError = document.querySelector("#refine-error");
+      const mustInclude = document.querySelector("#must-include");
+      const mustExclude = document.querySelector("#must-exclude");
+      const majorCategory = document.querySelector("#major-category");
+      const tagTreatment = document.querySelector("#tag-treatment");
+      const sortMode = document.querySelector("#sort-mode");
+      const label = document.querySelector("#query-label");
+      const resultHeader = document.querySelector("#result-header");
+      const summary = document.querySelector("#summary");
+      const conditionSummary = document.querySelector("#condition-summary");
+      const message = document.querySelector("#message");
+      const results = document.querySelector("#results");
+      const region = document.querySelector("#result-region");
+      const panel = document.querySelector("#search-panel");
+      const submitButton = document.querySelector("#submit-button");
+      const showMoreButton = document.querySelector("#show-more");
+      const refineTrigger = document.querySelector("#refine-trigger");
+      const resultDisplayOptions = document.querySelector("#result-display-options");
+      const readingsOnly = document.querySelector("#readings-only");
+      const highlightMatch = document.querySelector("#highlight-match");
+      const highlightControl = document.querySelector("#highlight-control");
+      const initialSummary = summary.textContent;
+      const resultStep = 300;
+      const maximumResultLimit = {{ result_limit }};
+      const initialResultLimit = Math.min(resultStep, maximumResultLimit);
+      let resultItems = [];
+      let requestedResultLimit = initialResultLimit;
+      let loadedResultCount = 0;
+      let loadingMore = false;
+      let requestNumber = 0;
+
+      const normalizedWordPattern = () =>
+        query.value.normalize("NFKC").replace(/[□_]/gu, "?");
+
+      const wordUsesPattern = () => state.mode === "reading"
+        && /[?*\[\]]/u.test(normalizedWordPattern());
+
+      const requestMode = () => wordUsesPattern() ? "pattern" : state.mode;
+
+      const requestQuery = () => wordUsesPattern() ? normalizedWordPattern() : query.value;
+
+      const toHiraganaCharacter = (character) => {
+        const codePoint = character.codePointAt(0);
+        return codePoint >= 0x30a1 && codePoint <= 0x30f6
+          ? String.fromCodePoint(codePoint - 0x60)
+          : character;
+      };
+
+      const selectedCategory = () => {
+        const separator = majorCategory.value.indexOf(":");
+        if (separator < 0) return null;
+        return {
+          axis: majorCategory.value.slice(0, separator),
+          value: majorCategory.value.slice(separator + 1),
+        };
+      };
+
+      const renderConditionChips = () => {
+        const conditions = [];
+        if (state.mode === "reading" && readingLength.value) {
+          const lengthLabels = {
+            kana: `読み${readingLength.value}文字`,
+            mora: `${readingLength.value}拍`,
+            surface: `表記${readingLength.value}文字`,
+          };
+          conditions.push(["length", lengthLabels[lengthUnit.value]]);
+        }
+        if (state.mode !== "anagram") {
+          if (mustInclude.value) {
+            conditions.push(["must-include", `「${mustInclude.value}」を含む`]);
+          }
+          if (mustExclude.value) {
+            conditions.push(["must-exclude", `「${mustExclude.value}」を含まない`]);
+          }
+          if (majorCategory.value) {
+            const selected = majorCategory.selectedOptions[0];
+            const tagLabel = selected.textContent;
+            const treatment = tagTreatment.value === "deprioritize"
+              ? `「${tagLabel}」を後に表示` : tagLabel;
+            conditions.push(["category", treatment]);
+          }
+        }
+        const sortLabels = {
+          dictionary_priority: "辞書で優先される語",
+          kana: "読み順",
+        };
+        if (sortLabels[sortMode.value]) {
+          conditions.push(["sort", sortLabels[sortMode.value]]);
+        }
+
+        conditionChips.replaceChildren();
+        conditions.forEach(([key, text]) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.dataset.clearCondition = key;
+          button.textContent = text;
+          button.setAttribute("aria-label", `${text}を解除`);
+          conditionChips.append(button);
+        });
+        conditionBar.classList.toggle("hidden", !conditions.length);
+      };
+
+      const clearCondition = (key) => {
+        if (key === "length") readingLength.value = "";
+        if (key === "must-include") mustInclude.value = "";
+        if (key === "must-exclude") mustExclude.value = "";
+        if (key === "category") majorCategory.value = "";
+        if (key === "sort") sortMode.value = "commonness";
+        renderConditionChips();
+      };
+
+      const updateSearchPresentation = () => {
+        const readingMode = state.mode === "reading";
+        const patternMode = wordUsesPattern();
+        const regexMode = state.mode === "regex";
+        primaryOptions.classList.toggle("hidden", state.mode !== "reading");
+        matchTypeField.classList.toggle("hidden", !readingMode || patternMode);
+        conditionOptions.classList.toggle("hidden", state.mode === "anagram");
+        highlightControl.classList.toggle("hidden", state.mode === "anagram");
+        region.classList.remove("hidden");
+        label.textContent = regexMode ? "正規表現"
+          : state.mode === "anagram" ? "文字"
+          : "検索パターン";
+        query.placeholder = regexMode ? "例: ^ね.*こ$"
+          : readingMode ? "例: ねこ / ね? / □こ" : "例: ねこ";
+        renderConditionChips();
+      };
+
+      const selectMode = (tab, focusQuery = true) => {
+        const nextMode = tab.dataset.mode;
+        if (nextMode === state.mode) {
+          if (focusQuery) query.focus();
+          return;
+        }
+        requestNumber += 1;
+        state.queries[state.mode] = query.value;
+        state.mode = nextMode;
+        query.value = state.queries[state.mode] || "";
+        tabs.forEach((item) => {
+          const selected = item === tab;
+          item.classList.toggle("active", selected);
+          item.setAttribute("aria-selected", String(selected));
+          item.tabIndex = selected ? 0 : -1;
+        });
+        panel.setAttribute("aria-labelledby", tab.id);
+        updateSearchPresentation();
+        results.replaceChildren();
+        resultItems = [];
+        requestedResultLimit = initialResultLimit;
+        loadedResultCount = 0;
+        loadingMore = false;
+        showMoreButton.classList.add("hidden");
+        resultHeader.classList.add("hidden");
+        resultDisplayOptions.classList.add("hidden");
+        region.classList.remove("has-response");
+        refineTrigger.classList.add("hidden");
+        message.classList.add("hidden");
+        message.classList.remove("error");
+        queryError.classList.add("hidden");
+        refineError.classList.add("hidden");
+        query.removeAttribute("aria-invalid");
+        mustInclude.removeAttribute("aria-invalid");
+        mustExclude.removeAttribute("aria-invalid");
+        summary.textContent = initialSummary;
+        conditionSummary.textContent = "";
+        conditionSummary.classList.add("hidden");
+        region.setAttribute("aria-busy", "false");
+        submitButton.disabled = false;
+        submitButton.textContent = "検索";
+        if (focusQuery) query.focus();
+      };
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => {
+          selectMode(tab);
+        });
+        tab.addEventListener("keydown", (event) => {
+          let nextIndex = null;
+          if (event.key === "ArrowRight") nextIndex = (index + 1) % tabs.length;
+          if (event.key === "ArrowLeft") nextIndex = (index - 1 + tabs.length) % tabs.length;
+          if (event.key === "Home") nextIndex = 0;
+          if (event.key === "End") nextIndex = tabs.length - 1;
+          if (nextIndex === null) return;
+          event.preventDefault();
+          selectMode(tabs[nextIndex], false);
+          tabs[nextIndex].focus();
+        });
+      });
+
+      query.addEventListener("input", () => {
+        if (state.mode === "reading") updateSearchPresentation();
+      });
+
+      matchType.addEventListener("change", () => {
+        updateSearchPresentation();
+        queryError.classList.add("hidden");
+        query.removeAttribute("aria-invalid");
+        query.focus();
+      });
+
+      lengthUnit.addEventListener("change", () => {
+        renderConditionChips();
+      });
+      readingLength.addEventListener("input", renderConditionChips);
+
+      sortMode.addEventListener("change", () => {
+        renderConditionChips();
+        if (resultItems.length) form.requestSubmit();
+      });
+      const updateResultDisplay = () => {
+        region.classList.toggle("readings-only", readingsOnly.checked);
+        region.classList.toggle("hide-match-highlight", !highlightMatch.checked);
+      };
+      readingsOnly.addEventListener("change", updateResultDisplay);
+      highlightMatch.addEventListener("change", updateResultDisplay);
+      mustInclude.addEventListener("input", renderConditionChips);
+      mustExclude.addEventListener("input", renderConditionChips);
+      majorCategory.addEventListener("change", renderConditionChips);
+      tagTreatment.addEventListener("change", renderConditionChips);
+      conditionChips.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-clear-condition]");
+        if (button) clearCondition(button.dataset.clearCondition);
+      });
+
+      const renderReading = (element, item) => {
+        const start = item.match_start;
+        const end = item.match_end;
+        if (Number.isInteger(start) && Number.isInteger(end) && start >= 0 && end > start
+            && end <= item.reading.length) {
+          const matched = document.createElement("mark");
+          matched.textContent = item.reading.slice(start, end);
+          element.append(item.reading.slice(0, start), matched, item.reading.slice(end));
+        } else {
+          element.textContent = item.reading;
+        }
+      };
+
+      const tagValueLabels = {
+        person: "人名", place: "地名", organization: "組織名",
+        character: "キャラクター", work: "作品名", product: "商品名",
+        other: "その他の固有名", computing: "IT・コンピューター"
+      };
+      const tagAxisLabels = {
+        proper_type: "種類", domain: "分野", form: "語形",
+        usage: "用法", dialect: "方言", suitability: "用途"
+      };
+      const sourceLabels = {
+        jmdict: "JMdict", sudachidict: "SudachiDict", manual: "追加・訂正データ"
+      };
+
+      const categoryLabel = (item) =>
+        ({proper: "固有名詞", function: "機能語"}[item.category] || "一般語");
+
+      const groupResultItems = (items) => {
+        const groups = new Map();
+        items.forEach((item) => {
+          const key = item.normalized_reading || Array.from(item.reading.normalize("NFKC"))
+            .map(toHiraganaCharacter).join("");
+          if (!groups.has(key)) {
+            groups.set(key, {normalizedReading: key, representative: item, items: []});
+          }
+          groups.get(key).items.push(item);
+        });
+        return [...groups.values()];
+      };
+
+      const appendDetail = (list, term, value) => {
+        if (!value) return;
+        const dt = document.createElement("dt");
+        const dd = document.createElement("dd");
+        dt.textContent = term;
+        dd.textContent = value;
+        list.append(dt, dd);
+      };
+
+      const createDetailList = (item) => {
+        const detailList = document.createElement("dl");
+        const lengths = item.lengths || {};
+        appendDetail(
+          detailList,
+          "文字数",
+          `読み${lengths.kana ?? "—"}文字 / ${lengths.mora ?? "—"}モーラ / 表記${lengths.surface ?? "—"}文字`
+        );
+        appendDetail(detailList, "品詞", item.pos);
+          appendDetail(
+            detailList,
+            "種類",
+            (item.all_categories || [item.category]).map((category) =>
+              ({proper: "固有名詞", function: "機能語"}[category] || "一般語")
+            ).join(" / ")
+          );
+        appendDetail(
+          detailList,
+          "特徴",
+          (item.tags || []).map((tag) =>
+            `${tagAxisLabels[tag.axis] || tag.axis}: ${tagValueLabels[tag.value] || tag.value}`
+          ).join(" / ")
+        );
+        appendDetail(
+          detailList,
+          "表示順",
+          (item.deprioritize_reasons || []).length ? "指定した分類のため後に表示" : ""
+        );
+        const sources = new Set((item.sources || []).map((source) => source.source));
+        (item.tags || []).forEach((tag) => (tag.evidence || []).forEach(
+          (evidence) => sources.add(evidence.source)
+        ));
+        appendDetail(
+          detailList,
+          "分類情報の出典",
+          [...sources].map((source) => sourceLabels[source] || source).join(" / ")
+        );
+        return detailList;
+      };
+
+      const appendResult = (group) => {
+        const row = document.createElement("li");
+        row.className = "result-group";
+
+        const heading = document.createElement("div");
+        heading.className = "result-group-heading";
+        const reading = document.createElement("strong");
+        reading.className = "result-reading";
+        renderReading(
+          reading,
+          {...group.representative, reading: group.normalizedReading}
+        );
+        const count = document.createElement("span");
+        count.className = "variant-count";
+        count.textContent = `${group.items.length}表記`;
+        const groupDetail = document.createElement("details");
+        groupDetail.className = "result-group-detail";
+        const groupDetailSummary = document.createElement("summary");
+        groupDetailSummary.textContent = "詳細";
+        const groupDetailItems = document.createElement("div");
+        groupDetailItems.className = "result-group-detail-items";
+        group.items.forEach((item) => {
+          const detailItem = document.createElement("section");
+          const surface = document.createElement("strong");
+          surface.textContent = item.surface;
+          detailItem.append(surface, createDetailList(item));
+          groupDetailItems.append(detailItem);
+        });
+        groupDetail.append(groupDetailSummary, groupDetailItems);
+        heading.append(reading, count, groupDetail);
+
+        const variants = document.createElement("div");
+        variants.className = "result-variants";
+        group.items.forEach((item) => {
+          const variant = document.createElement("div");
+          variant.className = "result-variant";
+
+          const surface = document.createElement("strong");
+          surface.className = "result-surface";
+          surface.textContent = item.surface;
+
+          const detail = document.createElement("details");
+          detail.className = "result-detail";
+          const detailSummary = document.createElement("summary");
+          detailSummary.textContent = "詳細";
+          detail.append(detailSummary, createDetailList(item));
+
+          variant.append(surface, detail);
+          variants.append(variant);
+        });
+        row.append(heading, variants);
+        results.append(row);
+      };
+
+      const updateShowMoreButton = (total, truncated) => {
+        const remaining = Math.min(total - loadedResultCount, maximumResultLimit - loadedResultCount);
+        const nextCount = Math.min(resultStep, remaining);
+        showMoreButton.classList.toggle("hidden", !truncated || nextCount <= 0);
+        showMoreButton.textContent = nextCount > 0
+          ? `次の${nextCount}件を表示`
+          : "";
+      };
+
+      showMoreButton.addEventListener("click", () => {
+        requestedResultLimit = Math.min(loadedResultCount + resultStep, maximumResultLimit);
+        loadingMore = true;
+        form.requestSubmit();
+      });
+
+      refineTrigger.addEventListener("click", () => {
+        conditionOptions.open = true;
+        conditionOptions.scrollIntoView({behavior: "smooth", block: "start"});
+        mustInclude.focus({preventScroll: true});
+      });
+
+      const showZeroResultHints = () => {
+        const hints = [];
+        if (state.mode !== "anagram"
+            && ((state.mode === "reading" && readingLength.value)
+              || mustInclude.value || mustExclude.value
+              || majorCategory.value)) {
+          hints.push("文字数や追加の絞り込みを減らしてみてください。");
+        }
+        if (state.mode === "regex"
+            && (query.value.startsWith("^") || query.value.endsWith("$"))) {
+          hints.push("より広く探すには、先頭の ^ や末尾の $ を外してみてください。");
+        }
+        if (state.mode === "anagram") {
+          hints.push("アナグラムは、文字の種類と数がすべて一致する語だけが対象です。");
+        }
+        if (!hints.length) {
+          hints.push("入力を短くするか、条件を変えてください。");
+        }
+        const heading = document.createElement("strong");
+        const list = document.createElement("ul");
+        heading.textContent = "検索のヒント";
+        hints.slice(0, 2).forEach((hint) => {
+          const item = document.createElement("li");
+          item.textContent = hint;
+          list.append(item);
+        });
+        message.replaceChildren(heading, list);
+        message.classList.remove("hidden", "error");
+        message.setAttribute("role", "status");
+      };
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const isLoadingMore = loadingMore;
+        loadingMore = false;
+        if (!isLoadingMore) requestedResultLimit = initialResultLimit;
+        const currentRequest = ++requestNumber;
+        const previousSummary = summary.textContent;
+        region.setAttribute("aria-busy", "true");
+        message.classList.add("hidden");
+        message.classList.remove("error");
+        message.setAttribute("role", "status");
+        queryError.classList.add("hidden");
+        refineError.classList.add("hidden");
+        query.removeAttribute("aria-invalid");
+        mustInclude.removeAttribute("aria-invalid");
+        mustExclude.removeAttribute("aria-invalid");
+        summary.textContent = "検索しています…";
+        resultHeader.classList.remove("hidden");
+        conditionSummary.textContent = "";
+        conditionSummary.classList.add("hidden");
+        submitButton.disabled = true;
+        submitButton.textContent = "検索中…";
+        showMoreButton.disabled = true;
+        const category = selectedCategory();
+        const includeProperCategory = category && category.axis === "proper_type";
+        const body = {
+          version: 6,
+          mode: requestMode(),
+          query: requestQuery(),
+          sort: sortMode.value,
+          include_proper: Boolean(includeProperCategory),
+          include_function: false,
+          vocabulary_layers: includeProperCategory ? ["core", "auxiliary"] : ["core"],
+          limit: requestedResultLimit,
+        };
+        if (state.mode !== "anagram" && category) {
+          const tag = [category];
+          if (tagTreatment.value === "deprioritize") {
+            body.deprioritize_tag_filters = tag;
+          } else {
+            body.tag_filters = tag;
+          }
+        }
+        if (state.mode === "reading") {
+          if (body.mode === "reading") {
+            body.match_type = matchType.value;
+          }
+          body.length = readingLength.value;
+          body.length_unit = lengthUnit.value;
+        }
+        if (state.mode !== "anagram") {
+          body.must_include = mustInclude.value;
+          body.must_exclude = mustExclude.value;
+        }
+        try {
+          const response = await fetch({{ url_for('wordquery.search_api') | tojson }}, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(body),
+          });
+          const data = await response.json();
+          if (!response.ok) {
+            const error = new Error(data.error || "検索に失敗しました。");
+            error.status = response.status;
+            error.position = data.error_position;
+            throw error;
+          }
+          if (currentRequest !== requestNumber) return;
+          conditionOptions.open = false;
+          const count = Number(data.total).toLocaleString("ja-JP");
+          conditionSummary.textContent = data.condition_description || "";
+          conditionSummary.classList.toggle("hidden", !data.condition_description);
+          results.replaceChildren();
+          resultItems = groupResultItems(data.results);
+          loadedResultCount = data.results.length;
+          const shown = Number(data.results.length).toLocaleString("ja-JP");
+          const readings = Number(resultItems.length).toLocaleString("ja-JP");
+          summary.replaceChildren();
+          const resultCount = document.createElement("strong");
+          resultCount.textContent = `${count}件`;
+          summary.append(resultCount);
+          if (data.total) {
+            const readingCount = document.createElement("span");
+            readingCount.textContent = `/ ${readings}読み`;
+            summary.append(readingCount);
+            if (data.results.length < data.total) {
+              const shownCount = document.createElement("small");
+              shownCount.textContent = `表示 ${shown}件`;
+              summary.append(shownCount);
+            }
+          }
+          resultItems.forEach(appendResult);
+          updateShowMoreButton(data.total, data.truncated);
+          region.classList.add("has-response");
+          refineTrigger.classList.toggle("hidden", state.mode === "anagram");
+          resultDisplayOptions.classList.toggle("hidden", !data.total);
+          if (!data.total) showZeroResultHints();
+        } catch (error) {
+          if (currentRequest !== requestNumber) return;
+          requestedResultLimit = loadedResultCount || initialResultLimit;
+          if (error.status === 400) {
+            summary.textContent = previousSummary;
+            if (error.message.startsWith("絞り込み") || error.message.startsWith("後回し")) {
+              const target = error.message.includes("含まない") ? mustExclude : mustInclude;
+              conditionOptions.open = true;
+              refineError.textContent = error.message;
+              refineError.classList.remove("hidden");
+              target.setAttribute("aria-invalid", "true");
+              target.focus();
+            } else {
+              queryError.textContent = error.message;
+              queryError.classList.remove("hidden");
+              query.setAttribute("aria-invalid", "true");
+              query.focus();
+              if (Number.isInteger(error.position)) {
+                const end = Math.min(error.position + 1, query.value.length);
+                query.setSelectionRange(error.position, end);
+              }
+            }
+          } else {
+            summary.textContent = previousSummary || "検索できませんでした";
+            message.textContent = error.message;
+            message.classList.remove("hidden");
+            message.classList.add("error");
+            message.setAttribute("role", "alert");
+          }
+        } finally {
+          if (currentRequest === requestNumber) {
+            region.setAttribute("aria-busy", "false");
+            submitButton.disabled = false;
+            submitButton.textContent = "検索";
+            showMoreButton.disabled = false;
+          }
+        }
+      });
+
+      updateSearchPresentation();
+    </script>
+    {% endif %}
+  </body>
+</html>

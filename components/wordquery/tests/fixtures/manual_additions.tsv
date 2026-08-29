@@ -1,0 +1,6 @@
+surface	reading	category	pos	priority	reason	reference
+猫	ねこ	general	名詞	50	test fixture	test-suite
+ネコ	ネコ	general	名詞	40	normalization fixture	test-suite
+こね	こね	general	名詞	20	anagram fixture	test-suite
+東京	とうきょう	proper	固有名詞	50	category fixture	test-suite
+の	の	function	助詞	50	category fixture	test-suite

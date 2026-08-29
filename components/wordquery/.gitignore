@@ -1,0 +1,22 @@
+.venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+.agents/
+.codex/
+*.lnk
+
+# Downloaded and generated lexicon artifacts
+data/raw/
+var/
+reports/
+
+.env
+*.log

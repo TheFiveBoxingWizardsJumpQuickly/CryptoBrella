@@ -1,3 +1,4 @@
+import os
 from copy import deepcopy
 
 
@@ -53,6 +54,7 @@ CATEGORY_TOOL_ORDER = {
         "frequency",
         "rsa",
         "memo",
+        "wordquery",
     ],
     "ingress-tools": [
         "rot_ex",
@@ -360,6 +362,16 @@ TOOL_CATALOG = [
         "aliases": ["notes", "memo pad"],
         "tags": ["text", "utility", "notes"],
         "icon": "icon_memo.png",
+    },
+    {
+        "id": "wordquery",
+        "path": os.environ.get("WORDQUERY_URL_PREFIX", "/wordquery"),
+        "name": "WordQuery: JP",
+        "description": "Search Japanese words by pattern, anagram, or Regex.",
+        "aliases": ["japanese word search", "anagram", "regex", "単語検索"],
+        "tags": ["utility", "japanese", "word", "puzzle"],
+        "icon": "icon_riddle_tables.png",
+        "show_on_home": os.environ.get("WORDQUERY_PUBLIC", "0") == "1",
     },
     {
         "id": "prime",
