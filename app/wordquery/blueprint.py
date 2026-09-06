@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import sqlite3
 import time
 from collections import defaultdict, deque
 from pathlib import Path
@@ -10,7 +11,11 @@ from typing import Any
 
 from flask import Blueprint, Flask, current_app, jsonify, render_template, request
 from wordquery_jp.models import SearchRequest, SearchResponse
-from wordquery_jp.operations import public_data_is_fresh, read_state
+from wordquery_jp.operations import (
+    public_data_is_fresh,
+    read_state,
+    verify_reviewed_release,
+)
 from wordquery_jp.query import (
     LegacySearchKind,
     RequestValidationError,
@@ -52,13 +57,21 @@ def register_wordquery(app: Flask, config: dict[str, Any] | None = None) -> None
         WORDQUERY_RATE_LIMIT=30,
         WORDQUERY_URL_PREFIX=os.environ.get("WORDQUERY_URL_PREFIX", "/wordquery"),
         WORDQUERY_PUBLIC=os.environ.get("WORDQUERY_PUBLIC", "0") == "1",
+        WORDQUERY_RELEASE_MODE=os.environ.get("WORDQUERY_RELEASE_MODE", "updated"),
         WORDQUERY_STATE_DIR=os.environ.get("WORDQUERY_STATE_DIR", "var/wordquery"),
         WORDQUERY_ENFORCE_FRESHNESS=os.environ.get("WORDQUERY_PUBLIC", "0") == "1",
     )
     if config:
         app.config.update(config)
 
+    release_mode = app.config["WORDQUERY_RELEASE_MODE"]
     try:
+        if release_mode not in {"updated", "reviewed"}:
+            raise ValueError("WORDQUERY_RELEASE_MODE must be updated or reviewed")
+        if release_mode == "reviewed":
+            app.extensions["wordquery_release"] = verify_reviewed_release(
+                Path(app.config["WORDQUERY_DB"])
+            )
         snapshot = load_snapshot(Path(app.config["WORDQUERY_DB"]))
         app.extensions["wordquery_metadata"] = snapshot.metadata
         app.extensions["wordquery_service"] = SearchService(
@@ -67,12 +80,14 @@ def register_wordquery(app: Flask, config: dict[str, Any] | None = None) -> None
             timeout_seconds=float(app.config["WORDQUERY_TIMEOUT"]),
         )
         app.extensions["wordquery_error"] = None
-    except LexiconUnavailable as exc:
+    except (LexiconUnavailable, OSError, ValueError, sqlite3.Error) as exc:
         app.extensions["wordquery_metadata"] = {}
         app.extensions["wordquery_service"] = None
         app.extensions["wordquery_error"] = str(exc)
-    if app.config["WORDQUERY_ENFORCE_FRESHNESS"] and not public_data_is_fresh(
-        read_state(Path(app.config["WORDQUERY_STATE_DIR"]))
+    if (
+        release_mode != "reviewed"
+        and app.config["WORDQUERY_ENFORCE_FRESHNESS"]
+        and not public_data_is_fresh(read_state(Path(app.config["WORDQUERY_STATE_DIR"])))
     ):
         app.extensions["wordquery_service"] = None
         app.extensions["wordquery_error"] = (

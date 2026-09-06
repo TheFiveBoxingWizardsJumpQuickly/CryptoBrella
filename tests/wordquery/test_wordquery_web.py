@@ -1,3 +1,6 @@
+import hashlib
+import json
+import sqlite3
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
@@ -38,6 +41,34 @@ def app(tmp_path):
             "WORDQUERY_ENFORCE_FRESHNESS": False,
         }
     )
+
+
+@pytest.mark.parametrize("fault", [None, "checksum", "unapproved", "input_hash", "missing"])
+def test_reviewed_public_release_requires_matching_approved_manifest(app, fault):
+    database = Path(app.config["WORDQUERY_DB"])
+    with database.open("rb") as stream:
+        digest = hashlib.file_digest(stream, "sha256").hexdigest()
+    with sqlite3.connect(database) as connection:
+        input_hash = dict(connection.execute("SELECT key, value FROM metadata"))["input_hash"]
+    manifest = {
+        "release_schema_version": 1,
+        "database_sha256": "wrong" if fault == "checksum" else digest,
+        "database_input_hash": "wrong" if fault == "input_hash" else input_hash,
+        "formal_human_review": {"passed": fault != "unapproved"},
+    }
+    if fault != "missing":
+        (database.parent / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+    reviewed = create_app({
+        "TESTING": True,
+        "WORDQUERY_DB": database,
+        "WORDQUERY_PUBLIC": True,
+        "WORDQUERY_RELEASE_MODE": "reviewed",
+        "WORDQUERY_ENFORCE_FRESHNESS": True,
+        "WORDQUERY_STATE_DIR": database.parent / "no-update-state",
+    })
+    response = reviewed.test_client().post("/wordquery/api/search/anagram", json={"text": "ねこ"})
+    assert response.status_code == (503 if fault else 200)
+    assert "X-Robots-Tag" not in response.headers
 
 
 def test_index_loads_dictionary(app):

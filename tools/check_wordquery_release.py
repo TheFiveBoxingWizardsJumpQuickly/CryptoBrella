@@ -12,7 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def check_release(database: Path) -> dict:
+def check_release(database: Path, *, reviewed_public: bool = False) -> dict:
     from flask import Flask
 
     from app.wordquery.blueprint import register_wordquery
@@ -22,8 +22,9 @@ def check_release(database: Path) -> dict:
     register_wordquery(app, {
         "TESTING": True,
         "WORDQUERY_DB": str(database.resolve()),
-        "WORDQUERY_PUBLIC": False,
-        "WORDQUERY_ENFORCE_FRESHNESS": False,
+        "WORDQUERY_PUBLIC": reviewed_public,
+        "WORDQUERY_RELEASE_MODE": "reviewed" if reviewed_public else "updated",
+        "WORDQUERY_ENFORCE_FRESHNESS": reviewed_public,
     })
     load_seconds = time.monotonic() - started
     client = app.test_client()
@@ -73,11 +74,15 @@ def check_release(database: Path) -> dict:
         "page": page.status_code == 200,
         "sources": sources.status_code == 200,
         "invalid_regex": invalid.status_code == 400,
-        "preview_noindex": page.headers.get("X-Robots-Tag") == "noindex, nofollow",
+        "indexing_header": (
+            "X-Robots-Tag" not in page.headers if reviewed_public
+            else page.headers.get("X-Robots-Tag") == "noindex, nofollow"
+        ),
     }
     return {
         "passed": all(row["passed"] for row in results) and all(boundaries.values()),
         "database": str(database),
+        "release_mode": "reviewed_public" if reviewed_public else "preview",
         "metadata": app.extensions.get("wordquery_metadata"),
         "load_seconds": round(load_seconds, 3),
         "peak_rss_mib": round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024, 1),
@@ -92,12 +97,13 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--database", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--reviewed-public", action="store_true")
     args = parser.parse_args()
     if not args.database.is_file():
         parser.error("Database does not exist")
     if args.output.exists():
         parser.error("Output already exists; choose a new report path")
-    report = check_release(args.database)
+    report = check_release(args.database, reviewed_public=args.reviewed_public)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report, ensure_ascii=False, indent=2))

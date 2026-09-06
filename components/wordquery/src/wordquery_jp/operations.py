@@ -207,6 +207,27 @@ def read_state(state_dir: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def verify_reviewed_release(database: Path) -> dict[str, Any]:
+    """Verify an operator-prepared reviewed release before serving its pinned DB."""
+    manifest_path = database.parent / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if not isinstance(manifest, dict) or manifest.get("release_schema_version") != 1:
+        raise ValueError("Unsupported reviewed release manifest")
+    gate = manifest.get("formal_human_review", {})
+    if not isinstance(gate, dict) or gate.get("passed") is not True:
+        raise ValueError("Reviewed release has no passing human gate")
+    digest = manifest.get("database_sha256")
+    with database.open("rb") as stream:
+        actual = hashlib.file_digest(stream, "sha256").hexdigest()
+    if digest != actual:
+        raise ValueError("Reviewed database SHA-256 does not match the release manifest")
+    with sqlite3.connect(f"{database.resolve().as_uri()}?mode=ro", uri=True) as connection:
+        metadata = dict(connection.execute("SELECT key, value FROM metadata"))
+    if metadata.get("input_hash") != manifest.get("database_input_hash"):
+        raise ValueError("Reviewed database input hash does not match the release manifest")
+    return manifest
+
+
 def write_state(state_dir: Path, state: dict[str, Any]) -> None:
     _write_json_atomic(state_dir / "state.json", state)
 

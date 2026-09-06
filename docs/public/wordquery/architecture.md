@@ -84,3 +84,13 @@ explicit schema version.
 - Syntax and input errors map to HTTP 400, search timeouts to 408, and rate-limit failures to 429.
 - A missing or corrupt lexicon makes the search page and API return a service-unavailable state.
 - An invalid dictionary row is recorded as a build error or quality-report finding rather than silently discarded.
+
+## Reviewed snapshots
+
+A deployment may explicitly select a pinned reviewed snapshot. Its adjacent
+release manifest must record a passing formal human gate and match the database
+byte hash and input hash. The application verifies these at startup and makes
+search unavailable if verification fails. This mode serves an evaluated version
+without claiming upstream freshness. The default updated-dictionary mode retains
+its existing freshness check. Switching modes is an operator choice; preparing
+a release bundle does not activate it.
