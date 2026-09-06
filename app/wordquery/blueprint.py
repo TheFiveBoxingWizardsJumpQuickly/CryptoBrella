@@ -12,8 +12,7 @@ from typing import Any
 from flask import Blueprint, Flask, current_app, jsonify, render_template, request
 from wordquery_jp.models import SearchRequest, SearchResponse
 from wordquery_jp.operations import (
-    public_data_is_fresh,
-    read_state,
+    public_snapshot_is_fresh,
     verify_reviewed_release,
 )
 from wordquery_jp.query import (
@@ -87,15 +86,6 @@ def register_wordquery(app: Flask, config: dict[str, Any] | None = None) -> None
         app.extensions["wordquery_metadata"] = {}
         app.extensions["wordquery_service"] = None
         app.extensions["wordquery_error"] = str(exc)
-    if (
-        release_mode != "reviewed"
-        and app.config["WORDQUERY_ENFORCE_FRESHNESS"]
-        and not public_data_is_fresh(read_state(Path(app.config["WORDQUERY_STATE_DIR"])))
-    ):
-        app.extensions["wordquery_service"] = None
-        app.extensions["wordquery_error"] = (
-            "辞書データの最新版確認から31日を超えたため、検索を停止しています。"
-        )
     app.extensions["wordquery_limiter"] = MemoryRateLimiter(
         int(app.config["WORDQUERY_RATE_LIMIT"])
     )
@@ -103,6 +93,28 @@ def register_wordquery(app: Flask, config: dict[str, Any] | None = None) -> None
         blueprint,
         url_prefix=str(app.config["WORDQUERY_URL_PREFIX"]).rstrip("/"),
     )
+
+
+@blueprint.before_request
+def enforce_public_freshness():
+    if request.endpoint == "wordquery.sources":
+        return None
+    app = current_app
+    if (app.config["WORDQUERY_ENFORCE_FRESHNESS"]
+            and not public_snapshot_is_fresh(
+                Path(app.config["WORDQUERY_STATE_DIR"]),
+                app.extensions["wordquery_metadata"].get("input_hash"),
+            )):
+        message = "現在、不具合により検索を利用できません。"
+        if request.path.rstrip("/").endswith("wordquery") or request.endpoint == "wordquery.index":
+            return render_template(
+                "wordquery/index.html", lexicon_error=message,
+                max_query_length=int(app.config["WORDQUERY_MAX_QUERY"]),
+                timeout_seconds=float(app.config["WORDQUERY_TIMEOUT"]),
+                result_limit=int(app.config["WORDQUERY_RESULT_LIMIT"]),
+            ), 503
+        return jsonify(error=message), 503
+    return None
 
 
 @blueprint.after_request

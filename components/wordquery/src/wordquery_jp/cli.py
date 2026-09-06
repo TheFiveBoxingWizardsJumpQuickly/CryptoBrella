@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
 from pathlib import Path
 
 from .benchmark import (
@@ -42,7 +43,13 @@ from .lexicon.risk_review import (
     compare_risk_judgments,
     write_risk_review_sample,
 )
-from .operations import status_report, update_lexicon
+from .operations import (
+    initialize_updates,
+    rollback_lexicon,
+    send_notification,
+    status_report,
+    update_lexicon,
+)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -67,6 +74,17 @@ def build_parser() -> argparse.ArgumentParser:
     update.add_argument("--force", action="store_true")
     update.add_argument("--dry-run", action="store_true")
     update.add_argument("--no-reload", action="store_true")
+
+    initialize = subparsers.add_parser(
+        "initialize-updates", help="評価済み辞書を更新の基準版にする"
+    )
+    initialize.add_argument("--state-dir", type=Path, required=True)
+    initialize.add_argument("--database", type=Path, required=True)
+    initialize.add_argument("--component-root", type=Path)
+    rollback = subparsers.add_parser("rollback", help="期限内の直前版に戻す（期限は延長しない）")
+    rollback.add_argument("--state-dir", type=Path, required=True)
+    rollback.add_argument("--no-reload", action="store_true")
+    subparsers.add_parser("notify-test", help="管理者への更新通知メールをテスト送信する")
 
     status = subparsers.add_parser("status", help="公開辞書の更新状態を表示する")
     status.add_argument("--state-dir", type=Path, required=True)
@@ -235,7 +253,22 @@ def main(argv: list[str] | None = None) -> int:
             f"candidates={result.candidates} issues={result.issues} hash={result.input_hash}"
         )
         return 0
+    if args.command == "notify-test":
+        sent = send_notification(
+            "WordQuery update notification test", "Notification delivery test."
+        )
+        print("Sent; confirm receipt." if sent else "SMTP configuration is missing.")
+        return 0 if sent else 1
+    if args.command == "rollback":
+        rollback_lexicon(args.state_dir, reload_webapp=not args.no_reload)
+        print("Rolled back; original freshness deadline retained.")
+        return 0
+    if args.command == "initialize-updates":
+        initialize_updates(args.state_dir, args.database, root=args.component_root)
+        print("Initialized. Freshness is not established; run update before public activation.")
+        return 0
     if args.command == "update":
+        logging.basicConfig(level=logging.INFO, format="%(message)s")
         result = update_lexicon(
             args.state_dir,
             root=args.component_root,

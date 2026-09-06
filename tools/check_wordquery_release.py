@@ -12,20 +12,25 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def check_release(database: Path, *, reviewed_public: bool = False) -> dict:
+def check_release(
+    database: Path, *, reviewed_public: bool = False, state_dir: Path | None = None,
+) -> dict:
     from flask import Flask
 
     from app.wordquery.blueprint import register_wordquery
 
     started = time.monotonic()
     app = Flask("app", root_path=str(ROOT / "app"))
-    register_wordquery(app, {
+    config = {
         "TESTING": True,
         "WORDQUERY_DB": str(database.resolve()),
         "WORDQUERY_PUBLIC": reviewed_public,
         "WORDQUERY_RELEASE_MODE": "reviewed" if reviewed_public else "updated",
         "WORDQUERY_ENFORCE_FRESHNESS": reviewed_public,
-    })
+    }
+    if state_dir is not None:
+        config["WORDQUERY_STATE_DIR"] = str(state_dir.resolve())
+    register_wordquery(app, config)
     load_seconds = time.monotonic() - started
     client = app.test_client()
     cases = [
@@ -98,12 +103,15 @@ def main() -> int:
     parser.add_argument("--database", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--reviewed-public", action="store_true")
+    parser.add_argument("--state-dir", type=Path, help="Verified update state for public freshness")
     args = parser.parse_args()
     if not args.database.is_file():
         parser.error("Database does not exist")
     if args.output.exists():
         parser.error("Output already exists; choose a new report path")
-    report = check_release(args.database, reviewed_public=args.reviewed_public)
+    report = check_release(
+        args.database, reviewed_public=args.reviewed_public, state_dir=args.state_dir,
+    )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report, ensure_ascii=False, indent=2))

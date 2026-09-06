@@ -5,6 +5,7 @@ from __future__ import annotations
 import email.message
 import hashlib
 import json
+import logging
 import os
 import shutil
 import smtplib
@@ -18,6 +19,7 @@ from datetime import UTC, datetime, timedelta
 from email.utils import parsedate_to_datetime
 from pathlib import Path
 from typing import Any
+from uuid import uuid4
 
 from .lexicon.builder import BuildConfig, build_database
 from .lexicon.candidate_audit import audit_auxiliary_candidates
@@ -87,16 +89,24 @@ def update_lexicon(
         if not force and not update_due(state, now=now):
             return UpdateResult("not_due", detail="latest check is less than 21 days old")
 
-        run_id = now.strftime("%Y%m%dT%H%M%SZ")
+        run_id = now.strftime("%Y%m%dT%H%M%SZ") + "-" + uuid4().hex[:8]
         work = state_dir / "work" / run_id
         work.mkdir(parents=True, exist_ok=False)
         try:
+            if state.get("approved_policy_sha256") != update_policy_fingerprint(root):
+                raise ValueError(
+                    "Update policy is not approved; initialize from a reviewed release"
+                )
+            logging.getLogger(__name__).info("Downloading latest JMdict: %s", run_id)
             candidate = _download_latest_jmdict(root, work)
-            active_manifest = read_active_manifest(state_dir)
-            active_jmdict_sha = (
-                active_manifest.get("sources", {}).get("jmdict", {}).get("sha256")
-            )
+            active_metadata = _database_metadata(state_dir / "current" / "lexicon.sqlite3")
+            active_jmdict_sha = active_metadata.get("source.jmdict.sha256")
             if active_jmdict_sha == candidate.sha256:
+                if dry_run:
+                    return UpdateResult(
+                        "validated", run_id, "Current source matches latest; state unchanged"
+                    )
+                active_input = _database_input_hash(state_dir / "current" / "lexicon.sqlite3")
                 recovered = int(state.get("consecutive_failures", 0)) > 0
                 state.update(
                     {
@@ -104,17 +114,23 @@ def update_lexicon(
                         "last_success_at": now.isoformat(),
                         "last_status": "already_current",
                         "consecutive_failures": 0,
+                        "active_input_hash": active_input,
+                        "last_failure_notification": None,
+                        "last_failures": [],
                     }
                 )
                 write_state(state_dir, state)
                 shutil.rmtree(work)
+                if reload_webapp:
+                    reload_pythonanywhere_webapp()
                 if recovered:
-                    send_notification(
+                    _safe_notification(
                         "WordQuery JMdict update recovered",
                         "The active release is already the latest JMdict.",
                     )
                 return UpdateResult("already_current", detail=candidate.sha256)
 
+            logging.getLogger(__name__).info("Building and validating candidate: %s", run_id)
             result = _build_candidate(
                 state_dir,
                 root,
@@ -126,6 +142,8 @@ def update_lexicon(
             if result["failures"]:
                 quarantine = state_dir / "quarantine" / run_id
                 os.replace(work, quarantine)
+                if dry_run:
+                    return UpdateResult("quarantined", run_id, "; ".join(result["failures"]))
                 _record_failure(state_dir, state, now, result["failures"])
                 _notify_failure_if_due(
                     state_dir,
@@ -144,31 +162,40 @@ def update_lexicon(
             release_dir = state_dir / "releases" / run_id
             os.replace(work, release_dir)
             old_target = _read_link_target(state_dir / "current")
-            _set_link(state_dir / "current", release_dir)
-            if old_target is not None:
-                _set_link(state_dir / "previous", old_target)
+            old_previous = _read_link_target(state_dir / "previous")
+            old_state = dict(state)
             try:
+                _set_link(state_dir / "current", release_dir)
+                if old_target is not None:
+                    _set_link(state_dir / "previous", old_target)
+                state.update({
+                    "last_checked_at": now.isoformat(), "last_success_at": now.isoformat(),
+                    "last_status": "activated", "active_release": run_id,
+                    "active_input_hash": result["manifest"]["input_hash"],
+                    "consecutive_failures": 0, "last_failure_notification": None,
+                    "last_failures": [],
+                    "previous_state": {k: v for k, v in old_state.items() if k != "previous_state"},
+                })
+                write_state(state_dir, state)
                 if reload_webapp:
                     reload_pythonanywhere_webapp()
             except Exception:
+                state.clear()
+                state.update(old_state)
                 if old_target is not None:
                     _set_link(state_dir / "current", old_target)
+                    if old_previous is not None:
+                        _set_link(state_dir / "previous", old_previous)
+                    else:
+                        (state_dir / "previous").unlink(missing_ok=True)
+                write_state(state_dir, state)
+                if old_target is not None and reload_webapp:
                     reload_pythonanywhere_webapp()
                 raise
-            recovered = int(state.get("consecutive_failures", 0)) > 0
-            state.update(
-                {
-                    "last_checked_at": now.isoformat(),
-                    "last_success_at": now.isoformat(),
-                    "last_status": "activated",
-                    "active_release": run_id,
-                    "consecutive_failures": 0,
-                }
-            )
-            write_state(state_dir, state)
+            recovered = int(old_state.get("consecutive_failures", 0)) > 0
             _prune_releases(state_dir)
             _prune_quarantine(state_dir)
-            send_notification(
+            _safe_notification(
                 (
                     "WordQuery JMdict update recovered"
                     if recovered
@@ -179,6 +206,8 @@ def update_lexicon(
             )
             return UpdateResult("activated", run_id)
         except Exception as exc:
+            if dry_run:
+                raise
             _record_failure(state_dir, state, now, [f"{type(exc).__name__}: {exc}"])
             _notify_failure_if_due(
                 state_dir,
@@ -191,14 +220,19 @@ def update_lexicon(
 
 
 def update_due(state: dict[str, Any], *, now: datetime) -> bool:
+    if int(state.get("consecutive_failures", 0)) > 0:
+        return True
     raw = state.get("last_success_at") or state.get("last_checked_at")
     if not isinstance(raw, str):
         return True
     try:
-        last = datetime.fromisoformat(raw).astimezone(UTC)
+        last = datetime.fromisoformat(raw)
+        if last.tzinfo is None:
+            return True
+        last = last.astimezone(UTC)
     except ValueError:
         return True
-    return now - last >= CHECK_INTERVAL
+    return now < last or now - last >= CHECK_INTERVAL
 
 
 def public_data_is_fresh(state: dict[str, Any], *, now: datetime | None = None) -> bool:
@@ -206,17 +240,126 @@ def public_data_is_fresh(state: dict[str, Any], *, now: datetime | None = None) 
     if not isinstance(raw, str):
         return False
     try:
-        last = datetime.fromisoformat(raw).astimezone(UTC)
+        last = datetime.fromisoformat(raw)
+        if last.tzinfo is None:
+            return False
+        last = last.astimezone(UTC)
     except ValueError:
         return False
-    return (now or datetime.now(UTC)).astimezone(UTC) - last <= PUBLIC_FRESHNESS_LIMIT
+    age = (now or datetime.now(UTC)).astimezone(UTC) - last
+    return last.tzinfo is not None and timedelta(0) <= age <= PUBLIC_FRESHNESS_LIMIT
 
 
 def read_state(state_dir: Path) -> dict[str, Any]:
     path = state_dir / "state.json"
-    if not path.is_file():
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+        return value if isinstance(value, dict) else {}
+    except (OSError, ValueError):
         return {}
-    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def public_snapshot_is_fresh(state_dir: Path, input_hash: str | None) -> bool:
+    state = read_state(state_dir)
+    return bool(input_hash and state.get("active_input_hash") == input_hash
+                and public_data_is_fresh(state))
+
+
+def _database_metadata(database: Path) -> dict[str, str]:
+    with sqlite3.connect(absolute_read_only_uri(database), uri=True) as connection:
+        return dict(connection.execute("SELECT key, value FROM metadata"))
+
+
+def _database_input_hash(database: Path) -> str:
+    return _database_metadata(database)["input_hash"]
+
+
+def update_policy_fingerprint(root: Path) -> str:
+    """Changes to sources other than JMdict, build policy or manual data require approval."""
+    digest = hashlib.sha256()
+    paths = sorted([
+        *(root / "src/wordquery_jp/lexicon").glob("*.py"),
+        *(root / "data/manual").glob("*.tsv"),
+        *(root / "data/gold").glob("*.tsv"),
+        root / "src/wordquery_jp/normalization.py", root / "src/wordquery_jp/units.py",
+    ])
+    for path in paths:
+        digest.update(path.relative_to(root).as_posix().encode())
+        digest.update(path.read_bytes())
+    with (root / "data/sources.toml").open("rb") as handle:
+        sources = tomllib.load(handle)
+    for key in ("sha256", "version"):
+        sources.get("jmdict", {}).pop(key, None)
+    digest.update(json.dumps(sources, sort_keys=True).encode())
+    return digest.hexdigest()
+
+
+def initialize_updates(state_dir: Path, database: Path, *, root: Path | None = None) -> None:
+    """Attach the reviewed baseline without claiming it is a current upstream version."""
+    import fcntl
+    root = (root or component_root()).resolve()
+    state_dir, database = state_dir.resolve(), database.resolve()
+    manifest = verify_reviewed_release(database)
+    for folder in ("manual", "gold"):
+        approved = {p.name: p.read_bytes() for p in (database.parent / folder).glob("*.tsv")}
+        current = {p.name: p.read_bytes() for p in (root / "data" / folder).glob("*.tsv")}
+        if not approved or approved != current:
+            raise ValueError(f"Reviewed {folder} data do not match the update inputs")
+    with (database.parent / "sources.toml").open("rb") as handle:
+        approved_sources = tomllib.load(handle)
+    with (root / "data/sources.toml").open("rb") as handle:
+        current_sources = tomllib.load(handle)
+    for sources in (approved_sources, current_sources):
+        for key in ("sha256", "version"):
+            sources.get("jmdict", {}).pop(key, None)
+    if approved_sources != current_sources:
+        raise ValueError("Reviewed source configuration does not match update inputs")
+    policy_hash = update_policy_fingerprint(root)
+    _prepare_state_directories(state_dir)
+    with (state_dir / "update.lock").open("w") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        if ((state_dir / "current").exists() or (state_dir / "current").is_symlink()
+                or (state_dir / "state.json").exists()):
+            raise ValueError("Update state already initialized; existing state was not changed")
+        _set_link(state_dir / "current", database.parent)
+        write_state(state_dir, {
+            "last_status": "initialized_unverified", "last_success_at": None,
+            "active_input_hash": manifest["database_input_hash"],
+            "approved_policy_sha256": policy_hash,
+            "human_review_baseline": str(database.parent),
+        })
+
+
+def rollback_lexicon(state_dir: Path, *, reload_webapp: bool = True) -> None:
+    """Restore the previous verified state, never extending its freshness deadline."""
+    import fcntl
+    state_dir = state_dir.resolve()
+    with (state_dir / "update.lock").open("w") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        state = read_state(state_dir)
+        previous_state = state.get("previous_state")
+        previous = _read_link_target(state_dir / "previous")
+        current = _read_link_target(state_dir / "current")
+        if not isinstance(previous_state, dict) or previous is None or current is None:
+            raise ValueError("No previous release and verification state available")
+        if (not public_data_is_fresh(previous_state)
+                or previous_state.get("active_input_hash")
+                != _database_input_hash(previous / "lexicon.sqlite3")):
+            raise ValueError("Previous release is expired or unverified; rollback refused")
+        restored = {**previous_state, "last_status": "rolled_back",
+                    "previous_state": {k: v for k, v in state.items() if k != "previous_state"}}
+        try:
+            _set_link(state_dir / "current", previous)
+            write_state(state_dir, restored)
+            if reload_webapp:
+                reload_pythonanywhere_webapp()
+        except Exception:
+            _set_link(state_dir / "current", current)
+            write_state(state_dir, state)
+            if reload_webapp:
+                reload_pythonanywhere_webapp()
+            raise
+        _set_link(state_dir / "previous", current)
 
 
 def verify_reviewed_release(database: Path) -> dict[str, Any]:
@@ -317,13 +460,26 @@ def send_notification(subject: str, body: str, *, success: bool = False) -> bool
     return True
 
 
+def _safe_notification(subject: str, body: str, *, success: bool = False) -> bool:
+    try:
+        return send_notification(subject, body, success=success)
+    except Exception as exc:
+        logging.getLogger(__name__).error("WordQuery notification failed (%s)", type(exc).__name__)
+        return False
+
+
 def status_report(state_dir: Path) -> dict[str, Any]:
     state = read_state(state_dir)
+    try:
+        input_hash = _database_input_hash(state_dir / "current" / "lexicon.sqlite3")
+    except (OSError, sqlite3.Error, KeyError):
+        input_hash = None
     return {
         **state,
         "state_dir": str(state_dir.resolve()),
         "current": str(_read_link_target(state_dir / "current") or ""),
-        "fresh": public_data_is_fresh(state),
+        "fresh": public_snapshot_is_fresh(state_dir, input_hash),
+        "freshness_timestamp_valid": public_data_is_fresh(state),
         "notification_configured": all(
             os.environ.get(name)
             for name in ("WORDQUERY_SMTP_HOST", "WORDQUERY_SMTP_FROM", "WORDQUERY_SMTP_TO")
@@ -374,11 +530,16 @@ def _build_candidate(
     failures.extend(evaluate_diff_policy(before, database, diff))
     smoke = _run_smoke(database)
     failures.extend(smoke["failures"])
+    with database.open("rb") as handle:
+        database_sha256 = hashlib.file_digest(handle, "sha256").hexdigest()
     manifest = {
         "release_id": run_id,
         "created_at": now.isoformat(),
         "component_version": "0.1.0",
         "input_hash": result.input_hash,
+        "database_sha256": database_sha256,
+        "approved_policy_sha256": update_policy_fingerprint(root),
+        "human_review_baseline": read_state(state_dir).get("human_review_baseline"),
         "counts": {"accepted": result.accepted, "candidates": result.candidates},
         "sources": {
             "jmdict": {"version": jmdict.version, "sha256": jmdict.sha256},
@@ -400,18 +561,22 @@ def _build_candidate(
 
 def _run_smoke(database: Path) -> dict[str, Any]:
     snapshot = load_snapshot(database)
-    service = SearchService(snapshot, timeout_seconds=1.5)
-    cases = (
-        {"version": 5, "mode": "pattern", "query": "ね?", "vocabulary_layers": ["core"]},
-        {"version": 1, "mode": "anagram", "query": "ねこ"},
-    )
+    service = SearchService(snapshot, timeout_seconds=5, regex_timeout_seconds=0.05)
+    cases = [
+        {"version": 6, "mode": mode, "query": query,
+         "vocabulary_layers": ["core", "auxiliary"], "include_proper": True}
+        for mode, query in [("pattern", "とう*"), ("pattern", "?ねこ"),
+                            ("pattern", "*ねこ"), ("pattern", "???"),
+                            ("regex", "^とう.*$"), ("regex", "ねこ$"),
+                            ("regex", "(とう|ねこ)$"), ("anagram", "ねこ")]
+    ]
     durations = []
     failures = []
     for payload in cases:
         try:
-            response = service.execute(parse_search_request(payload, limit=10))
+            response = service.execute(parse_search_request(payload, max_length=200, limit=3000))
             durations.append(response.duration_ms)
-            if response.duration_ms > 1500:
+            if response.duration_ms > 5000:
                 failures.append(f"smoke_timeout:{payload['mode']}")
         except Exception as exc:
             failures.append(f"smoke:{payload['mode']}:{exc}")
@@ -499,7 +664,7 @@ def _notify_failure_if_due(
     body: str,
 ) -> None:
     failures = int(state.get("consecutive_failures", 0))
-    stage = "first" if failures == 1 else ""
+    stage = "first" if failures and not state.get("last_failure_notification") else ""
     raw_success = state.get("last_success_at")
     if isinstance(raw_success, str):
         try:
@@ -512,7 +677,7 @@ def _notify_failure_if_due(
             pass
     if not stage or state.get("last_failure_notification") == stage:
         return
-    if send_notification(f"{subject} [{stage}]", body):
+    if _safe_notification(f"{subject} [{stage}]", body):
         state["last_failure_notification"] = stage
         write_state(state_dir, state)
 

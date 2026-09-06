@@ -81,13 +81,16 @@ def test_reviewed_public_release_requires_matching_approved_manifest(app, fault)
     }
     if fault != "missing":
         (database.parent / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+    write_state(database.parent / "update-state", {
+        "last_success_at": datetime.now(UTC).isoformat(), "active_input_hash": input_hash,
+    })
     reviewed = create_app({
         "TESTING": True,
         "WORDQUERY_DB": database,
         "WORDQUERY_PUBLIC": True,
         "WORDQUERY_RELEASE_MODE": "reviewed",
         "WORDQUERY_ENFORCE_FRESHNESS": True,
-        "WORDQUERY_STATE_DIR": database.parent / "no-update-state",
+        "WORDQUERY_STATE_DIR": database.parent / "update-state",
     })
     response = reviewed.test_client().post("/wordquery/api/search/anagram", json={"text": "ねこ"})
     assert response.status_code == (503 if fault else 200)
@@ -252,7 +255,35 @@ def test_public_search_stops_when_update_state_is_stale(tmp_path):
 
     assert page.status_code == 503
     assert api.status_code == 503
-    assert "31日" in api.json["error"]
+    assert api.json["error"] == "現在、不具合により検索を利用できません。"
+
+
+@pytest.mark.parametrize("state_fault", ["expired", "mismatch", "missing", "malformed", "future"])
+def test_freshness_checked_on_each_request_and_recovers_without_reload(app, tmp_path, state_fault):
+    state_dir = tmp_path / "state"
+    app.config.update(WORDQUERY_ENFORCE_FRESHNESS=True, WORDQUERY_STATE_DIR=state_dir)
+    good = {"last_success_at": datetime.now(UTC).isoformat(),
+            "active_input_hash": app.extensions["wordquery_metadata"]["input_hash"]}
+    write_state(state_dir, good)
+    client = app.test_client()
+    assert client.get("/wordquery/").status_code == 200
+    bad = dict(good)
+    if state_fault == "expired":
+        bad["last_success_at"] = (datetime.now(UTC) - timedelta(days=32)).isoformat()
+    elif state_fault == "future":
+        bad["last_success_at"] = (datetime.now(UTC) + timedelta(days=1)).isoformat()
+    elif state_fault == "mismatch":
+        bad["active_input_hash"] = "other-loaded-database"
+    write_state(state_dir, bad)
+    if state_fault == "missing":
+        (state_dir / "state.json").unlink()
+    elif state_fault == "malformed":
+        (state_dir / "state.json").write_text("{")
+    assert client.get("/wordquery/").status_code == 503
+    assert client.post("/wordquery/api/search/anagram", json={"text": "ねこ"}).status_code == 503
+    assert client.get("/wordquery/sources").status_code == 200
+    write_state(state_dir, good)
+    assert client.get("/wordquery/").status_code == 200
 
 
 def test_public_ui_uses_reader_facing_terms(app):

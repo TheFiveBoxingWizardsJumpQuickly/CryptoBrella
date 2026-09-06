@@ -42,7 +42,8 @@ def test_state_is_written_atomically_and_reported(tmp_path, monkeypatch):
 
     assert read_state(tmp_path)["last_status"] == "activated"
     report = status_report(tmp_path)
-    assert report["fresh"]
+    assert report["freshness_timestamp_valid"]
+    assert not report["fresh"]  # No active dictionary is attached to this state.
     assert not report["notification_configured"]
     assert json.loads((tmp_path / "state.json").read_text())["last_status"] == "activated"
 
