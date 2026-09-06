@@ -29,6 +29,8 @@ def search():
     "^.*$", "^$", "^とう|ねこ$", "(?m)^とう", "(?i)ねこ$",
     r"\Aとう.*\Z", "(?<=ね)こ", "(ねこ){e<=1}", "^とう*?$", "^とう++$",
     "^と[うこ]ね$", "^と[^う]ね$", "^と{0}こ$", "^と{201}$", "と(う|ね)こ",
+    "(とう|ねこ)$", "(?:とう|ねこ)$", "^(とう|ねこ)$", "(こ|ねこ|こ)$",
+    "(ねこ|こ)$", "(とう|)$", "(とう|ねこ)+$", "(?i)(とう|ねこ)$",
 ])
 def test_regex_prefilters_preserve_counts_order_and_spans(search, pattern):
     options = SearchOptions(limit=17, sort_mode="kana")
@@ -51,6 +53,37 @@ def test_suffix_index_returns_only_matching_readings(search):
     assert all(row.normalized_reading.endswith("ねこ") for row in candidates)
 
 
+def test_literal_alternatives_use_union_of_suffix_candidates(search):
+    hints = regex_hints("(こ|ねこ|こ)$")
+    assert hints.suffixes == ("こ", "ねこ")
+    rows = tuple(search._hint_candidates(hints))
+    assert len(rows) == len({row.id for row in rows})
+    assert {row.id for row in rows} == {
+        row.id for row in search.snapshot.records if row.normalized_reading.endswith("こ")
+    }
+
+
+@pytest.mark.parametrize("sort_mode", ["kana", "commonness", "dictionary_priority"])
+@pytest.mark.parametrize("query", ["?", "???", "?????"])
+def test_length_only_pattern_preserves_results(search, sort_mode, query):
+    from wordquery_jp.pattern import compile_reading_pattern
+    plan = compile_reading_pattern(query)
+    options = SearchOptions(sort_mode=sort_mode, limit=7)
+    actual = search.pattern_search(query, options)
+    expected = search._search_compiled(
+        plan.compiled, plan.normalized_pattern, options,
+        include_match_spans=False, condition_description=plan.description,
+    )
+    assert replace(actual, duration_ms=0) == replace(expected, duration_ms=0)
+
+
+def test_length_only_pattern_does_not_invoke_regex(search, monkeypatch):
+    def unexpected(*args):
+        pytest.fail("Length-only pattern must not execute Regex per record")
+    monkeypatch.setattr(search, "_regex_match", unexpected)
+    assert search.pattern_search("???").total == 4 ** 3
+
+
 def test_auxiliary_hints_preserve_results(tmp_path):
     from pathlib import Path
     fixtures = Path(__file__).parent / "fixtures"
@@ -67,6 +100,16 @@ def test_auxiliary_hints_preserve_results(tmp_path):
             auxiliary_records=service._auxiliary_records(options),
         )
         assert replace(result, duration_ms=0) == replace(baseline, duration_ms=0)
+    from wordquery_jp.pattern import compile_reading_pattern
+    for query in ["???", "?????", "????????"]:
+        plan = compile_reading_pattern(query)
+        actual = service.pattern_search(query, options)
+        baseline = service._search_compiled(
+            plan.compiled, plan.normalized_pattern, options,
+            auxiliary_records=service._auxiliary_records(options),
+            include_match_spans=False, condition_description=plan.description,
+        )
+        assert replace(actual, duration_ms=0) == replace(baseline, duration_ms=0)
 
 
 def test_auxiliary_regex_timeout_is_not_hidden_by_sqlite(tmp_path):

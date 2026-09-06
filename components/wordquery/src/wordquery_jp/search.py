@@ -101,6 +101,10 @@ class SearchService:
             yield from self.snapshot.records
             return
         choices = []
+        if hints.suffixes:
+            unique = {row.id: row for suffix in hints.suffixes
+                      for row in self._core_candidates(suffix, "suffix")}
+            choices.append(tuple(unique.values()))
         if hints.prefix:
             choices.append(self._core_candidates(hints.prefix, "prefix"))
         if hints.suffix:
@@ -116,6 +120,7 @@ class SearchService:
                     and (hints.exact_length is None or len(reading) == hints.exact_length)
                     and (not hints.prefix or reading.startswith(hints.prefix))
                     and (not hints.suffix or reading.endswith(hints.suffix))
+                    and (not hints.suffixes or reading.endswith(hints.suffixes))
                     and (not hints.contains or hints.contains in reading)):
                 yield row
 
@@ -181,13 +186,24 @@ class SearchService:
                 str(exc),
                 position=exc.position,
             ) from exc
+        length_only = bool(plan.normalized_pattern) and set(plan.normalized_pattern) == {"?"}
         auxiliary_records = self._auxiliary_records(
             options,
             normalized_query=plan.prefilter_query,
             match_type=plan.prefilter_match_type,
             hints=self._pattern_hints(plan),
-            reading_matcher=lambda reading: self._regex_match(plan.compiled, reading) is not None,
+            reading_matcher=(None if length_only else
+                             lambda reading: self._regex_match(plan.compiled, reading) is not None),
         )
+        if length_only:
+            return self._search_matching(
+                lambda record, remaining: (
+                    len(record.normalized_reading) == plan.exact_length
+                    and "\n" not in record.normalized_reading, None),
+                plan.normalized_pattern, options, auxiliary_records=auxiliary_records,
+                condition_description=plan.description,
+                core_records=self._pattern_core_candidates(plan),
+            )
         return self._search_compiled(
             plan.compiled,
             plan.normalized_pattern,

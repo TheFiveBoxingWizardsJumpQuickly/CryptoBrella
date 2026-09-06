@@ -69,6 +69,14 @@ class AuxiliaryLexicon:
                 indexed=self.search_index is not None,
             )
         if hints is not None:
+            if hints.suffixes:
+                alternatives = []
+                for suffix in hints.suffixes:
+                    constraint: list[str] = []
+                    _append_reading_constraint(constraint, parameters, suffix, "suffix",
+                                               indexed=self.search_index is not None)
+                    alternatives.append("(" + " AND ".join(constraint) + ")")
+                conditions.append("(" + " OR ".join(alternatives) + ")")
             if hints.prefix:
                 _append_reading_constraint(conditions, parameters, hints.prefix, "prefix")
             if hints.suffix:
@@ -102,7 +110,6 @@ class AuxiliaryLexicon:
             )
 
         connection = _open_read_only(self.search_index or self.database)
-        connection.row_factory = sqlite3.Row
         matcher_error: Exception | None = None
         if reading_matcher is not None:
             def match_reading(reading: str) -> bool:
@@ -123,6 +130,9 @@ class AuxiliaryLexicon:
             if self.search_index:
                 if signature is not None:
                     index_hint = " INDEXED BY auxiliary_signature"
+                elif hints and hints.suffixes:
+                    # Allow SQLite's MULTI-INDEX OR plan for the disjoint ranges.
+                    pass
                 elif match_type == "suffix" or (hints and hints.suffix):
                     index_hint = " INDEXED BY auxiliary_suffix"
                 elif match_type in {"prefix", "exact"} or (hints and hints.prefix):
@@ -146,7 +156,9 @@ class AuxiliaryLexicon:
                 parameters,
             )
             for row in cursor:
-                yield _record_from_row(row)
+                # This SELECT has a fixed projection. Avoid constructing a dict
+                # for every auxiliary hit (length-only queries can hit 100k+).
+                yield SearchRecord(*row[:9], multiple_sources=bool(row[9]))
         except sqlite3.OperationalError as exc:
             if matcher_error is not None:
                 raise matcher_error from exc

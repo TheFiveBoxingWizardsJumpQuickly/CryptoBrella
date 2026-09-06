@@ -11,6 +11,7 @@ class SearchHints:
     contains: str = ""
     minimum_length: int = 0
     exact_length: int | None = None
+    suffixes: tuple[str, ...] = ()
 
 
 # Deliberately excludes groups, flags, escapes, alternation and advanced classes.
@@ -19,6 +20,13 @@ _ATOM = re.compile(r"([ぁ-ゖー]|\.|\[[ぁ-ゖー-]+\])([*+?]|\{[0-9]+(?:,[0-9
 
 
 def regex_hints(pattern: str) -> SearchHints:
+    # Only a complete, unquantified literal alternative group at the end.
+    # Keep the original Regex for matching and capture/span semantics.
+    alternative = re.fullmatch(r"\^?\((?:\?:)?([ぁ-ゖー]+(?:\|[ぁ-ゖー]+)+)\)\$", pattern)
+    if alternative:
+        suffixes = tuple(dict.fromkeys(alternative[1].split("|")))
+        if len(suffixes) <= 32:
+            return SearchHints(suffixes=suffixes)
     anchored_start, anchored_end = pattern.startswith("^"), pattern.endswith("$")
     body = pattern[1:] if anchored_start else pattern
     body = body[:-1] if anchored_end else body

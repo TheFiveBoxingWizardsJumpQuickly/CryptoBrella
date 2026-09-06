@@ -33,7 +33,8 @@ def test_index_preserves_all_search_results_and_original_database(database, tags
                             limit=3000, sort_mode="commonness")
     for mode, queries in [
         ("pattern", ["*", "とう*", "*う", "?ねこ", "???", "?????", "と*う"]),
-        ("regex", ["^とう.*$", "う$", "(とう|ねこ)$", "^[あ-ん]{3}$"]),
+        ("regex", ["^とう.*$", "う$", "(とう|ねこ)$", "(う|ょう|う)$",
+                   "(?:う|ょう)$", "^(とう|ねこ)$", "^[あ-ん]{3}$"]),
         ("anagram", ["とうきょう", "ねこ"]),
         ("reading", ["ねこ", "とう"]),
     ]:
@@ -73,6 +74,18 @@ def test_suffix_query_uses_index(database):
                                   "AND reversed_reading<? AND reading_length=?",
                                   ("こね", "こね\U0010ffff", 3)).fetchall()
     assert any("SEARCH words USING INDEX auxiliary_suffix" in row[3] for row in plan)
+
+
+def test_alternative_suffix_query_uses_both_index_ranges(database):
+    build_search_index(database)
+    with sqlite3.connect(index_path(database)) as connection:
+        plan = connection.execute(
+            "EXPLAIN QUERY PLAN SELECT id FROM words WHERE status='candidate' AND "
+            "((reversed_reading>=? AND reversed_reading<?) OR "
+            "(reversed_reading>=? AND reversed_reading<?)) ORDER BY id",
+            ("うと", "うと\U0010ffff", "こね", "こね\U0010ffff"),
+        ).fetchall()
+    assert sum("SEARCH words USING INDEX auxiliary_suffix" in row[3] for row in plan) == 2
 
 
 def test_failed_build_is_never_published(database, monkeypatch):
