@@ -1,7 +1,6 @@
 import os
 from copy import deepcopy
 
-
 CATEGORY_DEFINITIONS = [
     {"id": "cryptography", "title": "Cryptography"},
     {"id": "encoding", "title": "Encoding"},
@@ -369,8 +368,8 @@ TOOL_CATALOG = [
         "name": "WordQuery: JP",
         "description": "Search Japanese words by pattern, anagram, or Regex.",
         "aliases": ["japanese word search", "anagram", "regex", "単語検索"],
-        "tags": ["utility", "japanese", "word", "puzzle"],
-        "icon": "icon_riddle_tables.png",
+        "tags": ["utility", "japanese", "word", "puzzle", "crossword"],
+        "icon": "icon_wordquery.png",
         "show_on_home": os.environ.get("WORDQUERY_PUBLIC", "0") == "1",
     },
     {

@@ -231,3 +231,132 @@ def test_failed_notification_retries_next_day(setup_update, monkeypatch):
     state["consecutive_failures"] = 2
     ops._notify_failure_if_due(state_dir, state, datetime.now(UTC), "failure", "details")
     assert len(calls) == 2
+
+
+@pytest.mark.parametrize("partial", [False, True])
+def test_repeated_failures_keep_only_one_quarantine(setup_update, monkeypatch, partial):
+    state_dir, database = setup_update
+    latest(monkeypatch, "new")
+    fake_build(monkeypatch, database, ["smoke timeout"])
+    if partial:
+        def fail(*args):
+            (args[1] / "partial.gz").write_bytes(b"partial")
+            raise OSError("download interrupted")
+        monkeypatch.setattr(ops, "_download_latest_jmdict", fail)
+    before = ops.read_state(state_dir)
+    for day in range(3):
+        now = datetime(2026, 9, 6 + day, tzinfo=UTC)
+        if partial:
+            with pytest.raises(OSError, match="interrupted"):
+                ops.update_lexicon(state_dir, now=now)
+        else:
+            assert ops.update_lexicon(state_dir, now=now).status == "quarantined"
+        entries = list((state_dir / "quarantine").iterdir())
+        assert len(entries) == 1
+        assert entries[0].name.startswith(now.strftime("%Y%m%d"))
+        assert not list((state_dir / "work").iterdir())
+    assert ops.read_state(state_dir)["last_success_at"] == before["last_success_at"]
+    assert (state_dir / "current").resolve() == database.parent
+
+
+def test_prune_protects_links_baseline_and_unknown_directories(setup_update):
+    state_dir, database = setup_update
+    quarantine = state_dir / "quarantine"
+    protected = quarantine / "20260901T000000Z-00000000"
+    protected.mkdir()
+    (state_dir / "previous").symlink_to(protected, target_is_directory=True)
+    baseline = quarantine / "20260902T000000Z-00000000"
+    baseline.mkdir()
+    state = ops.read_state(state_dir)
+    state["human_review_baseline"] = str(baseline)
+    ops.write_state(state_dir, state)
+    unknown = quarantine / "manual-backup"
+    unknown.mkdir()
+    symlink = quarantine / "20260903T000000Z-00000000"
+    symlink.symlink_to(database.parent, target_is_directory=True)
+    old = quarantine / "20260904T000000Z-00000000"
+    old.mkdir()
+    new = quarantine / "20260905T000000Z-00000000"
+    new.mkdir()
+    ops._prune_quarantine(state_dir)
+    assert not old.exists()
+    assert all(p.exists() for p in (new, protected, baseline, unknown, symlink, database))
+
+
+def test_storage_shortage_stops_before_download_and_preserves_state(setup_update, monkeypatch):
+    from types import SimpleNamespace
+    state_dir, database = setup_update
+    old = state_dir / "quarantine/20260901T000000Z-00000000"
+    old.mkdir()
+    monkeypatch.setattr(ops.shutil, "disk_usage", lambda p: SimpleNamespace(free=1))
+    monkeypatch.setattr(ops, "_download_latest_jmdict", lambda *a: pytest.fail("downloaded"))
+    with pytest.raises(ValueError, match="Insufficient update storage"):
+        ops.update_lexicon(state_dir)
+    state = ops.read_state(state_dir)
+    assert state["last_success_at"] is None
+    assert state["consecutive_failures"] == 1
+    assert (state_dir / "current").resolve() == database.parent
+    assert old.is_dir()  # Empty failed preflight must not evict useful evidence.
+    assert not list((state_dir / "work").iterdir())
+
+
+def test_account_quota_overrides_large_filesystem_free_space(setup_update, monkeypatch):
+    from types import SimpleNamespace
+    state_dir, _ = setup_update
+    monkeypatch.setenv("WORDQUERY_STORAGE_QUOTA_BYTES", "12000000000")
+    monkeypatch.setenv("WORDQUERY_STORAGE_USAGE_ROOT", str(state_dir.parent))
+    monkeypatch.setattr(ops.shutil, "disk_usage", lambda p: SimpleNamespace(free=10 ** 12))
+    monkeypatch.setattr(ops.subprocess, "run", lambda *a, **kw:
+                        SimpleNamespace(stdout="11000000000\taccount\n"))
+    with pytest.raises(ValueError, match="Insufficient update storage"):
+        ops.check_update_storage(state_dir)
+    monkeypatch.setattr(ops.subprocess, "run", lambda *a, **kw:
+                        SimpleNamespace(stdout="6100000000\taccount\n"))
+    assert ops.check_update_storage(state_dir)["available_bytes"] == 5900000000
+
+
+def test_incomplete_quota_configuration_fails_closed(setup_update, monkeypatch):
+    state_dir, _ = setup_update
+    monkeypatch.setenv("WORDQUERY_STORAGE_QUOTA_BYTES", "12000000000")
+    monkeypatch.delenv("WORDQUERY_STORAGE_USAGE_ROOT", raising=False)
+    with pytest.raises(ValueError, match="Set both"):
+        ops.check_update_storage(state_dir)
+
+
+def test_dry_run_does_not_prune_existing_quarantines(setup_update, monkeypatch):
+    state_dir, database = setup_update
+    latest(monkeypatch, "new")
+    fake_build(monkeypatch, database, ["smoke timeout"])
+    for day in (1, 2):
+        (state_dir / f"quarantine/2026090{day}T000000Z-00000000").mkdir()
+    before = (state_dir / "state.json").read_bytes()
+    ops.update_lexicon(state_dir, dry_run=True)
+    assert len(list((state_dir / "quarantine").iterdir())) == 3
+    assert (state_dir / "state.json").read_bytes() == before
+
+
+def test_release_cleanup_preserves_review_baseline(setup_update):
+    state_dir, _ = setup_update
+    baseline = state_dir / "releases/baseline"
+    baseline.mkdir()
+    expired = state_dir / "releases/old"
+    expired.mkdir()
+    state = ops.read_state(state_dir)
+    state["human_review_baseline"] = str(baseline)
+    ops.write_state(state_dir, state)
+    ops._prune_releases(state_dir)
+    assert baseline.is_dir()
+    assert not expired.exists()
+
+
+def test_quota_measurement_failure_stops_update(setup_update, monkeypatch):
+    state_dir, _ = setup_update
+    monkeypatch.setenv("WORDQUERY_STORAGE_QUOTA_BYTES", "12000000000")
+    monkeypatch.setenv("WORDQUERY_STORAGE_USAGE_ROOT", str(state_dir.parent))
+    def fail(*a, **kw):
+        raise ops.subprocess.TimeoutExpired("du", 60)
+    monkeypatch.setattr(ops.subprocess, "run", fail)
+    monkeypatch.setattr(ops, "_download_latest_jmdict", lambda *a: pytest.fail("downloaded"))
+    with pytest.raises(ops.subprocess.TimeoutExpired):
+        ops.update_lexicon(state_dir)
+    assert ops.read_state(state_dir)["last_success_at"] is None

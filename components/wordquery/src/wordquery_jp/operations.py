@@ -7,9 +7,11 @@ import hashlib
 import json
 import logging
 import os
+import re
 import shutil
 import smtplib
 import sqlite3
+import subprocess
 import tempfile
 import time
 import tomllib
@@ -37,6 +39,7 @@ PUBLIC_FRESHNESS_LIMIT = timedelta(days=31)
 MAX_ACCEPTED_COUNT_DELTA = 0.02
 MAX_ACCEPTED_REMOVED = 0.005
 MAX_ACCEPTED_TOUCHED = 0.05
+_RUN_ID = re.compile(r"[0-9]{8}T[0-9]{6}Z-[0-9a-f]{8}")
 
 
 @dataclass(frozen=True, slots=True)
@@ -99,6 +102,13 @@ def update_lexicon(
                 raise ValueError(
                     "Update policy is not approved; initialize from a reviewed release"
                 )
+            if not dry_run:
+                _prune_quarantine(state_dir)
+            storage = check_update_storage(state_dir)
+            logging.getLogger(__name__).info(
+                "Update storage: available=%s required=%s bytes",
+                storage["available_bytes"], storage["required_bytes"],
+            )
             logging.getLogger(__name__).info("Downloading latest JMdict: %s", run_id)
             candidate = _download_latest_jmdict(root, work)
             active_metadata = _database_metadata(state_dir / "current" / "lexicon.sqlite3")
@@ -146,6 +156,8 @@ def update_lexicon(
             if result["failures"]:
                 quarantine = state_dir / "quarantine" / run_id
                 os.replace(work, quarantine)
+                if not dry_run:
+                    _prune_quarantine(state_dir)
                 if dry_run:
                     return UpdateResult("quarantined", run_id, "; ".join(result["failures"]))
                 _record_failure(state_dir, state, now, result["failures"])
@@ -210,6 +222,17 @@ def update_lexicon(
             )
             return UpdateResult("activated", run_id)
         except Exception as exc:
+            # Preserve the newest failed build for diagnosis, including partial
+            # downloads/builds. Never touch an already activated release here.
+            if not dry_run and work.is_dir():
+                try:
+                    if any(work.iterdir()):
+                        os.replace(work, state_dir / "quarantine" / run_id)
+                        _prune_quarantine(state_dir)
+                    else:
+                        work.rmdir()
+                except OSError:
+                    logging.getLogger(__name__).exception("Could not retain failed update")
             if dry_run:
                 raise
             _record_failure(state_dir, state, now, [f"{type(exc).__name__}: {exc}"])
@@ -726,18 +749,71 @@ def _prune_releases(state_dir: Path) -> None:
         for name in ("current", "previous")
         if (target := _read_link_target(state_dir / name)) is not None
     }
+    if baseline := read_state(state_dir).get("human_review_baseline"):
+        keep.add(Path(baseline).resolve())
     for release in (state_dir / "releases").iterdir():
-        if release.is_dir() and release.resolve() not in keep:
+        if (not release.is_symlink() and release.is_dir()
+                and not any(release.resolve() == item or release.resolve() in item.parents
+                            for item in keep)):
             shutil.rmtree(release)
 
 
 def _prune_quarantine(state_dir: Path) -> None:
+    state = read_state(state_dir)
+    protected = {
+        target.resolve() for name in ("current", "previous")
+        if (target := _read_link_target(state_dir / name)) is not None
+    }
+    if baseline := state.get("human_review_baseline"):
+        protected.add(Path(baseline).resolve())
     entries = sorted(
-        (path for path in (state_dir / "quarantine").iterdir() if path.is_dir()),
+        (path for path in (state_dir / "quarantine").iterdir()
+         if _RUN_ID.fullmatch(path.name) and not path.is_symlink() and path.is_dir()
+         and not any(path.resolve() == item or path.resolve() in item.parents
+                     for item in protected)),
         reverse=True,
     )
     for path in entries[1:]:
         shutil.rmtree(path)
+        logging.getLogger(__name__).info("Removed old quarantined update: %s", path.name)
+
+
+def check_update_storage(state_dir: Path) -> dict[str, int | None]:
+    """Read-only conservative preflight; filesystem free space is not a user quota."""
+    database = state_dir / "current" / "lexicon.sqlite3"
+    size = sum(path.stat().st_size for path in (database, index_path(database))
+               if path.is_file())
+    required = max(2 * 1024 ** 3, 2 * size + 512 * 1024 ** 2)
+    available = shutil.disk_usage(state_dir).free
+    quota = os.environ.get("WORDQUERY_STORAGE_QUOTA_BYTES")
+    usage_root = os.environ.get("WORDQUERY_STORAGE_USAGE_ROOT")
+    used = None
+    if bool(quota) != bool(usage_root):
+        raise ValueError("Set both WORDQUERY_STORAGE_QUOTA_BYTES and WORDQUERY_STORAGE_USAGE_ROOT")
+    if quota and usage_root:
+        quota_bytes = int(quota)
+        account = Path(usage_root)
+        if quota_bytes <= 0 or not account.is_absolute() or not account.is_dir():
+            raise ValueError("Invalid storage quota or absolute account directory")
+        if not state_dir.resolve().is_relative_to(account.resolve()):
+            raise ValueError("Storage usage directory must contain the state directory")
+        # GNU du counts allocated blocks, includes dotfiles, and deduplicates hard
+        # links without following symlinks. Fail closed if measurement fails.
+        result = subprocess.run(
+            ["du", "-s", "-B1", "--", str(account)], check=True,
+            capture_output=True, text=True, timeout=60,
+        )
+        used = int(result.stdout.split()[0])
+        available = min(available, max(0, quota_bytes - used))
+    else:
+        logging.getLogger(__name__).warning(
+            "Account quota is not configured; checking filesystem free space only"
+        )
+    if available < required:
+        raise ValueError(
+            f"Insufficient update storage: available={available} required={required} bytes"
+        )
+    return {"available_bytes": available, "required_bytes": required, "account_used_bytes": used}
 
 
 def _write_json(path: Path, value: object) -> None:

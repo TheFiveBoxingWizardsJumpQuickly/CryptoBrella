@@ -45,6 +45,7 @@ from .lexicon.risk_review import (
 )
 from .operations import (
     _run_smoke,
+    check_update_storage,
     initialize_updates,
     rollback_lexicon,
     send_notification,
@@ -96,6 +97,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     status = subparsers.add_parser("status", help="公開辞書の更新状態を表示する")
     status.add_argument("--state-dir", type=Path, required=True)
+    storage = subparsers.add_parser("check-storage", help="更新用の空き容量を確認（変更なし）")
+    storage.add_argument("--state-dir", type=Path, required=True)
 
     evaluate = subparsers.add_parser("evaluate", help="品質ゲートを評価する")
     evaluate.add_argument("--database", type=Path, default=Path("var/lexicon.sqlite3"))
@@ -308,6 +311,9 @@ def main(argv: list[str] | None = None) -> int:
         report = status_report(args.state_dir)
         print(json.dumps(report, ensure_ascii=False, indent=2))
         return 0 if report["fresh"] else 1
+    if args.command == "check-storage":
+        print(json.dumps(check_update_storage(args.state_dir), indent=2))
+        return 0
     if args.command in {"evaluate", "validate"}:
         result = evaluate_database(
             args.database,
