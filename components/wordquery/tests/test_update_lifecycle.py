@@ -33,6 +33,7 @@ def setup_update(tmp_path, monkeypatch):
     (baseline / "manifest.json").write_text(json.dumps(manifest))
     state_dir = tmp_path / "state"
     ops.initialize_updates(state_dir, database)
+    ops.build_search_index(database)
     monkeypatch.setattr(ops, "send_notification", lambda *a, **kw: False)
     monkeypatch.setattr(ops, "reload_pythonanywhere_webapp", lambda: None)
     return state_dir, database
@@ -72,6 +73,28 @@ def test_update_smoke_uses_current_request_schema(setup_update):
     report = ops._run_smoke(database)
     assert report["failures"] == []
     assert len(report["durations_ms"]) == 8
+
+
+def test_candidate_build_packages_index_and_survives_directory_move(setup_update, monkeypatch):
+    from wordquery_jp.repository import load_snapshot
+    from wordquery_jp.search_index import file_hash, index_path
+    state_dir, _ = setup_update
+    root = ops.component_root()
+    fixtures = root / "tests/fixtures"
+    work = state_dir / "work/fixture-build"
+    work.mkdir()
+    monkeypatch.setattr(ops, "_prepare_sudachi", lambda *a: fixtures / "sudachi_raw.csv")
+    source = ops.SourceDownload(fixtures / "jmdict.xml", file_hash(fixtures / "jmdict.xml"),
+                                "fixture")
+    result = ops._build_candidate(state_dir, root, work, source, run_id="fixture-build",
+                                  now=datetime.now(UTC))
+    database = work / "lexicon.sqlite3"
+    assert result["manifest"]["search_index"]["sha256"] == file_hash(index_path(database))
+    assert result["manifest"]["smoke"]["failures"] == []
+    destination = state_dir / "releases/fixture-build"
+    work.rename(destination)
+    snapshot = load_snapshot(destination / "lexicon.sqlite3")
+    assert snapshot.auxiliary.search_index == index_path(destination / "lexicon.sqlite3")
 
 
 def test_same_source_dry_run_does_not_extend_expiry(setup_update, monkeypatch):

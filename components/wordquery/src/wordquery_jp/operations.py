@@ -11,6 +11,7 @@ import shutil
 import smtplib
 import sqlite3
 import tempfile
+import time
 import tomllib
 import urllib.request
 import zipfile
@@ -28,6 +29,7 @@ from .lexicon.quality import compare_databases, evaluate_database
 from .query import parse_search_request
 from .repository import load_snapshot
 from .search import SearchService
+from .search_index import build_search_index, file_hash, index_path, validate_search_index
 from .sqlite_paths import absolute_read_only_uri
 
 CHECK_INTERVAL = timedelta(days=21)
@@ -101,7 +103,9 @@ def update_lexicon(
             candidate = _download_latest_jmdict(root, work)
             active_metadata = _database_metadata(state_dir / "current" / "lexicon.sqlite3")
             active_jmdict_sha = active_metadata.get("source.jmdict.sha256")
-            if active_jmdict_sha == candidate.sha256:
+            if (active_jmdict_sha == candidate.sha256
+                    and validate_search_index(
+                        state_dir / "current" / "lexicon.sqlite3") is not None):
                 if dry_run:
                     return UpdateResult(
                         "validated", run_id, "Current source matches latest; state unchanged"
@@ -528,6 +532,7 @@ def _build_candidate(
     if not audit.passed:
         failures.extend(f"candidate_audit:{item}" for item in audit.report["failures"])
     failures.extend(evaluate_diff_policy(before, database, diff))
+    build_search_index(database)
     smoke = _run_smoke(database)
     failures.extend(smoke["failures"])
     with database.open("rb") as handle:
@@ -538,6 +543,9 @@ def _build_candidate(
         "component_version": "0.1.0",
         "input_hash": result.input_hash,
         "database_sha256": database_sha256,
+        "search_index": {"filename": index_path(database).name,
+                         "sha256": file_hash(index_path(database)),
+                         "bytes": index_path(database).stat().st_size},
         "approved_policy_sha256": update_policy_fingerprint(root),
         "human_review_baseline": read_state(state_dir).get("human_review_baseline"),
         "counts": {"accepted": result.accepted, "candidates": result.candidates},
@@ -572,15 +580,23 @@ def _run_smoke(database: Path) -> dict[str, Any]:
     ]
     durations = []
     failures = []
+    results = []
     for payload in cases:
+        started, cpu_started = time.monotonic(), time.process_time()
+        result = {"mode": payload["mode"], "query": payload["query"]}
         try:
             response = service.execute(parse_search_request(payload, max_length=200, limit=3000))
             durations.append(response.duration_ms)
+            result.update(status="completed", total=response.total)
             if response.duration_ms > 5000:
                 failures.append(f"smoke_timeout:{payload['mode']}")
         except Exception as exc:
-            failures.append(f"smoke:{payload['mode']}:{exc}")
-    return {"durations_ms": durations, "failures": failures}
+            failures.append(f"smoke:{payload['mode']}:{payload['query']}:{exc}")
+            result.update(status="failed", error=str(exc))
+        result.update(wall_ms=(time.monotonic() - started) * 1000,
+                      cpu_ms=(time.process_time() - cpu_started) * 1000)
+        results.append(result)
+    return {"durations_ms": durations, "failures": failures, "cases": results}
 
 
 def _download_latest_jmdict(root: Path, work: Path) -> SourceDownload:

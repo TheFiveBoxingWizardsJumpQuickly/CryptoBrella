@@ -20,6 +20,7 @@ from .models import (
 )
 from .search_budget import expired
 from .search_hints import SearchHints
+from .search_index import validate_search_index
 from .sqlite_paths import absolute_read_only_uri
 
 
@@ -45,6 +46,7 @@ class AuxiliaryLexicon:
 
     database: Path
     count: int
+    search_index: Path | None = None
 
     def iter_records(
         self,
@@ -63,20 +65,24 @@ class AuxiliaryLexicon:
             parameters.append(signature)
         elif normalized_query is not None and match_type is not None:
             _append_reading_constraint(
-                conditions, parameters, normalized_query, match_type
+                conditions, parameters, normalized_query, match_type,
+                indexed=self.search_index is not None,
             )
         if hints is not None:
             if hints.prefix:
                 _append_reading_constraint(conditions, parameters, hints.prefix, "prefix")
             if hints.suffix:
-                _append_reading_constraint(conditions, parameters, hints.suffix, "suffix")
+                _append_reading_constraint(conditions, parameters, hints.suffix, "suffix",
+                                           indexed=self.search_index is not None)
             if hints.contains:
                 _append_reading_constraint(conditions, parameters, hints.contains, "contains")
             if hints.exact_length is not None:
-                conditions.append("length(normalized_reading) = ?")
+                conditions.append("reading_length = ?" if self.search_index
+                                  else "length(normalized_reading) = ?")
                 parameters.append(hints.exact_length)
             elif hints.minimum_length:
-                conditions.append("length(normalized_reading) >= ?")
+                conditions.append("reading_length >= ?" if self.search_index
+                                  else "length(normalized_reading) >= ?")
                 parameters.append(hints.minimum_length)
         if options is not None:
             if not options.include_function:
@@ -88,13 +94,14 @@ class AuxiliaryLexicon:
                 conditions.append("instr(normalized_reading, ?) = 0")
                 parameters.append(options.must_exclude)
             if options.reading_length is not None and options.length_unit == "kana":
-                conditions.append("length(normalized_reading) = ?")
+                conditions.append("reading_length = ?" if self.search_index
+                                  else "length(normalized_reading) = ?")
                 parameters.append(options.reading_length)
             _append_tag_constraints(
                 conditions, parameters, options.tag_filters, word_alias="words"
             )
 
-        connection = _open_read_only(self.database)
+        connection = _open_read_only(self.search_index or self.database)
         connection.row_factory = sqlite3.Row
         matcher_error: Exception | None = None
         if reading_matcher is not None:
@@ -108,15 +115,31 @@ class AuxiliaryLexicon:
             connection.create_function("wordquery_match", 1, match_reading)
             conditions.append("wordquery_match(normalized_reading)")
         try:
+            if self.search_index and options is not None and options.tag_filters:
+                # Tags remain in the authoritative DB.
+                connection.execute("ATTACH DATABASE ? AS lexicon",
+                                   (absolute_read_only_uri(self.database),))
+            index_hint = ""
+            if self.search_index:
+                if signature is not None:
+                    index_hint = " INDEXED BY auxiliary_signature"
+                elif match_type == "suffix" or (hints and hints.suffix):
+                    index_hint = " INDEXED BY auxiliary_suffix"
+                elif match_type in {"prefix", "exact"} or (hints and hints.prefix):
+                    index_hint = " INDEXED BY auxiliary_prefix"
+                elif ((hints and hints.exact_length is not None)
+                      or (options and options.reading_length is not None
+                          and options.length_unit == "kana")):
+                    index_hint = " INDEXED BY auxiliary_length"
+            multiple_sources = ("multiple_sources" if self.search_index else """(
+                SELECT COUNT(DISTINCT p.source) >= 2 FROM provenance p WHERE p.word_id = words.id
+            )""")
             cursor = connection.execute(
                 f"""
                 SELECT id, surface, reading, normalized_reading, signature,
                        category, pos, priority, status,
-                       (
-                           SELECT COUNT(DISTINCT p.source) >= 2
-                           FROM provenance p WHERE p.word_id = words.id
-                       ) AS multiple_sources
-                FROM words
+                       {multiple_sources} AS multiple_sources
+                FROM words{index_hint}
                 WHERE {" AND ".join(conditions)}
                 ORDER BY id
                 """,
@@ -180,7 +203,9 @@ def load_snapshot(database: str | Path) -> SearchSnapshot:
         key: tuple(sorted(values, key=_dictionary_priority_key))
         for key, values in grouped.items()
     }
-    auxiliary = AuxiliaryLexicon(path.resolve(), candidate_count) if candidate_count else None
+    search_index = validate_search_index(path.resolve())
+    auxiliary = (AuxiliaryLexicon(path.resolve(), candidate_count, search_index)
+                 if candidate_count else None)
     return SearchSnapshot(
         records=records,
         anagrams=anagrams,
@@ -337,6 +362,7 @@ def _append_reading_constraint(
     parameters: list[object],
     normalized_query: str,
     match_type: MatchType,
+    *, indexed: bool = False,
 ) -> None:
     if match_type == "exact":
         conditions.append("normalized_reading = ?")
@@ -348,8 +374,12 @@ def _append_reading_constraint(
         conditions.append("instr(normalized_reading, ?) > 0")
         parameters.append(normalized_query)
     elif match_type == "suffix" and normalized_query:
-        conditions.append("substr(normalized_reading, -length(?)) = ?")
-        parameters.extend((normalized_query, normalized_query))
+        if indexed:
+            conditions.append("reversed_reading >= ? AND reversed_reading < ?")
+            parameters.extend((normalized_query[::-1], normalized_query[::-1] + "\U0010ffff"))
+        else:
+            conditions.append("substr(normalized_reading, -length(?)) = ?")
+            parameters.extend((normalized_query, normalized_query))
 
 
 def _append_tag_constraints(

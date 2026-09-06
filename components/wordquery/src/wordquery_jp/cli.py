@@ -44,12 +44,14 @@ from .lexicon.risk_review import (
     write_risk_review_sample,
 )
 from .operations import (
+    _run_smoke,
     initialize_updates,
     rollback_lexicon,
     send_notification,
     status_report,
     update_lexicon,
 )
+from .search_index import build_search_index
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -74,6 +76,12 @@ def build_parser() -> argparse.ArgumentParser:
     update.add_argument("--force", action="store_true")
     update.add_argument("--dry-run", action="store_true")
     update.add_argument("--no-reload", action="store_true")
+    index = subparsers.add_parser(
+        "build-search-index", help="既存辞書の検索索引を生成（DB変更なし）"
+    )
+    index.add_argument("--database", type=Path, required=True)
+    check_search = subparsers.add_parser("check-search", help="既存辞書で検索検査だけを再実行する")
+    check_search.add_argument("--database", type=Path, required=True)
 
     initialize = subparsers.add_parser(
         "initialize-updates", help="評価済み辞書を更新の基準版にする"
@@ -253,6 +261,14 @@ def main(argv: list[str] | None = None) -> int:
             f"candidates={result.candidates} issues={result.issues} hash={result.input_hash}"
         )
         return 0
+    if args.command == "build-search-index":
+        logging.basicConfig(level=logging.INFO, format="%(message)s")
+        print(json.dumps(build_search_index(args.database), ensure_ascii=False, indent=2))
+        return 0
+    if args.command == "check-search":
+        report = _run_smoke(args.database)
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+        return 1 if report["failures"] else 0
     if args.command == "notify-test":
         sent = send_notification(
             "WordQuery update notification test", "Notification delivery test."
