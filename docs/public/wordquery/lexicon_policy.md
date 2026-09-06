@@ -20,7 +20,10 @@ as a durable tag without evidence.
 2. Merge provenance when an entry matches across JMdict and SudachiDict.
 3. Include a SudachiDict-only general or function word at a lower initial
    priority than JMdict when it has a dictionary form, reading, known part of
-   speech, and no prohibited condition.
+   speech, and no prohibited condition. An ASCII-only written form containing
+   an A–Z letter stays in the candidate layer until corroborated by JMdict or
+   an evidence-backed manual entry; this also covers lowercase spellings and
+   forms containing ASCII punctuation.
 4. Include a SudachiDict-only proper noun in the candidate SQLite auxiliary
    layer as a merged written-form plus normalized-reading record. Do not promote
    records in bulk without entry-specific semantic evidence. Proper-noun status
@@ -54,6 +57,12 @@ categories, the representative search category is general if present, then
 proper, and function only when all categories are function-word categories. A
 matching developer entry overrides external dictionaries with its explicit
 category and priority. All parts of speech and sources are retained.
+
+The integrated regression baseline follows this rule: `東京/とうきょう`
+is general because JMdict entry 1447690 supplies a common-noun sense alongside
+SudachiDict's proper-name record. `の/の` is general because SudachiDict supplies
+both common-noun and particle records. Their source categories remain available
+even though the representative category is general.
 
 ## Search utility
 

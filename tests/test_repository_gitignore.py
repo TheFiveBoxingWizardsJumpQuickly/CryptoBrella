@@ -36,7 +36,17 @@ def test_private_local_files_are_ignored():
         "lexicon.sqlite3",
         "lexicon.sqlite3-wal",
         "local.db",
+        "var/wordquery/current/lexicon.sqlite3",
+        "var/wordquery/releases/20260830/manifest.json",
+        "var/wordquery/sources/JMdict_e.gz",
+        "components/wordquery/var/lexicon.sqlite3",
+        "components/wordquery/data/raw/JMdict_e.gz",
+        "components/wordquery/reports/quality.json",
         "reports/formal-human-gate.json",
+        "tools/wordquery_formal_review_core.js",
+        "tools/wordquery_formal_review_workbench.html",
+        "tools/wordquery_formal_review_workbench.js",
+        "tests/wordquery/test_formal_review_workbench.py",
     )
 
     assert all(is_ignored(path) for path in private_paths)

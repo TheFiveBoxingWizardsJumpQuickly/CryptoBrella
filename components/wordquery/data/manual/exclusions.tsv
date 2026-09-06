@@ -1,2 +1,6 @@
 source	source_entry_id	surface	reading	reason	reference
 sudachidict		pyridylthio	ピリジルチオ	英字の化学結合要素で、単独の日本語辞書見出しではなく形態素解析用の断片と判断	SudachiDict 20260428 core_lex.csv:33555; https://jglobal.jst.go.jp/en/detail?JGLOBAL_ID=200907009313941180
+sudachidict		おしかくせる	オシカクセル	正規化辞書形「押し隠す」から規則的に生成された可能形であり、辞書見出し語中心・規則的活用表層形は収録しない方針に反する	SudachiDict 20260428 small_lex.csv:29390; formal human review 2026-08-30
+sudachidict		ねりなおせる	ネリナオセル	正規化辞書形「練り直す」から規則的に生成された可能形であり、辞書見出し語中心・規則的活用表層形は収録しない方針に反する	SudachiDict 20260428 small_lex.csv:118949; formal human review 2026-08-30
+sudachidict		ソォ〜	ソウ	「そう」を伸ばした発話表記で、独立した辞書見出し形ではなく解析用の表層異形と判断	SudachiDict 20260428 small_lex.csv:214846; human adjudication 2026-08-31
+sudachidict		おもしれ〜	オモシレー	形容詞「面白い」の口語的・誇張的な表層形で、独立した辞書見出し形ではないと判断	SudachiDict 20260428 small_lex.csv:33587; human adjudication 2026-08-31

@@ -67,7 +67,8 @@ external dictionaries + data/manual + source manifest
 
 The generated SQLite database is a build artifact, not source data. A fast,
 primarily general-vocabulary `accepted` layer stays resident, while a
-`candidate` auxiliary layer serves proper-name candidates on demand. The
+`candidate` auxiliary layer serves proper-name and Sudachi-only ASCII-headword
+candidates on demand. The
 application never expands every candidate into resident memory unconditionally.
 The Flask layer is limited to translating task-oriented input into shared
 conditions and presenting results, preserving a one-way dependency from the

@@ -22,6 +22,7 @@ from wordquery_jp.normalization import (
 )
 
 from .importers import ImportedTag, ImportedWord, iter_jmdict, iter_sudachi_csv
+from .policy import is_ascii_only_headword
 from .schema import SCHEMA
 
 CATEGORIES = {"general", "proper", "function"}
@@ -131,7 +132,10 @@ def build_database(config: BuildConfig) -> BuildResult:
             existing.pos = "; ".join(filter(None, [existing.pos, word.pos]))
         if existing.category != word.category and word.source != "manual":
             existing.category = _resolve_category(existing.category, word.category)
-            if existing.category != "proper":
+            if (
+                existing.category != "proper"
+                and not is_ascii_only_headword(existing.surface)
+            ):
                 existing.status = "accepted"
 
     _attach_manual_tags(merged, manual_tags, issues)
@@ -456,6 +460,8 @@ def _resolve_category(first: str, second: str) -> str:
 
 
 def _initial_status(word: ImportedWord) -> str:
-    if word.source == "sudachidict" and word.category == "proper":
+    if word.source == "sudachidict" and (
+        word.category == "proper" or is_ascii_only_headword(word.surface)
+    ):
         return "candidate"
     return "accepted"

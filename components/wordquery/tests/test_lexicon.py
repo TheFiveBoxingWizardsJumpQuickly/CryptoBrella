@@ -14,6 +14,7 @@ from wordquery_jp.lexicon.importers import (
 from wordquery_jp.lexicon.quality import compare_databases, evaluate_database
 from wordquery_jp.repository import LexiconUnavailable, load_snapshot
 
+COMPONENT_ROOT = Path(__file__).parents[1]
 FIXTURES = Path(__file__).parent / "fixtures"
 
 
@@ -372,9 +373,51 @@ def test_sudachi_only_proper_noun_is_kept_in_on_demand_auxiliary_layer(tmp_path)
             """
         ).fetchall() == [("proper_type", "place", "地名")]
     snapshot = load_snapshot(database)
-    assert {record.surface for record in snapshot.records} == {"1000本", "(n)ine", "a/m"}
+    assert {record.surface for record in snapshot.records} == {"1000本"}
     assert snapshot.auxiliary is not None
-    assert snapshot.auxiliary.count == 1
+    assert snapshot.auxiliary.count == 3
+
+
+def test_ascii_only_sudachi_headword_is_core_only_with_independent_evidence(tmp_path):
+    sudachi_only = tmp_path / "sudachi-only.sqlite3"
+    build_database(
+        BuildConfig(
+            output=sudachi_only,
+            additions=tmp_path / "no-additions.tsv",
+            sudachi=FIXTURES / "sudachi_raw.csv",
+        )
+    )
+    snapshot = load_snapshot(sudachi_only)
+    assert "(n)ine" not in {record.surface for record in snapshot.records}
+
+    additions = tmp_path / "additions.tsv"
+    write_tsv(
+        additions,
+        ["surface", "reading", "category", "pos", "priority", "reason", "reference"],
+        [
+            {
+                "surface": "(n)ine",
+                "reading": "ないん",
+                "category": "general",
+                "pos": "名詞",
+                "priority": "50",
+                "reason": "independent review",
+                "reference": "test evidence",
+            }
+        ],
+    )
+    corroborated = tmp_path / "corroborated.sqlite3"
+    build_database(
+        BuildConfig(
+            output=corroborated,
+            additions=additions,
+            sudachi=FIXTURES / "sudachi_raw.csv",
+        )
+    )
+    snapshot = load_snapshot(corroborated)
+    record = next(record for record in snapshot.records if record.surface == "(n)ine")
+    assert record.status == "accepted"
+    assert record.multiple_sources is True
 
 
 def test_classification_regressions_are_enforced_by_import_and_manual_rules(tmp_path):
@@ -383,8 +426,8 @@ def test_classification_regressions_are_enforced_by_import_and_manual_rules(tmp_
         BuildConfig(
             output=database,
             additions=tmp_path / "no-additions.tsv",
-            corrections=tmp_path / "no-corrections.tsv",
-            exclusions=Path("data/manual/exclusions.tsv"),
+            corrections=COMPONENT_ROOT / "data/manual/corrections.tsv",
+            exclusions=COMPONENT_ROOT / "data/manual/exclusions.tsv",
             jmdict=FIXTURES / "jmdict.xml",
             sudachi=FIXTURES / "classification_sudachi_raw.csv",
             source_manifest=tmp_path / "none.toml",
@@ -397,6 +440,16 @@ def test_classification_regressions_are_enforced_by_import_and_manual_rules(tmp_
     assert records["サワムラー"].category == "proper"
     assert records["レクリエーシヨン"].category == "general"
     assert "pyridylthio" not in records
+    assert "おしかくせる" not in records
+    assert "ねりなおせる" not in records
+    assert "ソォ〜" not in records
+    assert "おもしれ〜" not in records
+    assert "toa" not in records
+    assert {"灰いろ", "灰色", "ひざ上", "膝上", "きょごう", "倨傲"} <= records.keys()
+    with sqlite3.connect(database) as connection:
+        assert connection.execute(
+            "SELECT category, status FROM words WHERE surface = 'toa'"
+        ).fetchone() == ("general", "candidate")
 
 
 def test_repository_rejects_an_unsupported_schema_before_loading(tmp_path):

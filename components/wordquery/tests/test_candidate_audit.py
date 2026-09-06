@@ -104,13 +104,28 @@ def test_candidate_audit_reports_completeness_classification_and_adoption_unit(
         )
         insert_provenance(connection, 3, "sudachidict", "sudachi:3")
 
+        insert_word(
+            connection,
+            word_id=4,
+            surface="polling",
+            reading="ぽーりんぐ",
+            category="general",
+            pos="名詞, 普通名詞, 一般",
+        )
+        insert_provenance(connection, 4, "sudachidict", "sudachi:4")
+
     result = audit_auxiliary_candidates(database)
 
     assert result.passed is True
     assert result.report["failures"] == []
-    assert result.report["counts"]["candidate_records"] == 2
-    assert result.report["counts"]["source_entries"] == 3
+    assert result.report["counts"]["candidate_records"] == 3
+    assert result.report["counts"]["source_entries"] == 4
     assert result.report["counts"]["records_with_multiple_source_entries"] == 1
+    assert result.report["counts"]["candidate_kinds"] == {
+        "proper": 2,
+        "ascii_only_headword": 1,
+        "overlap": 0,
+    }
     assert result.report["classification"]["proper_type_records"] == {
         "other": 2,
         "place": 1,
@@ -148,10 +163,27 @@ def test_candidate_audit_fails_on_scope_and_completeness_drift(tmp_path):
 
     assert result.passed is False
     assert set(result.report["failures"]) == {
-        "candidate_non_proper:1",
+        "candidate_out_of_scope:1",
         "candidate_without_sudachi_provenance:1",
         "candidate_with_non_sudachi_provenance:1",
-        "missing_proper_type:1",
         "invalid_readings:1",
         "missing_pos:1",
     }
+
+
+def test_candidate_audit_requires_type_evidence_for_proper_candidates(tmp_path):
+    database = tmp_path / "lexicon.sqlite3"
+    build_database(database)
+    with sqlite3.connect(database) as connection:
+        insert_word(
+            connection,
+            word_id=1,
+            surface="未分類名",
+            reading="みぶんるいめい",
+        )
+        insert_provenance(connection, 1, "sudachidict", "sudachi:1")
+
+    result = audit_auxiliary_candidates(database)
+
+    assert result.passed is False
+    assert result.report["failures"] == ["missing_proper_type:1"]

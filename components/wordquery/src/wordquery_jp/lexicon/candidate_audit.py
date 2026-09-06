@@ -14,7 +14,9 @@ from wordquery_jp.normalization import (
     normalize_dictionary_reading,
 )
 
-CANDIDATE_AUDIT_SCHEMA_VERSION = "1.0"
+from .policy import is_ascii_only_headword
+
+CANDIDATE_AUDIT_SCHEMA_VERSION = "1.1"
 PROPER_TYPE_VALUES = {
     "character",
     "organization",
@@ -33,7 +35,7 @@ class CandidateAuditResult:
 
 
 def audit_auxiliary_candidates(database: str | Path) -> CandidateAuditResult:
-    """Audit the current Sudachi-only proper-name candidate scope."""
+    """Audit Sudachi-only proper-name and ASCII-headword candidates."""
 
     path = Path(database).resolve()
     connection = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
@@ -58,6 +60,10 @@ def audit_auxiliary_candidates(database: str | Path) -> CandidateAuditResult:
         categories: Counter[str] = Counter()
         priorities: Counter[int] = Counter()
         positions: Counter[str] = Counter()
+        proper_candidates = 0
+        ascii_headword_candidates = 0
+        overlapping_candidate_kinds = 0
+        out_of_scope_candidates = 0
         for row in candidate_rows:
             candidate_count += 1
             surface = row["surface"]
@@ -66,6 +72,12 @@ def audit_auxiliary_candidates(database: str | Path) -> CandidateAuditResult:
             categories[row["category"]] += 1
             priorities[row["priority"]] += 1
             positions[row["pos"]] += 1
+            is_proper = row["category"] == "proper"
+            is_ascii_headword = is_ascii_only_headword(surface)
+            proper_candidates += is_proper
+            ascii_headword_candidates += is_ascii_headword
+            overlapping_candidate_kinds += is_proper and is_ascii_headword
+            out_of_scope_candidates += not (is_proper or is_ascii_headword)
             missing_surface += not bool(surface)
             missing_pos += not bool(row["pos"])
             try:
@@ -155,6 +167,7 @@ def audit_auxiliary_candidates(database: str | Path) -> CandidateAuditResult:
             """
             SELECT COUNT(*) FROM words w
             WHERE w.status = 'candidate'
+              AND w.category = 'proper'
               AND NOT EXISTS (
                   SELECT 1 FROM word_tags t
                   WHERE t.word_id = w.id AND t.axis = 'proper_type'
@@ -214,10 +227,9 @@ def audit_auxiliary_candidates(database: str | Path) -> CandidateAuditResult:
     finally:
         connection.close()
 
-    non_proper = candidate_count - categories.get("proper", 0)
     failures = _failures(
         candidate_count=candidate_count,
-        non_proper=non_proper,
+        out_of_scope_candidates=out_of_scope_candidates,
         missing_provenance=missing_provenance,
         without_sudachi_provenance=without_sudachi_provenance,
         with_non_sudachi_provenance=with_non_sudachi_provenance,
@@ -237,7 +249,7 @@ def audit_auxiliary_candidates(database: str | Path) -> CandidateAuditResult:
         "metadata": metadata,
         "scope": {
             "status": "candidate",
-            "expected_category": "proper",
+            "candidate_kinds": ["proper", "ascii_only_headword"],
             "expected_source": "sudachidict",
         },
         "counts": {
@@ -250,6 +262,11 @@ def audit_auxiliary_candidates(database: str | Path) -> CandidateAuditResult:
                 str(key): value for key, value in sorted(priorities.items())
             },
             "positions": dict(sorted(positions.items())),
+            "candidate_kinds": {
+                "proper": proper_candidates,
+                "ascii_only_headword": ascii_headword_candidates,
+                "overlap": overlapping_candidate_kinds,
+            },
         },
         "completeness": {
             "missing_provenance": missing_provenance,
@@ -271,8 +288,8 @@ def audit_auxiliary_candidates(database: str | Path) -> CandidateAuditResult:
             "only_other_records": only_other,
             "multiple_proper_types": multiple_proper_types,
             "specific_coverage": (
-                specifically_classified / candidate_count
-                if candidate_count
+                specifically_classified / proper_candidates
+                if proper_candidates
                 else None
             ),
             "note": (
@@ -341,7 +358,7 @@ def _count_records_with_type_values(
 def _failures(
     *,
     candidate_count: int,
-    non_proper: int,
+    out_of_scope_candidates: int,
     missing_provenance: int,
     without_sudachi_provenance: int,
     with_non_sudachi_provenance: int,
@@ -356,7 +373,7 @@ def _failures(
 ) -> list[str]:
     checks = (
         ("no_candidates", int(candidate_count == 0)),
-        ("candidate_non_proper", non_proper),
+        ("candidate_out_of_scope", out_of_scope_candidates),
         ("missing_provenance", missing_provenance),
         ("candidate_without_sudachi_provenance", without_sudachi_provenance),
         ("candidate_with_non_sudachi_provenance", with_non_sudachi_provenance),

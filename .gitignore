@@ -60,3 +60,9 @@ app/temporary/
 *.sqlite3-*
 *.db
 *.db-*
+
+# Local WordQuery human-review workbench
+/tools/wordquery_formal_review_core.js
+/tools/wordquery_formal_review_workbench.html
+/tools/wordquery_formal_review_workbench.js
+/tests/wordquery/test_formal_review_workbench.py
