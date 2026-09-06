@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import time
-from bisect import insort
+from bisect import bisect_left, bisect_right, insort
 from collections.abc import Callable, Iterable, Iterator
 from dataclasses import replace
 
@@ -52,6 +52,21 @@ class SearchService:
         self.snapshot = snapshot
         self.max_query_length = max_query_length
         self.timeout_seconds = timeout_seconds
+        self._reading_records = tuple(
+            sorted(snapshot.records, key=lambda row: row.normalized_reading)
+        )
+        self._reading_keys = tuple(row.normalized_reading for row in self._reading_records)
+
+    def _core_candidates(
+        self, text: str | None, match_type: str | None
+    ) -> tuple[SearchRecord, ...] | None:
+        if text is None or match_type not in {"exact", "prefix"}:
+            return None
+        start = bisect_left(self._reading_keys, text)
+        end = bisect_right(
+            self._reading_keys, text if match_type == "exact" else text + "\U0010ffff"
+        )
+        return self._reading_records[start:end]
 
     def execute(self, search_request: SearchRequest) -> SearchResponse:
         """Execute a validated versioned request through the framework-independent core."""
@@ -111,6 +126,7 @@ class SearchService:
             auxiliary_records=auxiliary_records,
             include_match_spans=False,
             condition_description=plan.description,
+            core_records=self._core_candidates(plan.prefilter_query, plan.prefilter_match_type),
         )
 
     def crossword_search(
@@ -199,16 +215,24 @@ class SearchService:
         except ValueError as exc:
             raise QueryValidationError(str(exc)) from exc
         self._validate_length(normalized)
-        escaped = regex.escape(normalized)
-        patterns = {
-            "contains": escaped,
-            "prefix": f"^{escaped}",
-            "suffix": f"{escaped}$",
-            "exact": f"^{escaped}$",
-        }
-        compiled = regex.compile(patterns[match_type], regex.VERSION0)
-        return self._search_compiled(
-            compiled,
+        def matcher(
+            record: SearchRecord, _remaining: float
+        ) -> tuple[bool, tuple[int, int] | None]:
+            reading = record.normalized_reading
+            if match_type == "exact":
+                start = 0 if reading == normalized else -1
+            elif match_type == "prefix":
+                start = 0 if reading.startswith(normalized) else -1
+            elif match_type == "suffix":
+                start = len(reading) - len(normalized) if reading.endswith(normalized) else -1
+            else:
+                start = reading.find(normalized)
+            if start < 0:
+                return False, None
+            return True, _display_match_span(record, (start, start + len(normalized)))
+
+        return self._search_matching(
+            matcher,
             normalized,
             options,
             auxiliary_records=self._auxiliary_records(
@@ -216,6 +240,7 @@ class SearchService:
                 normalized_query=normalized,
                 match_type=match_type,
             ),
+            core_records=self._core_candidates(normalized, match_type),
         )
 
     def _search_compiled(
@@ -227,6 +252,7 @@ class SearchService:
         auxiliary_records: Iterator[SearchRecord] | None = None,
         include_match_spans: bool = True,
         condition_description: str | None = None,
+        core_records: Iterable[SearchRecord] | None = None,
     ) -> SearchResponse:
         def matcher(
             record: SearchRecord,
@@ -248,6 +274,7 @@ class SearchService:
             options,
             auxiliary_records=auxiliary_records,
             condition_description=condition_description,
+            core_records=core_records,
         )
 
     def _search_matching(
@@ -261,6 +288,7 @@ class SearchService:
         *,
         auxiliary_records: Iterator[SearchRecord] | None = None,
         condition_description: str | None = None,
+        core_records: Iterable[SearchRecord] | None = None,
     ) -> SearchResponse:
         started = time.monotonic()
         deadline = started + self.timeout_seconds
@@ -280,7 +308,8 @@ class SearchService:
         deprioritized_ids = self._deprioritized_tag_ids(options)
         sources: list[Iterable[SearchRecord]] = []
         if "core" in options.vocabulary_layers:
-            sources.append(self._filtered(self.snapshot.records, options, tagged_core_ids))
+            candidates = self.snapshot.records if core_records is None else core_records
+            sources.append(self._filtered(candidates, options, tagged_core_ids))
         if auxiliary_records is not None:
             sources.append(self._filtered(auxiliary_records, options, tags_pre_filtered=True))
         try:

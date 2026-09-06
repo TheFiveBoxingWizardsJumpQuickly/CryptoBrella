@@ -71,6 +71,45 @@ def test_regex_anchors_request_full_match(service):
     assert service.regex_search("^ねこ$").total == 1
 
 
+@pytest.mark.parametrize(
+    ("mode", "query", "expected_scanned"),
+    [("exact", "ねこ", 1), ("prefix", "ね", 1), ("exact", "なし", 0),
+     ("pattern", "ね?", 1)],
+)
+def test_literal_prefix_queries_skip_unrelated_core_records(
+    service, monkeypatch, mode, query, expected_scanned
+):
+    scanned = []
+    original = service._filtered
+
+    def counted(records, *args, **kwargs):
+        records = tuple(records)
+        scanned.extend(records)
+        return original(records, *args, **kwargs)
+
+    monkeypatch.setattr(service, "_filtered", counted)
+    response = (
+        service.pattern_search(query) if mode == "pattern"
+        else service.reading_search(query, mode)
+    )
+    assert len(scanned) == expected_scanned
+    assert response.total == expected_scanned
+
+
+@pytest.mark.parametrize("match_type", ["contains", "prefix", "suffix", "exact"])
+def test_literal_search_preserves_regex_reference_results_and_spans(service, match_type):
+    for query in ("ね", "ねこ", "こ", "なし"):
+        pattern = {
+            "contains": query, "prefix": "^" + query,
+            "suffix": query + "$", "exact": "^" + query + "$",
+        }[match_type]
+        expected = service.regex_search(pattern)
+        actual = service.reading_search(query, match_type)
+        assert actual.results == expected.results
+        assert actual.match_spans == expected.match_spans
+        assert actual.total == expected.total
+
+
 def test_plain_reading_match_types_do_not_interpret_regex(service):
     assert [item.surface for item in service.reading_search("ね", "contains").results] == [
         "猫",
