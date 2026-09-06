@@ -18,7 +18,8 @@ def test_get_basic_pages(client):
     assert "Expanded the Enigma tool with Enigma I, Kriegsmarine M3/M4" in about_body
     assert "V1.4.0" in about_body
     assert "Added the Pigpen encoder, visual decoder" in about_body
-    assert "V1.6.0" in about_body
+    assert "V1.7.0" in about_body
+    assert "WordQuery: JP" in about_body
     assert "Added Double Columnar." in about_body
     link_resp = client.get("/link")
     assert link_resp.status_code == 200
