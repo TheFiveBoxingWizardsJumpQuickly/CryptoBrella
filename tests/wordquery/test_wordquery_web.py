@@ -140,7 +140,7 @@ def test_index_loads_dictionary(app):
     assert "次の${nextCount}件を表示" in page
     assert "limit: requestedResultLimit" in page
     assert "さらに${Math.min(resultStep, remaining)}読み" not in page
-    assert "検索のヒント" in page
+    assert "指定した条件に一致する語はありません。" in page
     assert "window.history" not in page
     assert "URLSearchParams" not in page
     assert 'id="copy-search-url"' not in page
@@ -719,11 +719,11 @@ def test_workbench_visual_language_uses_unified_light_tool_palette(app):
 
     assert 'class="site-header"' in page
     assert 'class="hero"' not in page
-    assert "--bg: #f7f7f8" in css
-    assert "--surface: #fff" in css
-    assert "--ink: #111827" in css
-    assert "--line: #d9dee3" in css
-    assert "--accent: #087b91" in css
+    assert "--bg: hsl(178 17% 92%)" in css
+    assert "--surface: hsl(180 12% 97%)" in css
+    assert "--ink: hsl(222 10% 20%)" in css
+    assert "--line: hsl(186 12% 78%)" in css
+    assert "--accent: hsl(16 57% 39%)" in css
     assert "box-shadow" not in css
     assert "#f4f1e8" not in css
     assert ".site-header h1" in css
@@ -799,7 +799,8 @@ def test_sources_page_uses_product_name(app):
 def test_search_page_always_links_to_licensing(app):
     page = app.test_client().get("/wordquery/").get_data(as_text=True)
 
-    assert "出典・ライセンス・変更内容" in page
+    assert "データ出典・ライセンス" in page
+    assert page.count('href="/wordquery/sources"') == 1
     assert "item.all_categories" in page
 
 
@@ -809,7 +810,7 @@ def test_invalid_query_and_missing_database(tmp_path):
     assert response.status_code == 503
     assert "error" in response.json
     page = app.test_client().get("/wordquery/").get_data(as_text=True)
-    assert "現在、検索を利用できません" in page
+    assert "現在、不具合により検索を利用できません。" in page
     assert "make lexicon-build" not in page
     assert str(tmp_path) not in page
 

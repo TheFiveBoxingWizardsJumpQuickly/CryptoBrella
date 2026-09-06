@@ -1,16 +1,16 @@
 :root {
   color-scheme: light;
   font-family: "Hiragino Sans", "Yu Gothic UI", "Yu Gothic", system-ui, sans-serif;
-  color: #111827;
-  background: #f7f7f8;
-  --bg: #f7f7f8;
-  --surface: #fff;
-  --ink: #111827;
-  --muted: #4b5563;
-  --faint: #6b7280;
-  --line: #d9dee3;
-  --line-strong: #b8c0c8;
-  --accent: #087b91;
+  color: var(--ink);
+  background: var(--bg);
+  --bg: hsl(178 17% 92%);
+  --surface: hsl(180 12% 97%);
+  --ink: hsl(222 10% 20%);
+  --muted: hsl(216 10% 34%);
+  --faint: hsl(210 8% 43%);
+  --line: hsl(186 12% 78%);
+  --line-strong: hsl(204 12% 59%);
+  --accent: hsl(16 57% 39%);
   --danger: #b42318;
   --warning: #a66700;
   --mono: "Roboto Mono", "Noto Sans Mono", Consolas, "Yu Gothic UI", monospace;
@@ -44,8 +44,9 @@ button { touch-action: manipulation; }
 
 .site-header {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
-  gap: 14px;
+  gap: 4px 14px;
   margin-bottom: 16px;
   padding-bottom: 4px;
 }
@@ -54,8 +55,22 @@ button { touch-action: manipulation; }
   color: var(--ink);
   font: 750 1.08rem/1 var(--mono);
   letter-spacing: 0;
+  white-space: nowrap;
 }
 .product-suffix { margin-left: .3em; color: var(--faint); font-weight: 500; }
+.site-credit {
+  color: var(--faint);
+  font-size: .75rem;
+  white-space: nowrap;
+}
+.site-credit a {
+  color: var(--accent);
+  text-underline-offset: .2em;
+}
+.site-credit a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
 .search-card {
   border-bottom: 1px solid var(--line);
   background: transparent;
@@ -94,7 +109,7 @@ input[type="text"] {
   border: 1px solid var(--line);
   border-radius: 0;
   padding: 7px 10px;
-  background: #fff;
+  background: var(--surface);
   color: var(--ink);
   font: .96rem var(--mono);
   caret-color: var(--accent);
@@ -111,7 +126,10 @@ button[type="submit"] {
   font-weight: 800;
   cursor: pointer;
 }
-button[type="submit"]:hover { background: #066579; border-color: #066579; }
+button[type="submit"]:hover {
+  background: color-mix(in srgb, var(--accent) 82%, black);
+  border-color: color-mix(in srgb, var(--accent) 82%, black);
+}
 button[type="submit"]:disabled { cursor: wait; opacity: .55; }
 button:focus-visible,
 input:focus-visible,
@@ -146,7 +164,7 @@ a:focus-visible {
   border: 1px solid var(--line);
   border-radius: 0;
   padding: 5px 8px;
-  background: #fff;
+  background: var(--surface);
   color: var(--ink);
 }
 
@@ -275,10 +293,10 @@ code {
 .notice {
   display: grid;
   gap: 7px;
-  border-left: 2px solid var(--warning);
+  border-left: 2px solid var(--line);
   padding: 10px 12px;
-  background: #fff7dc;
-  color: #3b3522;
+  background: var(--surface);
+  color: var(--muted);
   font-size: .84rem;
 }
 .notice ul { margin: 0; padding-left: 1.2rem; }
@@ -326,8 +344,6 @@ code {
   background: #fff;
   color: var(--ink);
 }
-#result-region .notice { background: #fff7dc; color: #3b3522; }
-#result-region .notice.error { background: #fff0ef; color: #532725; }
 .hidden { display: none !important; }
 .visually-hidden {
   position: absolute;

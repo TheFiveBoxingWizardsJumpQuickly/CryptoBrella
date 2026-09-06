@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import email.message
-import fcntl
 import hashlib
 import json
 import os
@@ -27,6 +26,7 @@ from .lexicon.quality import compare_databases, evaluate_database
 from .query import parse_search_request
 from .repository import load_snapshot
 from .search import SearchService
+from .sqlite_paths import absolute_read_only_uri
 
 CHECK_INTERVAL = timedelta(days=21)
 PUBLIC_FRESHNESS_LIMIT = timedelta(days=31)
@@ -63,6 +63,18 @@ def update_lexicon(
     now: datetime | None = None,
 ) -> UpdateResult:
     """Check, build, validate, and atomically activate the latest JMdict."""
+
+    # The web app also imports read-only release/status helpers from this module.
+    # Only the Unix deployment updater needs flock; importing the app on Windows
+    # must not require it. Fail before creating state or downloading anything.
+    try:
+        import fcntl
+    except ImportError as exc:
+        raise RuntimeError(
+            "Automatic lexicon updates require Unix file locking. "
+            "Run this command in WSL/Linux or on PythonAnywhere. "
+            "The web app can run on Windows."
+        ) from exc
 
     root = (root or component_root()).resolve()
     state_dir = state_dir.resolve()
@@ -221,7 +233,7 @@ def verify_reviewed_release(database: Path) -> dict[str, Any]:
         actual = hashlib.file_digest(stream, "sha256").hexdigest()
     if digest != actual:
         raise ValueError("Reviewed database SHA-256 does not match the release manifest")
-    with sqlite3.connect(f"{database.resolve().as_uri()}?mode=ro", uri=True) as connection:
+    with sqlite3.connect(absolute_read_only_uri(database), uri=True) as connection:
         metadata = dict(connection.execute("SELECT key, value FROM metadata"))
     if metadata.get("input_hash") != manifest.get("database_input_hash"):
         raise ValueError("Reviewed database input hash does not match the release manifest")

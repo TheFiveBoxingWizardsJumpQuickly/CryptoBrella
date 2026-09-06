@@ -10,12 +10,12 @@
     <main>
       <header class="site-header">
         <h1><span>WordQuery</span><span class="product-suffix">: JP</span></h1>
+        <span class="site-credit">powered by <a href="{{ request.script_root }}/" target="_blank" rel="noopener noreferrer">CryptoBrella</a></span>
       </header>
 
       {% if lexicon_error %}
         <section class="notice error" role="alert">
-          <strong>現在、検索を利用できません。</strong>
-          <span>しばらく時間をおいてから、もう一度お試しください。</span>
+          <strong>現在、不具合により検索を利用できません。</strong>
         </section>
       {% else %}
         <section class="search-card">
@@ -178,13 +178,10 @@
         </section>
       {% endif %}
 
-      <footer>
-        <a href="{{ url_for('wordquery.sources') }}">使用データとライセンス</a>
-      </footer>
     </main>
     <footer class="site-footer">
       辞書データはJMdict、SudachiDict等を加工・統合しています。
-      <a href="{{ url_for('wordquery.sources') }}">出典・ライセンス・変更内容</a>
+      <a href="{{ url_for('wordquery.sources') }}">データ出典・ライセンス</a>
     </footer>
 
     {% if not lexicon_error %}
@@ -599,33 +596,8 @@
         mustInclude.focus({preventScroll: true});
       });
 
-      const showZeroResultHints = () => {
-        const hints = [];
-        if (state.mode !== "anagram"
-            && ((state.mode === "reading" && readingLength.value)
-              || mustInclude.value || mustExclude.value
-              || majorCategory.value)) {
-          hints.push("文字数や追加の絞り込みを減らしてみてください。");
-        }
-        if (state.mode === "regex"
-            && (query.value.startsWith("^") || query.value.endsWith("$"))) {
-          hints.push("より広く探すには、先頭の ^ や末尾の $ を外してみてください。");
-        }
-        if (state.mode === "anagram") {
-          hints.push("アナグラムは、文字の種類と数がすべて一致する語だけが対象です。");
-        }
-        if (!hints.length) {
-          hints.push("入力を短くするか、条件を変えてください。");
-        }
-        const heading = document.createElement("strong");
-        const list = document.createElement("ul");
-        heading.textContent = "検索のヒント";
-        hints.slice(0, 2).forEach((hint) => {
-          const item = document.createElement("li");
-          item.textContent = hint;
-          list.append(item);
-        });
-        message.replaceChildren(heading, list);
+      const showZeroResult = () => {
+        message.textContent = "指定した条件に一致する語はありません。";
         message.classList.remove("hidden", "error");
         message.setAttribute("role", "status");
       };
@@ -726,7 +698,7 @@
           region.classList.add("has-response");
           refineTrigger.classList.toggle("hidden", state.mode === "anagram");
           resultDisplayOptions.classList.toggle("hidden", !data.total);
-          if (!data.total) showZeroResultHints();
+          if (!data.total) showZeroResult();
         } catch (error) {
           if (currentRequest !== requestNumber) return;
           requestedResultLimit = loadedResultCount || initialResultLimit;

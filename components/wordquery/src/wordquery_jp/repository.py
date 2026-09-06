@@ -18,6 +18,7 @@ from .models import (
     TagFilter,
     VocabularyTag,
 )
+from .sqlite_paths import absolute_read_only_uri
 
 
 class LexiconUnavailable(RuntimeError):
@@ -294,7 +295,7 @@ def _record_from_row(row: sqlite3.Row) -> SearchRecord:
 
 
 def _open_read_only(path: Path) -> sqlite3.Connection:
-    return sqlite3.connect(f"file:{path}?mode=ro", uri=True)
+    return sqlite3.connect(absolute_read_only_uri(path), uri=True)
 
 
 def _append_reading_constraint(

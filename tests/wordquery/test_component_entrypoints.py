@@ -76,6 +76,34 @@ def test_production_requirements_do_not_install_component_editable():
     assert "lxml>=" in requirements
 
 
+def test_web_startup_without_fcntl_and_updater_fails_before_writing(tmp_path):
+    code = f"""
+import sys
+from pathlib import Path
+sys.path.insert(0, {str(REPOSITORY_ROOT)!r})
+sys.modules['fcntl'] = None
+from flask import Flask
+from app.wordquery.blueprint import register_wordquery
+from wordquery_jp.operations import update_lexicon
+app = Flask('app', root_path={str(REPOSITORY_ROOT / 'app')!r})
+register_wordquery(app, {{
+    'WORDQUERY_DB': {str(tmp_path / 'missing.sqlite3')!r},
+    'WORDQUERY_RELEASE_MODE': 'updated',
+    'WORDQUERY_ENFORCE_FRESHNESS': False,
+}})
+assert app.test_client().get('/wordquery/').status_code == 503
+state = Path({str(tmp_path / 'update-state')!r})
+try:
+    update_lexicon(state)
+except RuntimeError as exc:
+    assert 'WSL/Linux' in str(exc)
+else:
+    raise AssertionError('Updater must require Unix locking')
+assert not state.exists()
+"""
+    subprocess.run([sys.executable, "-c", code], cwd=tmp_path, check=True, capture_output=True)
+
+
 def test_repository_cli_runs_without_console_script(tmp_path, capsys):
     result = wordquery_main(["status", "--state-dir", str(tmp_path)])
 
