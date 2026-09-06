@@ -24,6 +24,7 @@ from wordquery_jp.query import (
 )
 from wordquery_jp.repository import LexiconUnavailable, load_snapshot
 from wordquery_jp.search import QueryValidationError, SearchService, SearchTimedOut
+from wordquery_jp.search_budget import RegexMatchTimedOut
 from wordquery_jp.units import count_normalized_reading_units, count_units
 
 blueprint = Blueprint("wordquery", __name__)
@@ -52,7 +53,8 @@ def register_wordquery(app: Flask, config: dict[str, Any] | None = None) -> None
             "WORDQUERY_DB", "var/wordquery/current/lexicon.sqlite3"
         ),
         WORDQUERY_MAX_QUERY=200,
-        WORDQUERY_TIMEOUT=1.5,
+        WORDQUERY_TIMEOUT=float(os.environ.get("WORDQUERY_TIMEOUT", "5")),
+        WORDQUERY_REGEX_TIMEOUT=float(os.environ.get("WORDQUERY_REGEX_TIMEOUT", "0.05")),
         WORDQUERY_RESULT_LIMIT=3000,
         WORDQUERY_RATE_LIMIT=30,
         WORDQUERY_URL_PREFIX=os.environ.get("WORDQUERY_URL_PREFIX", "/wordquery"),
@@ -78,6 +80,7 @@ def register_wordquery(app: Flask, config: dict[str, Any] | None = None) -> None
             snapshot,
             max_query_length=int(app.config["WORDQUERY_MAX_QUERY"]),
             timeout_seconds=float(app.config["WORDQUERY_TIMEOUT"]),
+            regex_timeout_seconds=float(app.config["WORDQUERY_REGEX_TIMEOUT"]),
         )
         app.extensions["wordquery_error"] = None
     except (LexiconUnavailable, OSError, ValueError, sqlite3.Error) as exc:
@@ -176,7 +179,11 @@ def _handle_search(app: Flask, legacy_kind: LegacySearchKind | None = None):
             error["error_position"] = position
         return jsonify(error), 400
     except SearchTimedOut as exc:
-        return jsonify(error=str(exc)), 408
+        return jsonify(
+            error=str(exc),
+            error_code="regex_match_timeout" if isinstance(exc, RegexMatchTimedOut)
+            else "search_timeout",
+        ), 408
     return jsonify(_serialize_response(response, search_request))
 
 

@@ -43,6 +43,29 @@ def app(tmp_path):
     )
 
 
+def test_search_budget_defaults(app):
+    service = app.extensions["wordquery_service"]
+    assert service.timeout_seconds == 5
+    assert service.regex_timeout_seconds == 0.05
+
+
+@pytest.mark.parametrize("single_match", [False, True])
+def test_timeout_response_does_not_claim_partial_results(app, monkeypatch, single_match):
+    from wordquery_jp.search_budget import RegexMatchTimedOut, SearchTimedOut
+
+    def timeout(_request):
+        error = RegexMatchTimedOut if single_match else SearchTimedOut
+        raise error("検索を中断しました。")
+
+    monkeypatch.setattr(app.extensions["wordquery_service"], "execute", timeout)
+    response = app.test_client().post("/wordquery/api/search/anagram", json={"text": "ねこ"})
+    assert response.status_code == 408
+    assert response.json["error_code"] == (
+        "regex_match_timeout" if single_match else "search_timeout"
+    )
+    assert "results" not in response.json
+
+
 @pytest.mark.parametrize("fault", [None, "checksum", "unapproved", "input_hash", "missing"])
 def test_reviewed_public_release_requires_matching_approved_manifest(app, fault):
     database = Path(app.config["WORDQUERY_DB"])

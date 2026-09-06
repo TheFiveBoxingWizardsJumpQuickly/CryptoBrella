@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import sqlite3
 from collections import defaultdict
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -18,6 +18,8 @@ from .models import (
     TagFilter,
     VocabularyTag,
 )
+from .search_budget import expired
+from .search_hints import SearchHints
 from .sqlite_paths import absolute_read_only_uri
 
 
@@ -51,6 +53,8 @@ class AuxiliaryLexicon:
         match_type: MatchType | None = None,
         signature: str | None = None,
         options: SearchOptions | None = None,
+        hints: SearchHints | None = None,
+        reading_matcher: Callable[[str], bool] | None = None,
     ) -> Iterator[SearchRecord]:
         conditions = ["status = 'candidate'"]
         parameters: list[object] = []
@@ -61,6 +65,19 @@ class AuxiliaryLexicon:
             _append_reading_constraint(
                 conditions, parameters, normalized_query, match_type
             )
+        if hints is not None:
+            if hints.prefix:
+                _append_reading_constraint(conditions, parameters, hints.prefix, "prefix")
+            if hints.suffix:
+                _append_reading_constraint(conditions, parameters, hints.suffix, "suffix")
+            if hints.contains:
+                _append_reading_constraint(conditions, parameters, hints.contains, "contains")
+            if hints.exact_length is not None:
+                conditions.append("length(normalized_reading) = ?")
+                parameters.append(hints.exact_length)
+            elif hints.minimum_length:
+                conditions.append("length(normalized_reading) >= ?")
+                parameters.append(hints.minimum_length)
         if options is not None:
             if not options.include_function:
                 conditions.append("category != 'function'")
@@ -79,6 +96,17 @@ class AuxiliaryLexicon:
 
         connection = _open_read_only(self.database)
         connection.row_factory = sqlite3.Row
+        matcher_error: Exception | None = None
+        if reading_matcher is not None:
+            def match_reading(reading: str) -> bool:
+                nonlocal matcher_error
+                try:
+                    return reading_matcher(reading)
+                except Exception as exc:
+                    matcher_error = exc
+                    raise
+            connection.create_function("wordquery_match", 1, match_reading)
+            conditions.append("wordquery_match(normalized_reading)")
         try:
             cursor = connection.execute(
                 f"""
@@ -96,6 +124,10 @@ class AuxiliaryLexicon:
             )
             for row in cursor:
                 yield _record_from_row(row)
+        except sqlite3.OperationalError as exc:
+            if matcher_error is not None:
+                raise matcher_error from exc
+            raise
         finally:
             connection.close()
 
@@ -295,7 +327,9 @@ def _record_from_row(row: sqlite3.Row) -> SearchRecord:
 
 
 def _open_read_only(path: Path) -> sqlite3.Connection:
-    return sqlite3.connect(absolute_read_only_uri(path), uri=True)
+    connection = sqlite3.connect(absolute_read_only_uri(path), uri=True)
+    connection.set_progress_handler(expired, 1000)
+    return connection
 
 
 def _append_reading_constraint(

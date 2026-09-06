@@ -22,6 +22,9 @@ class PatternPlan:
     description: str
     prefilter_query: str | None
     prefilter_match_type: str | None
+    literal_suffix: str
+    minimum_length: int
+    exact_length: int | None
 
 
 @dataclass(frozen=True, slots=True)
@@ -72,14 +75,28 @@ def compile_reading_pattern(pattern: str) -> PatternPlan:
             break
         literal_prefix += token.value
     all_literal = all(token.kind == "literal" for token in tokens)
+    suffix_parts = []
+    for token in reversed(tokens):
+        if token.kind != "literal":
+            break
+        suffix_parts.append(token.value)
+    literal_suffix = "".join(reversed(suffix_parts))
+    minimum_length = sum(
+        len(token.value) if token.kind == "literal" else 1
+        for token in tokens if token.kind != "many"
+    )
     return PatternPlan(
         compiled=regex.compile(r"\A" + "".join(regex_parts) + r"\Z", regex.VERSION0),
         normalized_pattern="".join(normalized_parts),
         description="パターン全体: " + " → ".join(descriptions),
-        prefilter_query=literal_prefix or None,
+        prefilter_query=literal_prefix or literal_suffix or None,
         prefilter_match_type=(
-            "exact" if all_literal else "prefix" if literal_prefix else None
+            "exact" if all_literal else "prefix" if literal_prefix
+            else "suffix" if literal_suffix else None
         ),
+        literal_suffix=literal_suffix,
+        minimum_length=minimum_length,
+        exact_length=None if any(token.kind == "many" for token in tokens) else minimum_length,
     )
 
 

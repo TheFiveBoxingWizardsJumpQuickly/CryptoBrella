@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
+import math
 import time
-from bisect import bisect_left, bisect_right, insort
+from bisect import bisect_left, bisect_right
+from collections import defaultdict
 from collections.abc import Callable, Iterable, Iterator
-from dataclasses import replace
+from dataclasses import dataclass, replace
+from heapq import heappush, heapreplace
 
 import regex
 
@@ -19,8 +22,16 @@ from .models import (
     SearchResponse,
 )
 from .normalization import anagram_signature, normalize_pattern, normalize_reading, normalize_text
-from .pattern import PatternSyntaxError, compile_reading_pattern
+from .pattern import PatternPlan, PatternSyntaxError, compile_reading_pattern
 from .repository import SearchSnapshot, load_sources, load_tagged_word_ids, load_tags
+from .search_budget import (
+    RegexMatchTimedOut,
+    SearchTimedOut,
+    check_budget,
+    remaining_seconds,
+    search_budget,
+)
+from .search_hints import SearchHints, regex_hints
 from .sorting import explain_sort, sort_key
 from .units import (
     GridProfileName,
@@ -37,8 +48,12 @@ class QueryValidationError(ValueError):
         self.position = position
 
 
-class SearchTimedOut(TimeoutError):
-    pass
+@dataclass(slots=True)
+class _WorstFirst:
+    value: tuple
+
+    def __lt__(self, other: _WorstFirst) -> bool:
+        return self.value[:2] > other.value[:2]
 
 
 class SearchService:
@@ -47,26 +62,77 @@ class SearchService:
         snapshot: SearchSnapshot,
         *,
         max_query_length: int = 200,
-        timeout_seconds: float = 1.5,
+        timeout_seconds: float = 5.0,
+        regex_timeout_seconds: float = 0.05,
     ) -> None:
         self.snapshot = snapshot
         self.max_query_length = max_query_length
         self.timeout_seconds = timeout_seconds
+        self.regex_timeout_seconds = regex_timeout_seconds
+        if not all(math.isfinite(value) and value > 0
+                   for value in (timeout_seconds, regex_timeout_seconds)):
+            raise ValueError("検索の時間制限は有限の正数にしてください。")
         self._reading_records = tuple(
             sorted(snapshot.records, key=lambda row: row.normalized_reading)
         )
         self._reading_keys = tuple(row.normalized_reading for row in self._reading_records)
+        self._reverse_records = tuple(
+            sorted(snapshot.records, key=lambda row: row.normalized_reading[::-1])
+        )
+        self._reverse_keys = tuple(row.normalized_reading[::-1] for row in self._reverse_records)
+        by_length: dict[int, list[SearchRecord]] = defaultdict(list)
+        for row in snapshot.records:
+            by_length[len(row.normalized_reading)].append(row)
+        self._records_by_length = {length: tuple(rows) for length, rows in by_length.items()}
+
+    def _pattern_core_candidates(self, plan: PatternPlan) -> Iterable[SearchRecord]:
+        return self._hint_candidates(self._pattern_hints(plan))
+
+    @staticmethod
+    def _pattern_hints(plan: PatternPlan) -> SearchHints:
+        return SearchHints(
+            prefix=plan.prefilter_query if plan.prefilter_match_type in {"exact", "prefix"} else "",
+            suffix=plan.literal_suffix, minimum_length=plan.minimum_length,
+            exact_length=plan.exact_length,
+        )
+
+    def _hint_candidates(self, hints: SearchHints) -> Iterable[SearchRecord]:
+        if hints == SearchHints():
+            yield from self.snapshot.records
+            return
+        choices = []
+        if hints.prefix:
+            choices.append(self._core_candidates(hints.prefix, "prefix"))
+        if hints.suffix:
+            choices.append(self._core_candidates(hints.suffix, "suffix"))
+        if hints.exact_length is not None:
+            choices.append(self._records_by_length.get(hints.exact_length, ()))
+        candidates = min(choices, key=len) if choices else self.snapshot.records
+        for index, row in enumerate(candidates):
+            if index % 128 == 0:
+                check_budget()
+            reading = row.normalized_reading
+            if (len(reading) >= hints.minimum_length
+                    and (hints.exact_length is None or len(reading) == hints.exact_length)
+                    and (not hints.prefix or reading.startswith(hints.prefix))
+                    and (not hints.suffix or reading.endswith(hints.suffix))
+                    and (not hints.contains or hints.contains in reading)):
+                yield row
 
     def _core_candidates(
         self, text: str | None, match_type: str | None
     ) -> tuple[SearchRecord, ...] | None:
-        if text is None or match_type not in {"exact", "prefix"}:
+        if text is None or match_type not in {"exact", "prefix", "suffix"}:
             return None
-        start = bisect_left(self._reading_keys, text)
+        keys, records = self._reading_keys, self._reading_records
+        if match_type == "suffix":
+            text = text[::-1]
+            keys, records = self._reverse_keys, self._reverse_records
+        start = bisect_left(keys, text)
         end = bisect_right(
-            self._reading_keys, text if match_type == "exact" else text + "\U0010ffff"
+            keys, text if match_type == "exact" else text + "\U0010ffff"
         )
-        return self._reading_records[start:end]
+        return records[start:end]
 
     def execute(self, search_request: SearchRequest) -> SearchResponse:
         """Execute a validated versioned request through the framework-independent core."""
@@ -100,6 +166,7 @@ class SearchService:
             return self.regex_search(search_request.query, options)
         return self.reading_search(search_request.query, search_request.match_type, options)
 
+    @search_budget
     def pattern_search(
         self,
         pattern: str,
@@ -118,6 +185,8 @@ class SearchService:
             options,
             normalized_query=plan.prefilter_query,
             match_type=plan.prefilter_match_type,
+            hints=self._pattern_hints(plan),
+            reading_matcher=lambda reading: self._regex_match(plan.compiled, reading) is not None,
         )
         return self._search_compiled(
             plan.compiled,
@@ -126,9 +195,10 @@ class SearchService:
             auxiliary_records=auxiliary_records,
             include_match_spans=False,
             condition_description=plan.description,
-            core_records=self._core_candidates(plan.prefilter_query, plan.prefilter_match_type),
+            core_records=self._pattern_core_candidates(plan),
         )
 
+    @search_budget
     def crossword_search(
         self,
         cells: tuple[CrosswordCell, ...],
@@ -172,6 +242,7 @@ class SearchService:
             condition_description=describe_crossword(cells),
         )
 
+    @search_budget
     def regex_search(self, pattern: str, options: SearchOptions | None = None) -> SearchResponse:
         options = options or SearchOptions()
         normalized = normalize_pattern(pattern)
@@ -181,13 +252,19 @@ class SearchService:
         except regex.error as exc:
             raise QueryValidationError(f"Regex構文が正しくありません: {exc}") from exc
 
+        hints = regex_hints(normalized)
         return self._search_compiled(
             compiled,
             normalized,
             options,
-            auxiliary_records=self._auxiliary_records(options),
+            auxiliary_records=self._auxiliary_records(
+                options, hints=hints,
+                reading_matcher=lambda reading: self._regex_match(compiled, reading) is not None,
+            ),
+            core_records=self._hint_candidates(hints),
         )
 
+    @search_budget
     def reading_search(
         self,
         text: str,
@@ -240,8 +317,22 @@ class SearchService:
                 normalized_query=normalized,
                 match_type=match_type,
             ),
-            core_records=self._core_candidates(normalized, match_type),
+            core_records=(self._hint_candidates(SearchHints(contains=normalized))
+                          if match_type == "contains"
+                          else self._core_candidates(normalized, match_type)),
         )
+
+    def _regex_match(self, compiled: regex.Pattern, reading: str):
+        remaining = remaining_seconds(self.timeout_seconds)
+        try:
+            return compiled.search(reading, timeout=min(remaining, self.regex_timeout_seconds))
+        except TimeoutError as exc:
+            check_budget()
+            if remaining <= self.regex_timeout_seconds:
+                raise SearchTimedOut(self._timeout_message()) from exc
+            raise RegexMatchTimedOut(
+                "1語に対する照合が制限時間を超えたため、検索を中断しました。"
+            ) from exc
 
     def _search_compiled(
         self,
@@ -256,9 +347,9 @@ class SearchService:
     ) -> SearchResponse:
         def matcher(
             record: SearchRecord,
-            remaining: float,
+            _remaining: float,
         ) -> tuple[bool, tuple[int, int] | None]:
-            match = compiled.search(record.normalized_reading, timeout=remaining)
+            match = self._regex_match(compiled, record.normalized_reading)
             if match is None:
                 return False, None
             span = (
@@ -291,16 +382,7 @@ class SearchService:
         core_records: Iterable[SearchRecord] | None = None,
     ) -> SearchResponse:
         started = time.monotonic()
-        deadline = started + self.timeout_seconds
-        top_matches: list[
-            tuple[
-                tuple[object, ...],
-                int,
-                SearchRecord,
-                tuple[int, int] | None,
-                tuple[str, ...],
-            ]
-        ] = []
+        heap: list[_WorstFirst] = []
         total = 0
         tagged_core_ids = load_tagged_word_ids(
             self.snapshot.database, options.tag_filters, status="accepted"
@@ -315,7 +397,7 @@ class SearchService:
         try:
             for source in sources:
                 for record in source:
-                    remaining = deadline - time.monotonic()
+                    remaining = remaining_seconds(self.timeout_seconds)
                     if remaining <= 0:
                         raise SearchTimedOut(self._timeout_message())
                     matched, span = matcher(record, remaining)
@@ -324,24 +406,23 @@ class SearchService:
                         deprioritize_reasons = _deprioritize_reasons(
                             record, options, deprioritized_ids
                         )
-                        insort(
-                            top_matches,
-                            (
-                                (bool(deprioritize_reasons), *sort_key(record, options.sort_mode)),
-                                record.id,
-                                record,
-                                span,
-                                deprioritize_reasons,
-                            ),
+                        entry = (
+                            (bool(deprioritize_reasons), *sort_key(record, options.sort_mode)),
+                            record.id, record, span, deprioritize_reasons,
                         )
-                        if len(top_matches) > options.limit:
-                            top_matches.pop()
+                        if len(heap) < options.limit:
+                            heappush(heap, _WorstFirst(entry))
+                        elif entry[:2] < heap[0].value[:2]:
+                            heapreplace(heap, _WorstFirst(entry))
+        except SearchTimedOut:
+            raise
         except TimeoutError as exc:
             raise SearchTimedOut(self._timeout_message()) from exc
         finally:
             if auxiliary_records is not None:
                 auxiliary_records.close()
 
+        top_matches = sorted(item.value for item in heap)
         sorted_records = self._attach_tags([item[2] for item in top_matches])
         sort_explanations = tuple(
             explain_sort(record, options.sort_mode) for record in sorted_records
@@ -359,6 +440,7 @@ class SearchService:
             condition_description=condition_description,
         )
 
+    @search_budget
     def anagram_search(self, text: str, options: SearchOptions | None = None) -> SearchResponse:
         options = options or SearchOptions()
         started = time.monotonic()
@@ -435,6 +517,8 @@ class SearchService:
         normalized_query: str | None = None,
         match_type: MatchType | None = None,
         signature: str | None = None,
+        hints: SearchHints | None = None,
+        reading_matcher: Callable[[str], bool] | None = None,
     ) -> Iterator[SearchRecord] | None:
         if (
             not options.include_proper
@@ -447,6 +531,8 @@ class SearchService:
             match_type=match_type,
             signature=signature,
             options=options,
+            hints=hints,
+            reading_matcher=reading_matcher,
         )
 
     def _deprioritized_tag_ids(
@@ -467,7 +553,7 @@ class SearchService:
 
     def _timeout_message(self) -> str:
         seconds = f"{self.timeout_seconds:g}"
-        return f"検索処理を{seconds}秒で打ち切りました。条件を絞ってください。"
+        return f"検索処理が制限時間（{seconds}秒）を超えたため、中断しました。"
 
     @staticmethod
     def _filtered(
@@ -480,7 +566,9 @@ class SearchService:
         length_counter = (
             _length_counter(options) if options.reading_length is not None else None
         )
-        for record in records:
+        for index, record in enumerate(records):
+            if index % 128 == 0:
+                check_budget()
             if tagged_word_ids is not None and record.id not in tagged_word_ids:
                 continue
             if (

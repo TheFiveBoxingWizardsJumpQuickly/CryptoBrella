@@ -13,6 +13,7 @@ from wordquery_jp.models import (
     VocabularyTag,
 )
 from wordquery_jp.normalization import anagram_signature
+from wordquery_jp.pattern import compile_reading_pattern
 from wordquery_jp.repository import SearchSnapshot
 from wordquery_jp.search import QueryValidationError, SearchService, SearchTimedOut
 from wordquery_jp.sorting import sort_key
@@ -69,6 +70,29 @@ def test_regex_is_partial_and_normalizes_katakana(service):
 def test_regex_anchors_request_full_match(service):
     assert service.regex_search("^ね$").total == 0
     assert service.regex_search("^ねこ$").total == 1
+
+
+@pytest.mark.parametrize(
+    "pattern", ["?ねこ", "*ねこ", "???", "[こや]ねこ", "[!や]ねこ", "?*?", "ね*こ", "*ねこ?"]
+)
+def test_pattern_length_and_suffix_prefilters_preserve_full_regex_results(pattern):
+    rows = tuple(record(i, reading, reading) for i, reading in enumerate(
+        ["ねこ", "こねこ", "やまねこ", "やねこ", "ねこねこ", "ねこあ", "こ", "いぬ"]
+    ))
+    service = SearchService(SearchSnapshot(records=rows, anagrams={}, metadata={}))
+    expected = service.regex_search(compile_reading_pattern(pattern).compiled.pattern)
+    actual = service.pattern_search(pattern)
+    assert actual.results == expected.results
+    assert actual.total == expected.total
+
+
+def test_leading_wildcard_limits_candidates_by_length_and_suffix():
+    rows = tuple(record(i, reading, reading) for i, reading in enumerate(
+        ["ねこ", "こねこ", "やまねこ", "やねこ", "いぬあ"]
+    ))
+    service = SearchService(SearchSnapshot(records=rows, anagrams={}, metadata={}))
+    candidates = service._pattern_core_candidates(compile_reading_pattern("?ねこ"))
+    assert {row.normalized_reading for row in candidates} == {"こねこ", "やねこ"}
 
 
 @pytest.mark.parametrize(
@@ -414,7 +438,7 @@ def test_catastrophic_pattern_times_out():
     search = SearchService(snapshot, timeout_seconds=0.001, max_query_length=200)
     with pytest.raises(
         SearchTimedOut,
-        match="検索処理を0.001秒で打ち切りました。条件を絞ってください。",
+        match="検索処理が制限時間（0.001秒）を超えたため、中断しました。",
     ):
         search.regex_search("(あ|ああ)+$")
 
