@@ -42,6 +42,12 @@ written form and reading in `components/wordquery/data/manual/tags.tsv` and
 record the axis, value, reason, and reference.
 Manual corrections, exclusions, and tags are reapplied after source updates.
 
+Manual data is versioned in Git. Updates retain the supporting references and
+are validated by rebuilding the dictionary and its search index, checking
+regressions, and examining changes against the active release. Individual manual
+changes do not require a new 300-entry random human review. Historical corpus
+review evidence remains separate from the record of manual changes.
+
 ## Reading requirements
 
 After NFKC and katakana-to-hiragana conversion, a reading normally contains

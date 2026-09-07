@@ -26,6 +26,9 @@
 - Purpose: additions, corrections, and exclusions.
 - Storage: UTF-8 TSV files under `components/wordquery/data/manual/`.
 - Evidence: each non-empty record includes a reason and a supporting reference.
+- Display name: `WordQuery独自データ`. These entries and annotations are added
+  or supplemented by the WordQuery maintainer after checking supporting material.
+  Individual references remain attached to the search results.
 
 ## Repository contents
 

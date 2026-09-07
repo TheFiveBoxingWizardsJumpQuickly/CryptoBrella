@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import difflib
 import email.message
 import hashlib
 import json
@@ -68,6 +69,7 @@ def update_lexicon(
     dry_run: bool = False,
     reload_webapp: bool = True,
     now: datetime | None = None,
+    apply_manual: bool = False,
 ) -> UpdateResult:
     """Check, build, validate, and atomically activate the latest JMdict."""
 
@@ -91,14 +93,16 @@ def update_lexicon(
     with lock_path.open("w", encoding="utf-8") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         state = read_state(state_dir)
-        if not force and not update_due(state, now=now):
+        if not force and not apply_manual and not update_due(state, now=now):
             return UpdateResult("not_due", detail="latest check is less than 21 days old")
 
         run_id = now.strftime("%Y%m%dT%H%M%SZ") + "-" + uuid4().hex[:8]
         work = state_dir / "work" / run_id
         work.mkdir(parents=True, exist_ok=False)
         try:
-            if state.get("approved_policy_sha256") != update_policy_fingerprint(root):
+            policy_hash = update_policy_fingerprint(root)
+            revision = _manual_update_revision(root, state) if apply_manual else None
+            if not apply_manual and state.get("approved_policy_sha256") != policy_hash:
                 raise ValueError(
                     "Update policy is not approved; initialize from a reviewed release"
                 )
@@ -113,7 +117,7 @@ def update_lexicon(
             candidate = _download_latest_jmdict(root, work)
             active_metadata = _database_metadata(state_dir / "current" / "lexicon.sqlite3")
             active_jmdict_sha = active_metadata.get("source.jmdict.sha256")
-            if (active_jmdict_sha == candidate.sha256
+            if (not apply_manual and active_jmdict_sha == candidate.sha256
                     and validate_search_index(
                         state_dir / "current" / "lexicon.sqlite3") is not None):
                 if dry_run:
@@ -153,6 +157,21 @@ def update_lexicon(
                 run_id=run_id,
                 now=now,
             )
+            if update_policy_fingerprint(root) != policy_hash:
+                raise ValueError("Update inputs changed during build; retry from a stable checkout")
+            if apply_manual:
+                if _manual_update_revision(root, state) != revision:
+                    raise ValueError("Git revision changed during build")
+                result["manifest"]["manual_git_revision"] = revision
+                result["manifest"]["manual_update"] = {
+                    "git_revision": revision,
+                    "data_sha256": manual_data_fingerprint(root / "data"),
+                    "previous_policy_sha256": state.get("approved_policy_sha256"),
+                    "review_method": "operator-reviewed Git change and automated validation",
+                }
+                baseline = Path(state.get("manual_data_release") or state["human_review_baseline"])
+                _write_json(work / "manual-diff.json", _manual_data_diff(baseline, root / "data"))
+                _write_json(work / "manifest.json", result["manifest"])
             if result["failures"]:
                 quarantine = state_dir / "quarantine" / run_id
                 os.replace(work, quarantine)
@@ -190,6 +209,10 @@ def update_lexicon(
                     "active_input_hash": result["manifest"]["input_hash"],
                     "consecutive_failures": 0, "last_failure_notification": None,
                     "last_failures": [],
+                    "approved_policy_sha256": policy_hash,
+                    "manual_data_release": str(release_dir),
+                    "manual_git_revision": revision or state.get("manual_git_revision"),
+                    "manual_data_sha256": manual_data_fingerprint(root / "data"),
                     "previous_state": {k: v for k, v in old_state.items() if k != "previous_state"},
                 })
                 write_state(state_dir, state)
@@ -301,24 +324,78 @@ def _database_input_hash(database: Path) -> str:
     return _database_metadata(database)["input_hash"]
 
 
-def update_policy_fingerprint(root: Path) -> str:
+def update_policy_fingerprint(root: Path, *, data_root: Path | None = None) -> str:
     """Changes to sources other than JMdict, build policy or manual data require approval."""
     digest = hashlib.sha256()
+    data_root = data_root or root / "data"
     paths = sorted([
         *(root / "src/wordquery_jp/lexicon").glob("*.py"),
-        *(root / "data/manual").glob("*.tsv"),
-        *(root / "data/gold").glob("*.tsv"),
+        *(root / "data" / p.relative_to(data_root)
+          for folder in ("manual", "gold") for p in (data_root / folder).glob("*.tsv")),
         root / "src/wordquery_jp/normalization.py", root / "src/wordquery_jp/units.py",
     ])
     for path in paths:
         digest.update(path.relative_to(root).as_posix().encode())
-        digest.update(path.read_bytes())
+        source = (data_root / path.relative_to(root / "data")
+                  if path.is_relative_to(root / "data") else path)
+        digest.update(source.read_bytes())
     with (root / "data/sources.toml").open("rb") as handle:
         sources = tomllib.load(handle)
     for key in ("sha256", "version"):
         sources.get("jmdict", {}).pop(key, None)
     digest.update(json.dumps(sources, sort_keys=True).encode())
     return digest.hexdigest()
+
+
+def manual_data_fingerprint(data_root: Path) -> str:
+    digest = hashlib.sha256()
+    for folder in ("manual", "gold"):
+        for path in sorted((data_root / folder).glob("*.tsv")):
+            digest.update(path.relative_to(data_root).as_posix().encode())
+            digest.update(path.read_bytes())
+    return digest.hexdigest()
+
+
+def _manual_data_diff(before: Path, after: Path) -> dict[str, list[str]]:
+    changes = {}
+    for folder in ("manual", "gold"):
+        names = {p.name for base in (before, after) for p in (base / folder).glob("*.tsv")}
+        for name in sorted(names):
+            old, new = before / folder / name, after / folder / name
+            old_lines = old.read_text().splitlines() if old.is_file() else []
+            new_lines = new.read_text().splitlines() if new.is_file() else []
+            if old_lines != new_lines:
+                changes[f"{folder}/{name}"] = list(difflib.unified_diff(
+                    old_lines, new_lines, fromfile="approved", tofile="candidate", lineterm="",
+                ))
+    return changes
+
+
+def _manual_update_revision(root: Path, state: dict[str, Any]) -> str:
+    """Allow only committed data changes against the previously approved policy."""
+    baseline = state.get("manual_data_release") or state.get("human_review_baseline")
+    if not baseline:
+        raise ValueError("No approved manual data baseline")
+    baseline = Path(baseline)
+    if any(not list((baseline / folder).glob("*.tsv")) for folder in ("manual", "gold")):
+        raise ValueError("Approved manual data snapshot is missing")
+    if update_policy_fingerprint(root, data_root=baseline) != state.get("approved_policy_sha256"):
+        raise ValueError("Build policy changed; --apply-manual only approves manual/gold data")
+    return _committed_revision(root)
+
+
+def _committed_revision(root: Path) -> str:
+    def git(*args: str) -> str:
+        return subprocess.check_output(
+            ["git", "-C", str(root), *args], text=True, stderr=subprocess.PIPE,
+        ).strip()
+
+    if git("status", "--porcelain", "--untracked-files=all", "--", "data", "src"):
+        raise ValueError("Commit WordQuery data and source changes before --apply-manual")
+    for folder in ("manual", "gold"):
+        for path in (root / "data" / folder).glob("*.tsv"):
+            git("ls-files", "--error-unmatch", "--", str(path.relative_to(root)))
+    return git("rev-parse", "HEAD")
 
 
 def initialize_updates(state_dir: Path, database: Path, *, root: Path | None = None) -> None:
@@ -524,24 +601,31 @@ def _build_candidate(
     now: datetime,
 ) -> dict[str, Any]:
     source_manifest = _candidate_source_manifest(root, work, jmdict)
+    for folder in ("manual", "gold"):
+        shutil.copytree(root / "data" / folder, work / folder)
     sudachi = _prepare_sudachi(state_dir, source_manifest)
     database = work / "lexicon.sqlite3"
     result = build_database(
         BuildConfig(
             output=database,
-            additions=root / "data/manual/additions.tsv",
-            corrections=root / "data/manual/corrections.tsv",
-            exclusions=root / "data/manual/exclusions.tsv",
-            tags=root / "data/manual/tags.tsv",
+            additions=work / "manual/additions.tsv",
+            corrections=work / "manual/corrections.tsv",
+            exclusions=work / "manual/exclusions.tsv",
+            tags=work / "manual/tags.tsv",
             jmdict=jmdict.path,
             sudachi=sudachi,
             source_manifest=source_manifest,
         )
     )
+    with sqlite3.connect(database) as connection:
+        connection.execute(
+            "INSERT OR REPLACE INTO metadata VALUES ('source.jmdict.sha256', ?)",
+            (jmdict.sha256,),
+        )
     quality = evaluate_database(
         database,
-        accepted_gold=root / "data/gold/accepted.tsv",
-        rejected_gold=root / "data/gold/rejected.tsv",
+        accepted_gold=work / "gold/accepted.tsv",
+        rejected_gold=work / "gold/rejected.tsv",
     )
     audit = audit_auxiliary_candidates(database)
     active_database = state_dir / "current" / "lexicon.sqlite3"
@@ -555,6 +639,7 @@ def _build_candidate(
     if not audit.passed:
         failures.extend(f"candidate_audit:{item}" for item in audit.report["failures"])
     failures.extend(evaluate_diff_policy(before, database, diff))
+    _write_json(work / "diff.json", diff)
     build_search_index(database)
     smoke = _run_smoke(database)
     failures.extend(smoke["failures"])
@@ -570,6 +655,8 @@ def _build_candidate(
                          "sha256": file_hash(index_path(database)),
                          "bytes": index_path(database).stat().st_size},
         "approved_policy_sha256": update_policy_fingerprint(root),
+        "manual_data_sha256": manual_data_fingerprint(work),
+        "manual_git_revision": read_state(state_dir).get("manual_git_revision"),
         "human_review_baseline": read_state(state_dir).get("human_review_baseline"),
         "counts": {"accepted": result.accepted, "candidates": result.candidates},
         "sources": {

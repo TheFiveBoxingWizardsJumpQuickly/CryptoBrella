@@ -77,6 +77,10 @@ def build_parser() -> argparse.ArgumentParser:
     update.add_argument("--force", action="store_true")
     update.add_argument("--dry-run", action="store_true")
     update.add_argument("--no-reload", action="store_true")
+    update.add_argument(
+        "--apply-manual", action="store_true",
+        help="Gitコミット済みの手動データ変更を検査・再構築し更新基準へ反映する",
+    )
     index = subparsers.add_parser(
         "build-search-index", help="既存辞書の検索索引を生成（DB変更なし）"
     )
@@ -294,6 +298,7 @@ def main(argv: list[str] | None = None) -> int:
             force=args.force,
             dry_run=args.dry_run,
             reload_webapp=not args.no_reload,
+            apply_manual=args.apply_manual,
         )
         print(
             json.dumps(

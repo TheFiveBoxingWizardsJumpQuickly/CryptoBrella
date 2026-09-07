@@ -13,6 +13,7 @@ from wordquery_jp.lexicon.importers import (
 )
 from wordquery_jp.lexicon.quality import compare_databases, evaluate_database
 from wordquery_jp.repository import LexiconUnavailable, load_snapshot
+from wordquery_jp.search import SearchService
 
 COMPONENT_ROOT = Path(__file__).parents[1]
 FIXTURES = Path(__file__).parent / "fixtures"
@@ -268,6 +269,38 @@ def test_manual_category_and_priority_override_external_record(tmp_path):
     assert osaka.category == "general"
     assert osaka.priority == 55
     assert osaka.multiple_sources is True
+
+
+def test_production_manual_additions_include_shitashori(tmp_path):
+    database = tmp_path / "manual-additions.sqlite3"
+    build_database(
+        BuildConfig(
+            output=database,
+            additions=COMPONENT_ROOT / "data/manual/additions.tsv",
+            source_manifest=tmp_path / "none.toml",
+        )
+    )
+
+    response = SearchService(load_snapshot(database)).reading_search("したしょり", "exact")
+
+    assert [(record.surface, record.reading) for record in response.results] == [
+        ("下処理", "したしょり")
+    ]
+    record = response.results[0]
+    assert (record.category, record.pos, record.priority, record.status) == (
+        "general",
+        "名詞",
+        20,
+        "accepted",
+    )
+    assert [(source.source, source.reason, source.reference) for source in record.sources] == [
+        (
+            "manual",
+            "一般語の見出しとして読み「したしょり」と下準備の用法を確認",
+            "実用日本語表現辞典（Weblio）: "
+            "https://www.weblio.jp/content/%E4%B8%8B%E5%87%A6%E7%90%86",
+        )
+    ]
 
 
 def test_manual_tags_are_attached_with_required_evidence(tmp_path):

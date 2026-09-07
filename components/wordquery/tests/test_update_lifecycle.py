@@ -2,6 +2,7 @@ import hashlib
 import json
 import shutil
 import sqlite3
+import subprocess
 from datetime import UTC, datetime, timedelta
 
 import pytest
@@ -47,6 +48,8 @@ def latest(monkeypatch, sha):
 
 def fake_build(monkeypatch, database, failures=()):
     def build(state_dir, root, work, source, **kwargs):
+        for folder in ("manual", "gold"):
+            shutil.copytree(root / "data" / folder, work / folder)
         target = work / "lexicon.sqlite3"
         shutil.copyfile(database, target)
         with sqlite3.connect(target) as connection:
@@ -66,6 +69,141 @@ def test_initialize_does_not_invent_freshness(setup_update):
     assert (state_dir / "current").resolve() == database.parent
     with pytest.raises(ValueError, match="already initialized"):
         ops.initialize_updates(state_dir, database)
+
+
+@pytest.fixture
+def manual_update(setup_update, tmp_path, monkeypatch):
+    state_dir, database = setup_update
+    root = tmp_path / "component"
+    for folder in ("data", "src"):
+        shutil.copytree(ops.component_root() / folder, root / folder)
+    additions = root / "data/manual/additions.tsv"
+    with additions.open("a") as handle:
+        handle.write("試験語\tしけんご\tgeneral\t名詞\t20\t確認\ttest\n")
+    monkeypatch.setattr(ops, "_committed_revision", lambda root: "committed-revision")
+    latest(monkeypatch, "old")
+    fake_build(monkeypatch, database)
+    return state_dir, database, root
+
+
+def test_manual_update_bypasses_due_and_same_source_and_supports_schedule(manual_update):
+    state_dir, _, root = manual_update
+    state = ops.read_state(state_dir)
+    state["last_success_at"] = datetime.now(UTC).isoformat()
+    ops.write_state(state_dir, state)
+    assert ops.update_lexicon(state_dir, root=root).status == "not_due"
+    result = ops.update_lexicon(state_dir, root=root, apply_manual=True)
+    assert result.status == "activated"
+    after = ops.read_state(state_dir)
+    assert after["approved_policy_sha256"] == ops.update_policy_fingerprint(root)
+    assert after["previous_state"]["approved_policy_sha256"] == state["approved_policy_sha256"]
+    assert after["human_review_baseline"] == state["human_review_baseline"]
+    manifest = ops.read_active_manifest(state_dir)
+    assert manifest["manual_update"]["git_revision"] == "committed-revision"
+    manual_diff = json.loads((state_dir / "current/manual-diff.json").read_text())
+    assert "manual/additions.tsv" in manual_diff
+    # The next ordinary update accepts the new policy without a human gate.
+    assert ops.update_lexicon(state_dir, root=root, force=True).status == "activated"
+    # A subsequent manual update uses the latest data snapshot, not the initial review.
+    assert ops.update_lexicon(state_dir, root=root, apply_manual=True).status == "activated"
+
+
+def test_manual_rollback_restores_policy_and_revision(manual_update, monkeypatch):
+    state_dir, database, root = manual_update
+    before = ops.read_state(state_dir)
+    before["last_success_at"] = datetime.now(UTC).isoformat()
+    ops.write_state(state_dir, before)
+    ops.update_lexicon(state_dir, root=root, apply_manual=True)
+    ops.rollback_lexicon(state_dir, reload_webapp=False)
+    restored = ops.read_state(state_dir)
+    assert restored["approved_policy_sha256"] == before["approved_policy_sha256"]
+    assert restored["last_success_at"] == before["last_success_at"]
+    assert restored.get("manual_git_revision") == before.get("manual_git_revision")
+    assert (state_dir / "current").resolve() == database.parent
+
+
+def test_input_change_during_build_rejects_activation(manual_update, monkeypatch):
+    state_dir, database, root = manual_update
+    original_build = ops._build_candidate
+    def build(*args, **kwargs):
+        result = original_build(*args, **kwargs)
+        with (root / "data/manual/additions.tsv").open("a") as handle:
+            handle.write("変更\tへんこう\tgeneral\t名詞\t20\ttest\ttest\n")
+        return result
+    monkeypatch.setattr(ops, "_build_candidate", build)
+    before = ops.read_state(state_dir)
+    with pytest.raises(ValueError, match="inputs changed"):
+        ops.update_lexicon(state_dir, root=root, apply_manual=True)
+    assert ops.read_state(state_dir)["approved_policy_sha256"] == before["approved_policy_sha256"]
+    assert (state_dir / "current").resolve() == database.parent
+
+
+def test_manual_dry_run_retains_state_and_approval(manual_update):
+    state_dir, database, root = manual_update
+    before = (state_dir / "state.json").read_bytes()
+    result = ops.update_lexicon(state_dir, root=root, apply_manual=True, dry_run=True)
+    assert result.status == "validated"
+    assert (state_dir / "state.json").read_bytes() == before
+    assert (state_dir / "current").resolve() == database.parent
+    manifest = json.loads((state_dir / "work" / result.release_id / "manifest.json").read_text())
+    assert manifest["manual_update"]["data_sha256"] == ops.manual_data_fingerprint(root / "data")
+
+
+def test_manual_mode_does_not_approve_build_rule_changes(manual_update):
+    state_dir, _, root = manual_update
+    with (root / "src/wordquery_jp/lexicon/builder.py").open("a") as handle:
+        handle.write("\n# changed build policy\n")
+    with pytest.raises(ValueError, match="Build policy changed"):
+        ops.update_lexicon(state_dir, root=root, apply_manual=True, dry_run=True)
+
+
+def test_manual_quarantine_does_not_approve_data(manual_update, monkeypatch):
+    state_dir, database, root = manual_update
+    before = ops.read_state(state_dir)
+    fake_build(monkeypatch, database, ["excessive-diff"])
+    assert ops.update_lexicon(state_dir, root=root, apply_manual=True).status == "quarantined"
+    after = ops.read_state(state_dir)
+    assert after["approved_policy_sha256"] == before["approved_policy_sha256"]
+    assert after["last_success_at"] == before["last_success_at"]
+
+
+def test_manual_reload_failure_restores_approval(manual_update, monkeypatch):
+    state_dir, database, root = manual_update
+    before = ops.read_state(state_dir)
+    calls = []
+    def reload():
+        calls.append(True)
+        if len(calls) == 1:
+            raise RuntimeError("reload failed")
+    monkeypatch.setattr(ops, "reload_pythonanywhere_webapp", reload)
+    with pytest.raises(RuntimeError, match="reload failed"):
+        ops.update_lexicon(state_dir, root=root, apply_manual=True)
+    assert ops.read_state(state_dir)["approved_policy_sha256"] == before["approved_policy_sha256"]
+    assert (state_dir / "current").resolve() == database.parent
+
+
+def test_git_manual_update_rejects_dirty_and_untracked_inputs(tmp_path):
+    root = tmp_path / "repo"
+    root.mkdir()
+    def git(*args):
+        return subprocess.check_output(["git", "-C", str(root), *args], text=True).strip()
+    git("init", "-q")
+    for folder in ("manual", "gold"):
+        (root / "data" / folder).mkdir(parents=True)
+        (root / "data" / folder / "test.tsv").write_text("fixture\n")
+    git("add", "data")
+    git("-c", "user.name=Test", "-c", "user.email=test@example.invalid",
+        "commit", "-qm", "fixture")
+    assert ops._committed_revision(root) == git("rev-parse", "HEAD")
+    extra = root / "data/manual/extra.tsv"
+    extra.write_text("uncommitted\n")
+    with pytest.raises(ValueError, match="Commit WordQuery"):
+        ops._committed_revision(root)
+    extra.unlink()
+    (root / "data/manual/test.tsv").write_text("changed\n")
+    git("add", "data")
+    with pytest.raises(ValueError, match="Commit WordQuery"):
+        ops._committed_revision(root)
 
 
 def test_update_smoke_uses_current_request_schema(setup_update):
@@ -91,6 +229,11 @@ def test_candidate_build_packages_index_and_survives_directory_move(setup_update
     database = work / "lexicon.sqlite3"
     assert result["manifest"]["search_index"]["sha256"] == file_hash(index_path(database))
     assert result["manifest"]["smoke"]["failures"] == []
+    assert ops._database_metadata(database)["source.jmdict.sha256"] == source.sha256
+    assert (work / "manual/additions.tsv").read_bytes() == (
+        root / "data/manual/additions.tsv"
+    ).read_bytes()
+    assert (work / "diff.json").is_file()
     destination = state_dir / "releases/fixture-build"
     work.rename(destination)
     snapshot = load_snapshot(destination / "lexicon.sqlite3")
