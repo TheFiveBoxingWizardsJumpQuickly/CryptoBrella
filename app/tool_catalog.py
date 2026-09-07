@@ -1,4 +1,3 @@
-import os
 from copy import deepcopy
 
 CATEGORY_DEFINITIONS = [
@@ -364,13 +363,12 @@ TOOL_CATALOG = [
     },
     {
         "id": "wordquery",
-        "path": os.environ.get("WORDQUERY_URL_PREFIX", "/wordquery"),
+        "path": "/wordquery",
         "name": "WordQuery: JP",
         "description": "Search Japanese words by pattern, anagram, or Regex.",
         "aliases": ["japanese word search", "anagram", "regex", "単語検索"],
         "tags": ["utility", "japanese", "word", "puzzle", "crossword"],
         "icon": "icon_wordquery.png",
-        "show_on_home": os.environ.get("WORDQUERY_PUBLIC", "0") == "1",
     },
     {
         "id": "prime",
@@ -519,7 +517,9 @@ TOOL_CATALOG = [
 ]
 
 
-def get_home_catalog():
+def get_home_catalog(
+    *, wordquery_visible: bool = True, wordquery_path: str = "/wordquery"
+):
     sections = []
     section_index = {}
     tool_index = {tool["id"]: tool for tool in TOOL_CATALOG}
@@ -543,9 +543,14 @@ def get_home_catalog():
         category = section["categories"][0]
         ordered_ids = CATEGORY_TOOL_ORDER[category["id"]]
         category["tools"] = [
-            tool_index[tool_id]
+            (
+                {**tool_index[tool_id], "path": wordquery_path}
+                if tool_id == "wordquery"
+                else tool_index[tool_id]
+            )
             for tool_id in ordered_ids
             if tool_index[tool_id].get("show_on_home", True)
+            and (tool_id != "wordquery" or wordquery_visible)
         ]
 
     return sections

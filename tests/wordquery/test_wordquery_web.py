@@ -49,6 +49,59 @@ def test_search_budget_defaults(app):
     assert service.regex_timeout_seconds == 0.05
 
 
+def test_lazy_mode_loads_dictionary_once_on_first_wordquery_request(
+    tmp_path, monkeypatch
+):
+    import app.wordquery.blueprint as delivery
+
+    database = tmp_path / "lexicon.sqlite3"
+    build_database(
+        BuildConfig(output=database, additions=FIXTURES / "manual_additions.tsv")
+    )
+    actual_load_snapshot = delivery.load_snapshot
+    calls = []
+
+    def tracked_load_snapshot(path):
+        calls.append(path)
+        return actual_load_snapshot(path)
+
+    monkeypatch.setattr(delivery, "load_snapshot", tracked_load_snapshot)
+    lazy_app = create_app({
+        "TESTING": True,
+        "WORDQUERY_DB": database,
+        "WORDQUERY_LOAD_MODE": "lazy",
+        "WORDQUERY_ENFORCE_FRESHNESS": False,
+    })
+
+    assert lazy_app.extensions["wordquery_load_state"] == "unloaded"
+    assert lazy_app.extensions["wordquery_service"] is None
+    assert calls == []
+
+    client = lazy_app.test_client()
+    assert client.get("/wordquery/").status_code == 200
+    assert client.get("/wordquery/sources").status_code == 200
+    assert lazy_app.extensions["wordquery_load_state"] == "loaded"
+    assert len(calls) == 1
+
+
+def test_disabled_mode_never_loads_dictionary(tmp_path, monkeypatch):
+    import app.wordquery.blueprint as delivery
+
+    monkeypatch.setattr(
+        delivery,
+        "load_snapshot",
+        lambda _path: pytest.fail("disabled WordQuery loaded its dictionary"),
+    )
+    disabled_app = create_app({
+        "TESTING": True,
+        "WORDQUERY_DB": tmp_path / "missing.sqlite3",
+        "WORDQUERY_LOAD_MODE": "disabled",
+    })
+
+    assert disabled_app.extensions["wordquery_load_state"] == "disabled"
+    assert disabled_app.test_client().get("/wordquery/").status_code == 503
+
+
 @pytest.mark.parametrize("single_match", [False, True])
 def test_timeout_response_does_not_claim_partial_results(app, monkeypatch, single_match):
     from wordquery_jp.search_budget import RegexMatchTimedOut, SearchTimedOut
@@ -200,8 +253,8 @@ def test_index_loads_dictionary(app):
     assert "const selectedCategory = ()" in page
     assert 'category.axis === "proper_type"' in page
     assert '<option value="commonness">一般的な語を優先</option>' in page
-    assert '<option value="dictionary_priority">辞書で優先される語</option>' in page
-    assert '<option value="kana">読み順</option>' in page
+    assert '<option value="dictionary_priority">' not in page
+    assert '<option value="kana">読みの五十音順</option>' in page
     assert 'class="examples"' not in page
     assert 'id="condition-submit"' not in page
     assert 'fetch("/wordquery/api/search"' in page

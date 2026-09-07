@@ -9,16 +9,30 @@ def test_catalog_ids_and_paths_are_unique():
     assert len(paths) == len(set(paths))
 
 
-def test_wordquery_home_link_and_dedicated_icon(monkeypatch):
+def test_wordquery_home_link_and_dedicated_icon():
     from pathlib import Path
     wordquery = next(tool for tool in TOOL_CATALOG if tool["id"] == "wordquery")
     assert wordquery["icon"] == "icon_wordquery.png"
     assert (Path(__file__).parents[2] / "app/static/image" / wordquery["icon"]).is_file()
     for visible in (False, True):
-        monkeypatch.setitem(wordquery, "show_on_home", visible)
-        utility = next(section for section in get_home_catalog() if section["id"] == "utility")
+        utility = next(
+            section
+            for section in get_home_catalog(wordquery_visible=visible)
+            if section["id"] == "utility"
+        )
         ids = [tool["id"] for tool in utility["categories"][0]["tools"]]
         assert ("wordquery" in ids) == visible
+
+    utility = next(
+        section
+        for section in get_home_catalog(wordquery_path="/preview-wordquery")
+        if section["id"] == "utility"
+    )
+    configured = next(
+        tool for tool in utility["categories"][0]["tools"] if tool["id"] == "wordquery"
+    )
+    assert configured["path"] == "/preview-wordquery"
+    assert wordquery["path"] == "/wordquery"
 
 
 def test_category_tool_order_covers_each_tool_once():

@@ -1,15 +1,24 @@
 import os
 import random
-import app.gear as gear
-import app.secret.cryptobrella as cryptobrella
 
+from flask import (
+    Flask,
+    abort,
+    current_app,
+    jsonify,
+    render_template,
+    request,
+    send_from_directory,
+    url_for,
+)
+
+from app import gear
 from app.cipher_docs import get_cipher_doc_page
 from app.link_catalog import get_link_sections
 from app.niantic_wiki import niantic_wiki
+from app.secret import cryptobrella
 from app.tool_catalog import get_home_catalog
 from app.wordquery.blueprint import register_wordquery
-from flask import Flask, abort, render_template, request, send_from_directory, url_for, jsonify
-
 
 NOT_FOUND_MESSAGES = [
     "A simple umbrella, a simple cipher, a little peace of mind.",
@@ -40,7 +49,13 @@ app.config['SECRET_IMAGE_FOLDER'] = os.path.join(
 
 @app.route('/')
 def index():
-    return render_template('index.html', catalog_sections=get_home_catalog())
+    return render_template(
+        'index.html',
+        catalog_sections=get_home_catalog(
+            wordquery_visible=bool(current_app.config["WORDQUERY_SHOW_ON_HOME"]),
+            wordquery_path=str(current_app.config["WORDQUERY_URL_PREFIX"]),
+        ),
+    )
 
 
 @app.route('/about')

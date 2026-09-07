@@ -163,8 +163,7 @@
                 <label for="sort-mode">並び順
                   <select id="sort-mode" name="sort-mode">
                     <option value="commonness">一般的な語を優先</option>
-                    <option value="dictionary_priority">辞書で優先される語</option>
-                    <option value="kana">読み順</option>
+                    <option value="kana">読みの五十音順</option>
                   </select>
                 </label>
               </div>
@@ -289,8 +288,7 @@
           }
         }
         const sortLabels = {
-          dictionary_priority: "辞書で優先される語",
-          kana: "読み順",
+          kana: "読みの五十音順",
         };
         if (sortLabels[sortMode.value]) {
           conditions.push(["sort", sortLabels[sortMode.value]]);

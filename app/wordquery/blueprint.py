@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 import sqlite3
+import threading
 import time
 from collections import defaultdict, deque
 from pathlib import Path
@@ -47,6 +48,7 @@ class MemoryRateLimiter:
 
 
 def register_wordquery(app: Flask, config: dict[str, Any] | None = None) -> None:
+    public = os.environ.get("WORDQUERY_PUBLIC", "0") == "1"
     app.config.from_mapping(
         WORDQUERY_DB=os.environ.get(
             "WORDQUERY_DB", "var/wordquery/current/lexicon.sqlite3"
@@ -57,14 +59,58 @@ def register_wordquery(app: Flask, config: dict[str, Any] | None = None) -> None
         WORDQUERY_RESULT_LIMIT=3000,
         WORDQUERY_RATE_LIMIT=30,
         WORDQUERY_URL_PREFIX=os.environ.get("WORDQUERY_URL_PREFIX", "/wordquery"),
-        WORDQUERY_PUBLIC=os.environ.get("WORDQUERY_PUBLIC", "0") == "1",
+        WORDQUERY_PUBLIC=public,
         WORDQUERY_RELEASE_MODE=os.environ.get("WORDQUERY_RELEASE_MODE", "updated"),
         WORDQUERY_STATE_DIR=os.environ.get("WORDQUERY_STATE_DIR", "var/wordquery"),
-        WORDQUERY_ENFORCE_FRESHNESS=os.environ.get("WORDQUERY_PUBLIC", "0") == "1",
+        WORDQUERY_ENFORCE_FRESHNESS=(
+            os.environ.get("WORDQUERY_ENFORCE_FRESHNESS", "1" if public else "0") == "1"
+        ),
+        WORDQUERY_SHOW_ON_HOME=(
+            os.environ.get("WORDQUERY_SHOW_ON_HOME", "1" if public else "0") == "1"
+        ),
+        WORDQUERY_LOAD_MODE=os.environ.get("WORDQUERY_LOAD_MODE", "eager"),
     )
     if config:
         app.config.update(config)
 
+    app.extensions["wordquery_metadata"] = {}
+    app.extensions["wordquery_service"] = None
+    app.extensions["wordquery_error"] = None
+    app.extensions["wordquery_load_lock"] = threading.Lock()
+    load_mode = app.config["WORDQUERY_LOAD_MODE"]
+    if load_mode not in {"eager", "lazy", "disabled"}:
+        app.extensions["wordquery_load_state"] = "failed"
+        app.extensions["wordquery_error"] = (
+            "WORDQUERY_LOAD_MODE must be eager, lazy or disabled"
+        )
+    elif load_mode == "disabled":
+        app.extensions["wordquery_load_state"] = "disabled"
+        app.extensions["wordquery_error"] = "WordQuery is disabled in this environment."
+    else:
+        app.extensions["wordquery_load_state"] = "unloaded"
+        if load_mode == "eager":
+            _ensure_wordquery_loaded(app)
+
+    app.extensions["wordquery_limiter"] = MemoryRateLimiter(
+        int(app.config["WORDQUERY_RATE_LIMIT"])
+    )
+    app.register_blueprint(
+        blueprint,
+        url_prefix=str(app.config["WORDQUERY_URL_PREFIX"]).rstrip("/"),
+    )
+
+
+def _ensure_wordquery_loaded(app: Flask) -> None:
+    if app.extensions["wordquery_load_state"] != "unloaded":
+        return
+    lock: threading.Lock = app.extensions["wordquery_load_lock"]
+    with lock:
+        if app.extensions["wordquery_load_state"] != "unloaded":
+            return
+        _load_wordquery(app)
+
+
+def _load_wordquery(app: Flask) -> None:
     release_mode = app.config["WORDQUERY_RELEASE_MODE"]
     try:
         if release_mode not in {"updated", "reviewed"}:
@@ -82,21 +128,17 @@ def register_wordquery(app: Flask, config: dict[str, Any] | None = None) -> None
             regex_timeout_seconds=float(app.config["WORDQUERY_REGEX_TIMEOUT"]),
         )
         app.extensions["wordquery_error"] = None
+        app.extensions["wordquery_load_state"] = "loaded"
     except (LexiconUnavailable, OSError, ValueError, sqlite3.Error) as exc:
         app.extensions["wordquery_metadata"] = {}
         app.extensions["wordquery_service"] = None
         app.extensions["wordquery_error"] = str(exc)
-    app.extensions["wordquery_limiter"] = MemoryRateLimiter(
-        int(app.config["WORDQUERY_RATE_LIMIT"])
-    )
-    app.register_blueprint(
-        blueprint,
-        url_prefix=str(app.config["WORDQUERY_URL_PREFIX"]).rstrip("/"),
-    )
+        app.extensions["wordquery_load_state"] = "failed"
 
 
 @blueprint.before_request
 def enforce_public_freshness():
+    _ensure_wordquery_loaded(current_app)
     if request.endpoint == "wordquery.sources":
         return None
     app = current_app
