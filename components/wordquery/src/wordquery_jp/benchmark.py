@@ -113,8 +113,6 @@ def load_benchmark_cases(path: str | Path) -> tuple[BenchmarkCase, ...]:
         request_payload = raw_case.get("request")
         if not isinstance(request_payload, dict):
             raise ValueError(f"{case_id}のrequestはJSONオブジェクトで指定してください。")
-        if request_payload.get("version") != 4:
-            raise ValueError(f"{case_id}のrequestは検索条件version 4で指定してください。")
         if "limit" in request_payload:
             raise ValueError(f"{case_id}のlimitは代表問題側では指定できません。")
         try:

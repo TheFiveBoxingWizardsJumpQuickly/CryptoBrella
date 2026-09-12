@@ -2,7 +2,8 @@
 
 ## Components
 
-- `normalization`: strict storage normalization and search-time comparison profiles.
+- `normalization`: strict storage normalization.
+- `comparison`: search-only small/full-size kana equivalence.
 - `units`: tokenization and counting for kana characters, morae, and written characters.
 - `query`: conversion from task-specific inputs into a shared `SearchRequest` and search plan.
 - `search`: Flask-independent services for reading matches, patterns, Regex, and anagrams.
@@ -12,9 +13,8 @@
 - `app/wordquery`: the application Blueprint, three-mode UI, and JSON boundary.
 
 `units` provides one API for kana, mora, and written-character units. `query`
-validates versioned `SearchRequest` objects and provides a stable JSON
-representation. Request version 5
-represents readable patterns separately from Regex as `mode=pattern` and
+validates the current `SearchRequest` and serializes its effective conditions.
+Search requests use version 7 and readable patterns use `mode=pattern`, which
 converts validated tokens into a safe predicate over the complete reading.
 `repository` expands `accepted` entries into the resident snapshot and fetches
 `candidate` entries on demand from the auxiliary SQLite layer. Vocabulary tags
@@ -25,11 +25,11 @@ searching.
 order. Commonness is a provisional signal based only on dictionary priority
 and corroboration across sources; it is neither observed usage frequency nor a
 recommendation. Data status, word type, and domain remain separate attributes
-and do not implicitly reduce commonness. Request version 3 selects resident and
+and do not implicitly reduce commonness. Search conditions select resident and
 auxiliary vocabulary layers independently of categories and applies tag
 axis/value conditions with AND semantics. Auxiliary-layer tag conditions are
 passed to SQLite so nonmatching candidates are not expanded into Python.
-Version 4 applies vocabulary-layer and tag deprioritization as separate ranking
+Vocabulary-layer and tag deprioritization apply as separate ranking
 groups while preserving the selected sort within each group.
 
 The application Blueprint converts three Japanese UI tabs—`パターン`,
@@ -74,10 +74,25 @@ The Flask layer is limited to translating task-oriented input into shared
 conditions and presenting results, preserving a one-way dependency from the
 application boundary to the search core.
 
-Readable-pattern conditions are represented as token predicates over the
-selected search unit. A condition may be optimized to Regex when it is
-equivalent in single-kana-character units. API search conditions carry an
-explicit schema version.
+Readable patterns are compiled into safe expressions over kana characters;
+selected length units are additional filters. Small-kana equivalence expands
+literal and set matches without changing stored readings. Prefilters retain
+only necessary conditions that cannot discard equivalent matches.
+
+## Search API
+
+All UI and operational callers use `POST /wordquery/api/search` with integer
+`version: 7`, `mode` (`reading`, `pattern`, `regex`, or `anagram`), and a string
+`query`. Reading mode accepts `match_type`: `contains` (default), `prefix`,
+`suffix`, or `exact`. Regex is selected by its own mode.
+
+Optional shared conditions include `length`, `length_unit` (`kana`, `mora`,
+`surface`), `must_include`, `must_exclude`, category flags, vocabulary layers,
+tag filters, sorting, deprioritization, and result limit. Defaults are
+`length_unit: kana`, `sort: commonness`, vocabulary layer `core`, and false
+category flags. `fold_small_kana` defaults to false and enables small/full-size
+kana equivalence in reading and pattern searches. The response includes the
+effective request. See [pattern search](pattern_search.md) for matching rules.
 
 ## Error boundaries
 

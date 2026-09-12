@@ -17,7 +17,7 @@ from wordquery_jp.operations import (
     verify_reviewed_release,
 )
 from wordquery_jp.query import (
-    LegacySearchKind,
+    SEARCH_REQUEST_VERSION,
     RequestValidationError,
     parse_search_request,
     serialize_search_request,
@@ -172,6 +172,7 @@ def index():
     rendered = render_template(
         "wordquery/index.html",
         lexicon_error=error,
+        search_request_version=SEARCH_REQUEST_VERSION,
         max_query_length=int(current_app.config["WORDQUERY_MAX_QUERY"]),
         timeout_seconds=float(current_app.config["WORDQUERY_TIMEOUT"]),
         result_limit=int(current_app.config["WORDQUERY_RESULT_LIMIT"]),
@@ -194,17 +195,7 @@ def search_api():
     return _handle_search(current_app)
 
 
-@blueprint.post("/api/search/regex")
-def regex_api():
-    return _handle_search(current_app, legacy_kind="regex")
-
-
-@blueprint.post("/api/search/anagram")
-def anagram_api():
-    return _handle_search(current_app, legacy_kind="anagram")
-
-
-def _handle_search(app: Flask, legacy_kind: LegacySearchKind | None = None):
+def _handle_search(app: Flask):
     limiter: MemoryRateLimiter = app.extensions["wordquery_limiter"]
     client = request.remote_addr or "unknown"
     if not limiter.allow(client):
@@ -223,7 +214,6 @@ def _handle_search(app: Flask, legacy_kind: LegacySearchKind | None = None):
             payload,
             max_length=int(app.config["WORDQUERY_MAX_QUERY"]),
             limit=result_limit,
-            legacy_kind=legacy_kind,
         )
         response = service.execute(search_request)
     except (QueryValidationError, RequestValidationError, ValueError) as exc:

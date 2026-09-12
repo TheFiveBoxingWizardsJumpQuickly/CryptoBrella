@@ -4,7 +4,6 @@ from pathlib import Path
 import pytest
 
 from wordquery_jp.models import (
-    CrosswordCell,
     SearchOptions,
     SearchRecord,
     SearchRequest,
@@ -156,7 +155,7 @@ def test_reading_length_filter(service):
     assert [item.surface for item in length_only.results] == ["猫", "こね"]
 
 
-def test_length_units_and_grid_profiles_are_applied():
+def test_length_units_are_applied():
     item = record(1, "キャット", "きゃっと")
     snapshot = SearchSnapshot(
         records=(item,),
@@ -174,20 +173,12 @@ def test_length_units_and_grid_profiles_are_applied():
     assert service.reading_search(
         "", options=SearchOptions(reading_length=4, length_unit="surface")
     ).total == 1
-    assert service.reading_search(
-        "",
-        options=SearchOptions(
-            reading_length=2,
-            length_unit="grid",
-            grid_profile="combine_all_small",
-        ),
-    ).total == 1
 
 
 def test_versioned_request_dispatches_through_search_service(service):
     response = service.execute(
         SearchRequest(
-            version=1,
+            version=7,
             mode="reading",
             query="う",
             length=4,
@@ -199,32 +190,6 @@ def test_versioned_request_dispatches_through_search_service(service):
     assert [item.surface for item in response.results] == ["東京"]
 
 
-def test_crossword_request_dispatches_structured_cells_and_common_filters(service):
-    response = service.execute(
-        SearchRequest(
-            version=6,
-            mode="crossword",
-            query="",
-            length=5,
-            length_unit="grid",
-            grid_cells=(
-                CrosswordCell("exact", ("と",)),
-                CrosswordCell("exact", ("う",)),
-                CrosswordCell("unknown"),
-                CrosswordCell("include", ("ょ", "お")),
-                CrosswordCell("exclude", ("ん",)),
-            ),
-            include_proper=True,
-            must_include="きょ",
-        )
-    )
-
-    assert [item.surface for item in response.results] == ["東京"]
-    assert response.match_spans == (None,)
-    assert response.condition_description == (
-        "クロスワード5マス: 1マス目 「と」 / 2マス目 「う」 / "
-        "3マス目 不明 / 4マス目 「ょ・お」の候補 / 5マス目 「ん」以外"
-    )
 
 
 def test_reading_include_and_exclude_filters(service):
@@ -479,20 +444,6 @@ def test_auxiliary_candidates_are_queried_only_when_proper_nouns_are_enabled(
     ]
     assert [
         item.surface for item in search.pattern_search("とう?ょう", options).results
-    ] == ["東京"]
-    assert [
-        item.surface
-        for item in search.crossword_search(
-            (
-                CrosswordCell("exact", ("と",)),
-                CrosswordCell("exact", ("う",)),
-                CrosswordCell("unknown"),
-                CrosswordCell("exact", ("ょ",)),
-                CrosswordCell("exact", ("う",)),
-            ),
-            "separate",
-            options,
-        ).results
     ] == ["東京"]
 
 

@@ -51,7 +51,7 @@ def test_search_benchmark_records_top_ten_target_reachability(tmp_path):
                 "purpose": "reading",
                 "description": "完全一致で猫を探す",
                 "request": {
-                    "version": 4,
+                    "version": 7,
                     "mode": "reading",
                     "query": "ねこ",
                     "match_type": "exact",
@@ -64,7 +64,7 @@ def test_search_benchmark_records_top_ten_target_reachability(tmp_path):
                 "purpose": "reading",
                 "description": "既知の答えが先頭10件にない例",
                 "request": {
-                    "version": 4,
+                    "version": 7,
                     "mode": "reading",
                     "query": "ねこ",
                     "match_type": "exact",
@@ -113,7 +113,7 @@ def test_search_review_template_is_validated_and_summarized(tmp_path):
                 "purpose": "anagram",
                 "description": "ねこの完全アナグラム",
                 "request": {
-                    "version": 4,
+                    "version": 7,
                     "mode": "anagram",
                     "query": "ねこ",
                     "vocabulary_layers": ["core"],
@@ -164,7 +164,7 @@ def test_benchmark_cases_reject_duplicate_ids_and_unsupported_versions(tmp_path)
         "purpose": "reading",
         "description": "重複",
         "request": {
-            "version": 4,
+            "version": 7,
             "mode": "reading",
             "query": "ねこ",
             "vocabulary_layers": ["core"],
@@ -178,7 +178,7 @@ def test_benchmark_cases_reject_duplicate_ids_and_unsupported_versions(tmp_path)
     duplicate["id"] = "CASE-002"
     duplicate["request"]["version"] = 3
     write_cases(cases, [duplicate])
-    with pytest.raises(ValueError, match="version 4"):
+    with pytest.raises(ValueError, match="version"):
         load_benchmark_cases(cases)
 
 
@@ -196,7 +196,7 @@ def test_search_benchmark_records_timeout_without_aborting(tmp_path, monkeypatch
                 "purpose": "pattern",
                 "description": "時間上限を記録する",
                 "request": {
-                    "version": 4,
+                    "version": 7,
                     "mode": "regex",
                     "query": "^ね.$",
                     "vocabulary_layers": ["core"],

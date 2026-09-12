@@ -29,7 +29,7 @@ from .lexicon.builder import BuildConfig, build_database
 from .lexicon.candidate_audit import audit_auxiliary_candidates
 from .lexicon.fetch import fetch_source
 from .lexicon.quality import compare_databases, evaluate_database
-from .query import parse_search_request
+from .query import SEARCH_REQUEST_VERSION, parse_search_request
 from .repository import load_snapshot
 from .search import SearchService
 from .search_index import build_search_index, file_hash, index_path, validate_search_index
@@ -681,7 +681,7 @@ def _run_smoke(database: Path) -> dict[str, Any]:
     snapshot = load_snapshot(database)
     service = SearchService(snapshot, timeout_seconds=5, regex_timeout_seconds=0.05)
     cases = [
-        {"version": 6, "mode": mode, "query": query,
+        {"version": SEARCH_REQUEST_VERSION, "mode": mode, "query": query,
          "vocabulary_layers": ["core", "auxiliary"], "include_proper": True}
         for mode, query in [("pattern", "とう*"), ("pattern", "?ねこ"),
                             ("pattern", "*ねこ"), ("pattern", "???"),

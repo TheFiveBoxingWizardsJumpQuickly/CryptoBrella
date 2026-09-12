@@ -6,6 +6,7 @@ from dataclasses import dataclass
 
 import regex
 
+from .comparison import kana_variants, literal_pattern
 from .normalization import normalize_reading, normalize_text
 
 
@@ -34,7 +35,7 @@ class _Token:
     position: int
 
 
-def compile_reading_pattern(pattern: str) -> PatternPlan:
+def compile_reading_pattern(pattern: str, *, fold_small_kana: bool = False) -> PatternPlan:
     """Compile the documented glob-like grammar to an anchored safe Regex."""
 
     if not pattern:
@@ -45,7 +46,8 @@ def compile_reading_pattern(pattern: str) -> PatternPlan:
     descriptions: list[str] = []
     for token in tokens:
         if token.kind == "literal":
-            regex_parts.append(regex.escape(token.value))
+            regex_parts.append(literal_pattern(token.value) if fold_small_kana
+                               else regex.escape(token.value))
             normalized_parts.append(token.value)
             descriptions.append(f"「{token.value}」")
         elif token.kind == "one":
@@ -57,14 +59,18 @@ def compile_reading_pattern(pattern: str) -> PatternPlan:
             normalized_parts.append("*")
             descriptions.append("任意の0文字以上")
         elif token.kind == "include":
-            escaped = "".join(regex.escape(character) for character in token.value)
+            characters = ("".join(kana_variants(char) for char in token.value)
+                          if fold_small_kana else token.value)
+            escaped = "".join(regex.escape(character) for character in dict.fromkeys(characters))
             regex_parts.append(f"[{escaped}]")
             normalized_parts.append(f"[{token.value}]")
             descriptions.append(
                 f"「{'・'.join(token.value)}」のいずれか1文字"
             )
         else:
-            escaped = "".join(regex.escape(character) for character in token.value)
+            characters = ("".join(kana_variants(char) for char in token.value)
+                          if fold_small_kana else token.value)
+            escaped = "".join(regex.escape(character) for character in dict.fromkeys(characters))
             regex_parts.append(f"[^{escaped}]")
             normalized_parts.append(f"[!{token.value}]")
             descriptions.append(f"「{'・'.join(token.value)}」以外の1文字")
@@ -81,6 +87,19 @@ def compile_reading_pattern(pattern: str) -> PatternPlan:
             break
         suffix_parts.append(token.value)
     literal_suffix = "".join(reversed(suffix_parts))
+    if fold_small_kana:
+        # Only fixed characters may constrain the existing, unfolded indexes.
+        def fixed_edge(value: str) -> str:
+            edge = ""
+            for char in value:
+                if len(kana_variants(char)) != 1:
+                    break
+                edge += char
+            return edge
+        original_prefix = literal_prefix
+        literal_prefix = fixed_edge(literal_prefix)
+        literal_suffix = fixed_edge(literal_suffix[::-1])[::-1]
+        all_literal = all_literal and literal_prefix == original_prefix
     minimum_length = sum(
         len(token.value) if token.kind == "literal" else 1
         for token in tokens if token.kind != "many"

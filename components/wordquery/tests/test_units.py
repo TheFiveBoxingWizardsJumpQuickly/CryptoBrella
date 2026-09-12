@@ -2,9 +2,6 @@ import pytest
 
 from wordquery_jp.normalization import InvalidReading
 from wordquery_jp.units import (
-    GRID_COMBINE_ALL_SMALL,
-    GRID_COMBINE_PHONETIC,
-    GRID_SEPARATE,
     count_normalized_reading_units,
     count_units,
     tokenize,
@@ -44,16 +41,6 @@ def test_surface_tokens_preserve_script_and_count_graphemes():
     assert count_units("キャット", "surface") == 4
 
 
-def test_grid_profiles_make_small_kana_rules_explicit():
-    value = "きゃっと"
-
-    assert tokenize(value, "grid", grid_profile=GRID_SEPARATE) == ("き", "ゃ", "っ", "と")
-    assert tokenize(value, "grid", grid_profile=GRID_COMBINE_PHONETIC) == (
-        "きゃ",
-        "っ",
-        "と",
-    )
-    assert tokenize(value, "grid", grid_profile=GRID_COMBINE_ALL_SMALL) == ("きゃっ", "と")
 
 
 def test_leading_small_kana_remains_an_independent_token():

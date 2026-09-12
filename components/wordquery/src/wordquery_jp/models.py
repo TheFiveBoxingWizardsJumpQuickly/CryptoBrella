@@ -5,15 +5,14 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
-from .units import GridProfileName, LengthUnit
+from .units import LengthUnit
 
 Category = Literal["general", "proper", "function"]
 RecordStatus = Literal["accepted", "candidate"]
-MatchType = Literal["contains", "prefix", "suffix", "exact", "regex"]
-SearchMode = Literal["reading", "pattern", "crossword", "regex", "anagram"]
+MatchType = Literal["contains", "prefix", "suffix", "exact"]
+SearchMode = Literal["reading", "pattern", "regex", "anagram"]
 SortMode = Literal["commonness", "dictionary_priority", "kana"]
 VocabularyLayer = Literal["core", "auxiliary"]
-CrosswordCellKind = Literal["exact", "unknown", "include", "exclude"]
 
 
 @dataclass(frozen=True, slots=True)
@@ -51,12 +50,6 @@ class SourceRecord:
 
 
 @dataclass(frozen=True, slots=True)
-class CrosswordCell:
-    kind: CrosswordCellKind
-    values: tuple[str, ...] = ()
-
-
-@dataclass(frozen=True, slots=True)
 class SearchRecord:
     id: int
     surface: str
@@ -78,7 +71,7 @@ class SearchOptions:
     include_function: bool = False
     reading_length: int | None = None
     length_unit: LengthUnit = "kana"
-    grid_profile: GridProfileName = "separate"
+    fold_small_kana: bool = False
     must_include: str | None = None
     must_exclude: str | None = None
     limit: int = 100
@@ -97,7 +90,7 @@ class SearchRequest:
     match_type: MatchType = "contains"
     length: int | None = None
     length_unit: LengthUnit = "kana"
-    grid_profile: GridProfileName = "separate"
+    fold_small_kana: bool = False
     include_proper: bool = False
     include_function: bool = False
     must_include: str | None = None
@@ -108,7 +101,6 @@ class SearchRequest:
     tag_filters: tuple[TagFilter, ...] = ()
     deprioritize_vocabulary_layers: tuple[VocabularyLayer, ...] = ()
     deprioritize_tag_filters: tuple[TagFilter, ...] = ()
-    grid_cells: tuple[CrosswordCell, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)

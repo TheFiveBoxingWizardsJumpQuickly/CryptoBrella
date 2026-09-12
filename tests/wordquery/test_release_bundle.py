@@ -91,3 +91,34 @@ def test_release_rejects_changed_sample_membership(release_inputs):
     with pytest.raises(ValueError):
         release.prepare_release(*release_inputs)
     assert not (release_inputs[-1] / "manifest.json").exists()
+
+
+def test_release_check_cli_uses_current_search_requests(tmp_path):
+    import subprocess
+    import sys
+
+    from wordquery_jp.lexicon.builder import BuildConfig, build_database
+
+    from component_paths import REPOSITORY_ROOT
+
+    additions = tmp_path / "words.tsv"
+    additions.write_text(
+        "surface\treading\tcategory\tpos\tpriority\treason\treference\n"
+        "猫\tねこ\tgeneral\t名詞\t50\ttest\ttest\n"
+        "くわっくわっ\tくわっくわっ\tgeneral\t名詞\t50\ttest\ttest\n"
+        "何県\tなにけん\tgeneral\t名詞\t50\ttest\ttest\n"
+        "東京\tとうきょう\tproper\t名詞\t50\ttest\ttest\n",
+        encoding="utf-8",
+    )
+    database = tmp_path / "lexicon.sqlite3"
+    build_database(BuildConfig(output=database, additions=additions))
+    with sqlite3.connect(database) as connection:
+        connection.execute("UPDATE words SET status='candidate' WHERE surface='東京'")
+    report = tmp_path / "check.json"
+    result = subprocess.run(
+        [sys.executable, str(REPOSITORY_ROOT / "tools/check_wordquery_release.py"),
+         "--database", str(database), "--output", str(report)],
+        cwd=tmp_path, capture_output=True, text=True, check=False,
+    )
+    assert result.returncode == 0, result.stderr + result.stdout
+    assert json.loads(report.read_text())["passed"] is True

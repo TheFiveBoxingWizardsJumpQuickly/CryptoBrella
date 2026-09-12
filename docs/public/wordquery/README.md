@@ -49,6 +49,8 @@ candidates without discarding them categorically.
 - Contains, prefix, suffix, exact, and readable-pattern matching, plus Regex for
   advanced users.
 - Length constraints in kana characters, morae, and written characters.
+- Optional small/full-size kana equivalence in the Pattern tab;
+  see [pattern search](pattern_search.md).
 - Exact anagrams.
 - Filtering by additional required or forbidden characters and selected
   classifications.

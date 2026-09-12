@@ -4,7 +4,7 @@
 
 Readable patterns express common crossword and fill-in-the-blank reading
 shapes without requiring Regex knowledge. They use `mode=pattern` in search
-request version 5 and are validated with a grammar separate from `mode=regex`.
+request version 7 and are validated with a grammar separate from `mode=regex`.
 
 ## Grammar
 
@@ -43,7 +43,7 @@ The JSON search endpoint accepts the following request body with
 
 ```json
 {
-  "version": 5,
+  "version": 7,
   "mode": "pattern",
   "query": "ね?[こご]",
   "sort": "commonness",
@@ -56,8 +56,30 @@ layer, tag, sorting, and deprioritization use the shared conditions. The pattern
 itself is evaluated in kana-character units over the normalized reading. A
 different selected length unit is applied as an additional result filter.
 
-For a pattern beginning with fixed kana, that prefix becomes a precondition for
-the auxiliary SQLite layer. A pattern beginning with `?`, `*`, an include set,
-or an exclude set has no safe reading precondition, so a broad search including
-auxiliary candidates may reach the time limit. Existing time and result limits
-also apply to readable patterns.
+Search prefilters use fixed prefixes, suffixes, and character lengths when safe.
+Broad patterns can still reach the search time limit; existing time and result
+limits apply.
+
+## Small kana equivalence
+
+In the Pattern tab, enable `小書きかなを同一視` under `その他の条件` to match
+small kana and their full-size counterparts. The option is off by default.
+The JSON field is `fold_small_kana` (boolean, default `false`) for `reading`
+and `pattern` requests.
+
+| Small kana | Full-size kana |
+|---|---|
+| ぁ ぃ ぅ ぇ ぉ | あ い う え お |
+| ゃ ゅ ょ | や ゆ よ |
+| っ ゎ ゕ ゖ | つ わ か け |
+
+Matching is symmetric: `きやつと` can find `きゃっと`, and vice versa.
+The same rule applies to all four reading match types, pattern literals,
+include/exclude sets, and required/forbidden text. For example, `[!つ]`
+excludes both `つ` and `っ` when the option is enabled.
+
+Voicing marks, semi-voicing marks, and long-vowel marks remain distinct.
+Original readings, displayed forms, result grouping, and sort order are kept.
+Counting still uses the original reading: `きゃっと` has four reading
+characters and three morae. This option does not change Regex or anagram
+matching, and does not require a dictionary rebuild.

@@ -548,3 +548,11 @@ a:hover { color: var(--ink); text-decoration-color: #4b5563; }
   .primary-options label { width: 100%; }
   .syntax-list div { grid-template-columns: 6.25rem 1fr; }
 }
+
+.kana-equivalence {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  min-height: 44px;
+}
+.kana-equivalence input { width: auto; flex: 0 0 auto; }

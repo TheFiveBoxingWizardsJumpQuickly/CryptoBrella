@@ -109,9 +109,9 @@ def regex_guard_probe() -> dict:
 def measure(
     database: Path, budget: float, stress: float, reference_budget: float,
     cases: list[tuple[str, str, str]] | None = None,
-    include_auxiliary: bool = False, limit: int = 3000,
+    include_auxiliary: bool = False, limit: int = 3000, fold_small_kana: bool = False,
 ) -> dict:
-    from wordquery_jp.query import parse_search_request
+    from wordquery_jp.query import SEARCH_REQUEST_VERSION, parse_search_request
     from wordquery_jp.repository import load_snapshot
     from wordquery_jp.search import SearchService
 
@@ -122,9 +122,11 @@ def measure(
     profiles = [("reference", reference_budget), ("normal", budget), ("stress", budget / stress)]
     rows = []
     for case_id, mode, query in CASES if cases is None else cases:
-        payload = {"version": 6, "mode": mode, "query": query,
+        payload = {"version": SEARCH_REQUEST_VERSION, "mode": mode, "query": query,
                    "vocabulary_layers": ["core", "auxiliary"] if include_auxiliary else ["core"],
                    "include_proper": include_auxiliary, "sort": "commonness"}
+        if fold_small_kana and mode in {"reading", "pattern"}:
+            payload["fold_small_kana"] = True
         if mode == "reading":
             payload["match_type"] = "contains"
         request = parse_search_request(
@@ -146,6 +148,7 @@ def measure(
                 )
             rows.append({
                 "case": case_id, "mode": mode, "query": query, "profile": profile,
+                "fold_small_kana": bool(payload.get("fold_small_kana")),
                 "budget_seconds": effective_budget, **result,
                 "matches_reference": same_results,
                 "completes_with_reference_budget": baseline["status"] == "completed",
@@ -217,6 +220,8 @@ def main() -> int:
     parser.add_argument("--database", type=Path, default=default_database())
     parser.add_argument("--budget", type=float, default=5)
     parser.add_argument("--include-auxiliary", action="store_true")
+    parser.add_argument("--fold-small-kana", action="store_true",
+                        help="Fold small kana in reading/pattern cases")
     parser.add_argument("--limit", type=int, default=3000)
     parser.add_argument("--stress-factor", type=float, default=4)
     parser.add_argument("--reference-budget", type=float, default=10)
@@ -241,7 +246,7 @@ def main() -> int:
         print(json.dumps(measure(
             args.database, args.budget, args.stress_factor, args.reference_budget,
             None if args.mode is None else [("custom", args.mode, args.query)],
-            args.include_auxiliary, args.limit,
+            args.include_auxiliary, args.limit, args.fold_small_kana,
         ), ensure_ascii=False))
         return 0
     output = args.output or ROOT / "reports" / (
@@ -255,6 +260,8 @@ def main() -> int:
         str(args.stress_factor), "--reference-budget", str(args.reference_budget),
         "--limit", str(args.limit),
     ]
+    if args.fold_small_kana:
+        command.append("--fold-small-kana")
     if args.include_auxiliary:
         command.append("--include-auxiliary")
     if args.mode is not None:

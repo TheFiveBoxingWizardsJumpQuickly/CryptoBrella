@@ -15,7 +15,11 @@ ROOT = Path(__file__).resolve().parents[1]
 def check_release(
     database: Path, *, reviewed_public: bool = False, state_dir: Path | None = None,
 ) -> dict:
+    from component_paths import activate_wordquery
+
+    activate_wordquery()
     from flask import Flask
+    from wordquery_jp.query import SEARCH_REQUEST_VERSION
 
     from app.wordquery.blueprint import register_wordquery
 
@@ -54,7 +58,7 @@ def check_release(
     for name, payload, expected in cases:
         started = time.monotonic()
         response = client.post("/wordquery/api/search", json={
-            "version": 5, "limit": 300, **payload,
+            "version": SEARCH_REQUEST_VERSION, "limit": 300, **payload,
         })
         duration_ms = (time.monotonic() - started) * 1000
         body = response.get_json() or {}
@@ -73,7 +77,7 @@ def check_release(
     page = client.get("/wordquery/")
     sources = client.get("/wordquery/sources")
     invalid = client.post("/wordquery/api/search", json={
-        "version": 5, "mode": "regex", "query": "[",
+        "version": SEARCH_REQUEST_VERSION, "mode": "regex", "query": "[",
     })
     boundaries = {
         "page": page.status_code == 200,

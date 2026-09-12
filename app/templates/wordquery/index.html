@@ -76,6 +76,10 @@
                 <details id="condition-options" class="condition-options">
                   <summary>その他の条件</summary>
                   <div class="condition-options-content">
+                    <label id="fold-small-kana-field" class="kana-equivalence">
+                      <input id="fold-small-kana" type="checkbox">
+                      小書きかなを同一視（っ／つ、ゃ／や など）
+                    </label>
                     <div class="refine-grid">
                       <label for="must-include">追加で含む
                         <input id="must-include" name="must-include" type="text"
@@ -137,6 +141,8 @@
                       <h2>共通仕様</h2>
                       <ul>
                         <li>ひらがな・カタカナ、全角・半角は検索時に統一します。</li>
+                        <li>パターン検索では「その他の条件」で小書きかなを同一視できます。
+                          濁点・半濁点・長音と、文字数・拍数の数え方は変わりません。</li>
                         <li>結果は300件ずつ、最大{{ result_limit }}件まで表示します。</li>
                       </ul>
                     </section>
@@ -206,6 +212,8 @@
       const conditionChips = document.querySelector("#condition-chips");
       const conditionOptions = document.querySelector("#condition-options");
       const refineError = document.querySelector("#refine-error");
+      const foldSmallKana = document.querySelector("#fold-small-kana");
+      const foldSmallKanaField = document.querySelector("#fold-small-kana-field");
       const mustInclude = document.querySelector("#must-include");
       const mustExclude = document.querySelector("#must-exclude");
       const majorCategory = document.querySelector("#major-category");
@@ -264,6 +272,9 @@
 
       const renderConditionChips = () => {
         const conditions = [];
+        if (state.mode === "reading" && foldSmallKana.checked) {
+          conditions.push(["fold-small-kana", "小書きかなを同一視"]);
+        }
         if (state.mode === "reading" && readingLength.value) {
           const lengthLabels = {
             kana: `読み${readingLength.value}文字`,
@@ -307,6 +318,7 @@
       };
 
       const clearCondition = (key) => {
+        if (key === "fold-small-kana") foldSmallKana.checked = false;
         if (key === "length") readingLength.value = "";
         if (key === "must-include") mustInclude.value = "";
         if (key === "must-exclude") mustExclude.value = "";
@@ -317,6 +329,7 @@
 
       const updateSearchPresentation = () => {
         const readingMode = state.mode === "reading";
+        foldSmallKanaField.classList.toggle("hidden", !readingMode);
         const patternMode = wordUsesPattern();
         const regexMode = state.mode === "regex";
         primaryOptions.classList.toggle("hidden", state.mode !== "reading");
@@ -419,6 +432,7 @@
       };
       readingsOnly.addEventListener("change", updateResultDisplay);
       highlightMatch.addEventListener("change", updateResultDisplay);
+      foldSmallKana.addEventListener("change", renderConditionChips);
       mustInclude.addEventListener("input", renderConditionChips);
       mustExclude.addEventListener("input", renderConditionChips);
       majorCategory.addEventListener("change", renderConditionChips);
@@ -626,7 +640,7 @@
         const category = selectedCategory();
         const includeProperCategory = category && category.axis === "proper_type";
         const body = {
-          version: 6,
+          version: {{ search_request_version }},
           mode: requestMode(),
           query: requestQuery(),
           sort: sortMode.value,
@@ -647,6 +661,7 @@
           if (body.mode === "reading") {
             body.match_type = matchType.value;
           }
+          body.fold_small_kana = foldSmallKana.checked;
           body.length = readingLength.value;
           body.length_unit = lengthUnit.value;
         }

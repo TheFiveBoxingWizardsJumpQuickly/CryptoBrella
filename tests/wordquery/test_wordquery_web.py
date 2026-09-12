@@ -111,7 +111,7 @@ def test_timeout_response_does_not_claim_partial_results(app, monkeypatch, singl
         raise error("検索を中断しました。")
 
     monkeypatch.setattr(app.extensions["wordquery_service"], "execute", timeout)
-    response = app.test_client().post("/wordquery/api/search/anagram", json={"text": "ねこ"})
+    response = app.test_client().post("/wordquery/api/search", json={'version': 7, 'mode': 'anagram', 'query': 'ねこ'})
     assert response.status_code == 408
     assert response.json["error_code"] == (
         "regex_match_timeout" if single_match else "search_timeout"
@@ -145,7 +145,7 @@ def test_reviewed_public_release_requires_matching_approved_manifest(app, fault)
         "WORDQUERY_ENFORCE_FRESHNESS": True,
         "WORDQUERY_STATE_DIR": database.parent / "update-state",
     })
-    response = reviewed.test_client().post("/wordquery/api/search/anagram", json={"text": "ねこ"})
+    response = reviewed.test_client().post("/wordquery/api/search", json={'version': 7, 'mode': 'anagram', 'query': 'ねこ'})
     assert response.status_code == (503 if fault else 200)
     assert "X-Robots-Tag" not in response.headers
 
@@ -175,7 +175,6 @@ def test_index_loads_dictionary(app):
     assert page.count('id="result-header"') == 1
     assert 'state.mode === "anagram" ? "文字"' in page
     assert 'const regexMode = state.mode === "regex"' in page
-    assert 'data-mode="crossword"' not in page
     assert 'data-mode="more"' not in page
     assert 'data-mode="pattern"' not in page
     assert 'data-mode="tools"' not in page
@@ -185,15 +184,10 @@ def test_index_loads_dictionary(app):
     assert 'matchTypeField.classList.toggle("hidden", !readingMode || patternMode)' in page
     assert 'query.value.normalize("NFKC").replace(/[□_]/gu, "?")' in page
     assert 'const requestMode = () => wordUsesPattern() ? "pattern" : state.mode' in page
-    assert 'id="crossword-builder"' not in page
-    assert 'id="crossword-pattern"' not in page
     assert 'id="reading-length"' in page
     assert 'id="length-unit"' in page
     assert '<option value="mora">拍（モーラ）</option>' in page
     assert '<option value="surface">表記の文字数</option>' in page
-    assert 'id="grid-profile"' not in page
-    assert '<option value="grid">マス数</option>' not in page
-    assert '<option value="combine_phonetic">拗音などを同じマス</option>' not in page
     assert 'id="must-include"' in page
     assert 'id="must-exclude"' in page
     assert 'id="refine-trigger"' in page
@@ -220,9 +214,6 @@ def test_index_loads_dictionary(app):
     assert "limit: requestedResultLimit" in page
     assert "さらに${Math.min(resultStep, remaining)}読み" not in page
     assert "指定した条件に一致する語はありません。" in page
-    assert "window.history" not in page
-    assert "URLSearchParams" not in page
-    assert 'id="copy-search-url"' not in page
     assert 'id="condition-summary"' in page
     assert "<code>?</code>" in page
     assert "<code>[!かき]</code>" in page
@@ -303,7 +294,7 @@ def test_public_search_stops_when_update_state_is_stale(tmp_path):
 
     page = public_app.test_client().get("/wordquery/")
     api = public_app.test_client().post(
-        "/wordquery/api/search", json={"version": 1, "mode": "anagram", "query": "ねこ"}
+        "/wordquery/api/search", json={"version": 7, "mode": "anagram", "query": "ねこ"}
     )
 
     assert page.status_code == 503
@@ -333,7 +324,7 @@ def test_freshness_checked_on_each_request_and_recovers_without_reload(app, tmp_
     elif state_fault == "malformed":
         (state_dir / "state.json").write_text("{")
     assert client.get("/wordquery/").status_code == 503
-    assert client.post("/wordquery/api/search/anagram", json={"text": "ねこ"}).status_code == 503
+    assert client.post("/wordquery/api/search", json={'version': 7, 'mode': 'anagram', 'query': 'ねこ'}).status_code == 503
     assert client.get("/wordquery/sources").status_code == 200
     write_state(state_dir, good)
     assert client.get("/wordquery/").status_code == 200
@@ -368,10 +359,10 @@ def test_public_ui_uses_reader_facing_terms(app):
 
 def test_regex_api_and_category_filter(app):
     client = app.test_client()
-    response = client.post("/wordquery/api/search/regex", json={"pattern": "トウ"})
+    response = client.post("/wordquery/api/search", json={'version': 7, 'mode': 'regex', 'query': 'トウ'})
     assert response.status_code == 200
     assert response.json["total"] == 0
-    response = client.post("/wordquery/api/search/regex", json={"pattern": "トウ", "include_proper": True})
+    response = client.post("/wordquery/api/search", json={'version': 7, 'mode': 'regex', 'query': 'トウ', 'include_proper': True})
     assert response.json["results"][0]["surface"] == "東京"
     assert response.json["results"][0]["status"] == "accepted"
     assert response.json["results"][0]["vocabulary_layer"] == "core"
@@ -386,12 +377,11 @@ def test_regex_api_and_category_filter(app):
         ("prefix", "ね", {"猫", "ネコ"}),
         ("suffix", "ね", {"こね"}),
         ("exact", "ねこ", {"猫", "ネコ"}),
-        ("regex", "^ね.*こ$", {"猫", "ネコ"}),
     ],
 )
 def test_reading_search_api_match_types(app, match_type, query, expected):
     response = app.test_client().post(
-        "/wordquery/api/search/regex", json={"query": query, "match_type": match_type}
+        "/wordquery/api/search", json={'version': 7, 'mode': 'reading', 'query': query, 'match_type': match_type}
     )
 
     assert response.status_code == 200
@@ -401,24 +391,24 @@ def test_reading_search_api_match_types(app, match_type, query, expected):
 def test_reading_search_api_length_and_option_validation(app):
     client = app.test_client()
     response = client.post(
-        "/wordquery/api/search/regex",
-        json={"query": "ね", "match_type": "contains", "length": 2},
+        "/wordquery/api/search",
+        json={'version': 7, 'mode': 'reading', 'query': 'ね', 'match_type': 'contains', 'length': 2},
     )
     assert response.status_code == 200
     assert response.json["total"] == 3
 
     length_only = client.post(
-        "/wordquery/api/search/regex",
-        json={"query": "", "match_type": "contains", "length": 2},
+        "/wordquery/api/search",
+        json={'version': 7, 'mode': 'reading', 'query': '', 'match_type': 'contains', 'length': 2},
     )
     assert length_only.status_code == 200
     assert length_only.json["total"] == 3
 
     assert client.post(
-        "/wordquery/api/search/regex", json={"query": "ね", "match_type": "unknown"}
+        "/wordquery/api/search", json={'version': 7, 'mode': 'reading', 'query': 'ね', 'match_type': 'unknown'}
     ).status_code == 400
     assert client.post(
-        "/wordquery/api/search/regex", json={"query": "ね", "match_type": "contains", "length": 0}
+        "/wordquery/api/search", json={'version': 7, 'mode': 'reading', 'query': 'ね', 'match_type': 'contains', 'length': 0}
     ).status_code == 400
 
 
@@ -427,7 +417,7 @@ def test_versioned_search_api_supports_length_units(app):
     response = client.post(
         "/wordquery/api/search",
         json={
-            "version": 1,
+            "version": 7,
             "mode": "reading",
             "query": "う",
             "length": 4,
@@ -439,13 +429,15 @@ def test_versioned_search_api_supports_length_units(app):
     assert response.status_code == 200
     assert [item["surface"] for item in response.json["results"]] == ["東京"]
     assert response.json["request"] == {
-        "version": 1,
+        "version": 7,
         "mode": "reading",
         "query": "う",
         "match_type": "contains",
         "length": 4,
         "length_unit": "mora",
-        "grid_profile": "separate",
+        "fold_small_kana": False,
+        "sort": "commonness",
+        "vocabulary_layers": ["core"],
         "include_proper": True,
         "include_function": False,
         "limit": 3000,
@@ -454,7 +446,7 @@ def test_versioned_search_api_supports_length_units(app):
     surface = client.post(
         "/wordquery/api/search",
         json={
-            "version": 1,
+            "version": 7,
             "mode": "reading",
             "query": "う",
             "length": 2,
@@ -465,11 +457,11 @@ def test_versioned_search_api_supports_length_units(app):
     assert [item["surface"] for item in surface.json["results"]] == ["東京"]
 
 
-def test_version_2_api_exposes_selected_sort_and_reasons(app):
+def test_api_exposes_selected_sort_and_reasons(app):
     response = app.test_client().post(
         "/wordquery/api/search",
         json={
-            "version": 2,
+            "version": 7,
             "mode": "reading",
             "query": "ね",
             "sort": "commonness",
@@ -482,7 +474,7 @@ def test_version_2_api_exposes_selected_sort_and_reasons(app):
     assert all(item["sort_reasons"] for item in response.json["results"])
 
 
-def test_version_3_api_filters_auxiliary_layer_and_tags(tmp_path):
+def test_api_filters_auxiliary_layer_and_tags(tmp_path):
     database = tmp_path / "candidate-filter.sqlite3"
     build_database(
         BuildConfig(
@@ -495,7 +487,7 @@ def test_version_3_api_filters_auxiliary_layer_and_tags(tmp_path):
     app = create_app({"TESTING": True, "WORDQUERY_DB": database})
     client = app.test_client()
     payload = {
-        "version": 3,
+        "version": 7,
         "mode": "reading",
         "query": "とうきょう",
         "match_type": "exact",
@@ -516,7 +508,7 @@ def test_version_3_api_filters_auxiliary_layer_and_tags(tmp_path):
     assert excluded.json["total"] == 0
 
 
-def test_version_4_api_marks_deprioritized_auxiliary_results(tmp_path):
+def test_api_marks_deprioritized_auxiliary_results(tmp_path):
     database = tmp_path / "candidate-deprioritize.sqlite3"
     build_database(
         BuildConfig(
@@ -530,7 +522,7 @@ def test_version_4_api_marks_deprioritized_auxiliary_results(tmp_path):
     response = app.test_client().post(
         "/wordquery/api/search",
         json={
-            "version": 4,
+            "version": 7,
             "mode": "reading",
             "query": "とうきょう",
             "match_type": "exact",
@@ -551,11 +543,11 @@ def test_versioned_search_api_dispatches_regex_and_anagram(app):
 
     regex = client.post(
         "/wordquery/api/search",
-        json={"version": 1, "mode": "regex", "query": "^ね.*こ$"},
+        json={"version": 7, "mode": "regex", "query": "^ね.*こ$"},
     )
     anagram = client.post(
         "/wordquery/api/search",
-        json={"version": 1, "mode": "anagram", "query": "ネコ"},
+        json={"version": 7, "mode": "anagram", "query": "ネコ"},
     )
 
     assert regex.status_code == 200
@@ -564,13 +556,13 @@ def test_versioned_search_api_dispatches_regex_and_anagram(app):
     assert {item["surface"] for item in anagram.json["results"]} == {"猫", "ネコ", "こね"}
 
 
-def test_version_5_pattern_api_returns_condition_description_and_error_position(app):
+def test_pattern_api_returns_condition_description_and_error_position(app):
     client = app.test_client()
 
     response = client.post(
         "/wordquery/api/search",
         json={
-            "version": 5,
+            "version": 7,
             "mode": "pattern",
             "query": "ね?",
             "sort": "commonness",
@@ -580,7 +572,7 @@ def test_version_5_pattern_api_returns_condition_description_and_error_position(
     invalid = client.post(
         "/wordquery/api/search",
         json={
-            "version": 5,
+            "version": 7,
             "mode": "pattern",
             "query": "ね[こ",
             "sort": "commonness",
@@ -597,106 +589,65 @@ def test_version_5_pattern_api_returns_condition_description_and_error_position(
     assert "2文字目" in invalid.json["error"]
 
 
-def test_version_6_crossword_api_returns_structured_effective_cells(app):
-    client = app.test_client()
-    payload = {
-        "version": 6,
-        "mode": "crossword",
-        "grid_cells": [
-            {"kind": "exact", "values": ["ネ"]},
-            {"kind": "include", "values": ["コ", "ご"]},
-        ],
-        "must_exclude": "ご",
-        "sort": "commonness",
-        "vocabulary_layers": ["core"],
-    }
-
-    response = client.post("/wordquery/api/search", json=payload)
-    invalid = client.post(
-        "/wordquery/api/search",
-        json={
-            "version": 6,
-            "mode": "crossword",
-            "grid_cells": [{"kind": "exact", "values": ["きゃ"]}],
-        },
-    )
-
-    assert response.status_code == 200
-    assert {item["surface"] for item in response.json["results"]} == {"猫", "ネコ"}
-    assert response.json["request"]["length"] == 2
-    assert response.json["request"]["length_unit"] == "grid"
-    assert response.json["request"]["grid_cells"] == [
-        {"kind": "exact", "values": ["ね"]},
-        {"kind": "include", "values": ["こ", "ご"]},
-    ]
-    assert response.json["condition_description"].startswith("クロスワード2マス:")
-    assert invalid.status_code == 400
-    assert "1マスになる必要" in invalid.json["error"]
 
 
-def test_versioned_search_api_rejects_missing_version_and_invalid_profile(app):
+def test_search_api_rejects_missing_version_and_invalid_length_unit(app):
     client = app.test_client()
 
     missing = client.post("/wordquery/api/search", json={"mode": "reading", "query": "ね"})
     invalid = client.post(
         "/wordquery/api/search",
         json={
-            "version": 1,
+            "version": 7,
             "mode": "reading",
             "query": "ね",
-            "length_unit": "mora",
-            "grid_profile": "combine_phonetic",
+            "length_unit": "unknown",
         },
     )
 
     assert missing.status_code == 400
     assert "version" in missing.json["error"]
     assert invalid.status_code == 400
-    assert "文字数の数え方が「マス数」" in invalid.json["error"]
+    assert "文字数の数え方" in invalid.json["error"]
 
 
 def test_reading_search_api_include_and_exclude_filters(app):
     client = app.test_client()
     response = client.post(
-        "/wordquery/api/search/regex",
-        json={
-            "query": ".",
-            "match_type": "regex",
-            "must_include": "ね",
-            "must_exclude": "こ",
-        },
+        "/wordquery/api/search",
+        json={'version': 7, 'mode': 'regex', 'query': '.', 'must_include': 'ね', 'must_exclude': 'こ'},
     )
 
     assert response.status_code == 200
     assert response.json["total"] == 0
     invalid = client.post(
-        "/wordquery/api/search/regex",
-        json={"query": "ね", "match_type": "contains", "must_include": "漢字"},
+        "/wordquery/api/search",
+        json={'version': 7, 'mode': 'reading', 'query': 'ね', 'match_type': 'contains', 'must_include': '漢字'},
     )
     assert invalid.status_code == 400
     assert "絞り込み" in invalid.json["error"]
     invalid_query = client.post(
-        "/wordquery/api/search/regex",
-        json={"query": "漢字", "match_type": "contains"},
+        "/wordquery/api/search",
+        json={'version': 7, 'mode': 'reading', 'query': '漢字', 'match_type': 'contains'},
     )
     assert invalid_query.status_code == 400
     assert invalid_query.json["error"] == "かなと長音記号だけを使用してください。"
 
 
 def test_anagram_api(app):
-    response = app.test_client().post("/wordquery/api/search/anagram", json={"text": "ネコ"})
+    response = app.test_client().post("/wordquery/api/search", json={'version': 7, 'mode': 'anagram', 'query': 'ネコ'})
     assert response.status_code == 200
     assert {item["surface"] for item in response.json["results"]} == {"猫", "ネコ", "こね"}
 
 
-def test_legacy_api_returns_canonical_request(app):
+def test_api_returns_effective_request(app):
     response = app.test_client().post(
-        "/wordquery/api/search/regex",
-        json={"query": "ね", "match_type": "contains"},
+        "/wordquery/api/search",
+        json={'version': 7, 'mode': 'reading', 'query': 'ね', 'match_type': 'contains'},
     )
 
     assert response.status_code == 200
-    assert response.json["request"]["version"] == 1
+    assert response.json["request"]["version"] == 7
     assert response.json["request"]["mode"] == "reading"
 
 
@@ -715,11 +666,13 @@ def test_api_marks_on_demand_candidate_results_as_auxiliary(tmp_path):
     response = app.test_client().post(
         "/wordquery/api/search",
         json={
-            "version": 1,
+            "version": 7,
             "mode": "reading",
             "query": "とうきょう",
             "match_type": "exact",
             "include_proper": True,
+            "vocabulary_layers": ["core", "auxiliary"],
+            "sort": "dictionary_priority",
         },
     )
 
@@ -776,7 +729,7 @@ def test_result_limit_is_shared_by_ui_and_api(app):
     app.config["WORDQUERY_RESULT_LIMIT"] = 1
     client = app.test_client()
     page = client.get("/wordquery/").get_data(as_text=True)
-    response = client.post("/wordquery/api/search/anagram", json={"text": "ネコ"})
+    response = client.post("/wordquery/api/search", json={'version': 7, 'mode': 'anagram', 'query': 'ネコ'})
 
     assert "最大1件まで表示" in page
     assert response.json["total"] == 3
@@ -787,13 +740,13 @@ def test_result_limit_is_shared_by_ui_and_api(app):
 def test_search_api_accepts_a_result_limit_up_to_the_server_maximum(app):
     client = app.test_client()
     response = client.post(
-        "/wordquery/api/search/anagram", json={"text": "ネコ", "limit": 1}
+        "/wordquery/api/search", json={'version': 7, 'mode': 'anagram', 'query': 'ネコ', 'limit': 1}
     )
     too_large = client.post(
-        "/wordquery/api/search/anagram", json={"text": "ネコ", "limit": 3001}
+        "/wordquery/api/search", json={'version': 7, 'mode': 'anagram', 'query': 'ネコ', 'limit': 3001}
     )
     invalid_type = client.post(
-        "/wordquery/api/search/anagram", json={"text": "ネコ", "limit": True}
+        "/wordquery/api/search", json={'version': 7, 'mode': 'anagram', 'query': 'ネコ', 'limit': True}
     )
 
     assert response.status_code == 200
@@ -813,7 +766,6 @@ def test_mobile_styles_stack_controls_and_wrap_results(app):
     assert ".primary-options { display: grid; grid-template-columns: 1fr; }" in css
     assert "flex-direction: column;" in css
     assert "grid-template-columns: repeat(3, minmax(0, 1fr));" not in css
-    assert ".crossword-cells" not in css
     assert ".condition-chips button::after" in css
     assert ".condition-options-content" in css
     assert ".advanced-actions" not in css
@@ -845,7 +797,6 @@ def test_result_workbench_groups_readings_without_row_selection_noise(app):
     css = app.test_client().get("/static/wordquery/wordquery.css").get_data(as_text=True)
 
     assert 'id="result-actions"' not in page
-    assert 'id="copy-search-url"' not in page
     assert "const groupResultItems = (items)" in page
     assert 'detailSummary.textContent = "詳細"' in page
     assert "resultItems = groupResultItems(data.results)" in page
@@ -882,7 +833,6 @@ def test_result_display_options_control_readings_highlight_and_sort(app):
     assert 'highlightControl.classList.toggle("hidden", state.mode === "anagram")' in page
     assert 'primaryOptions.classList.toggle("hidden", state.mode !== "reading")' in page
     assert 'if (state.mode === "reading") {' in page
-    assert "body.grid_profile" not in page
     assert "if (resultItems.length) form.requestSubmit()" in page
     assert ".readings-only .result-variants" in css
     assert 'className = "result-group-detail"' in page
@@ -913,7 +863,7 @@ def test_search_page_always_links_to_licensing(app):
 
 def test_invalid_query_and_missing_database(tmp_path):
     app = create_app({"TESTING": True, "WORDQUERY_DB": tmp_path / "missing.sqlite3"})
-    response = app.test_client().post("/wordquery/api/search/anagram", json={"text": "東京"})
+    response = app.test_client().post("/wordquery/api/search", json={'version': 7, 'mode': 'anagram', 'query': '東京'})
     assert response.status_code == 503
     assert "error" in response.json
     page = app.test_client().get("/wordquery/").get_data(as_text=True)
@@ -925,5 +875,33 @@ def test_invalid_query_and_missing_database(tmp_path):
 def test_rate_limit(app):
     app.extensions["wordquery_limiter"].limit = 1
     client = app.test_client()
-    assert client.post("/wordquery/api/search/regex", json={"pattern": "ね"}).status_code == 200
-    assert client.post("/wordquery/api/search/regex", json={"pattern": "ね"}).status_code == 429
+    assert client.post("/wordquery/api/search", json={'version': 7, 'mode': 'regex', 'query': 'ね'}).status_code == 200
+    assert client.post("/wordquery/api/search", json={'version': 7, 'mode': 'regex', 'query': 'ね'}).status_code == 429
+
+
+@pytest.mark.parametrize("mode", ["reading", "pattern"])
+def test_small_kana_option_matches_without_changing_reading_and_counts(app, mode):
+    payload = {"version": 7, "mode": mode, "query": "とうきよう", "include_proper": True}
+    if mode == "reading":
+        payload["match_type"] = "exact"
+    client = app.test_client()
+    assert client.post("/wordquery/api/search", json=payload).json["total"] == 0
+    payload["fold_small_kana"] = True
+    response = client.post("/wordquery/api/search", json=payload)
+    assert response.status_code == 200
+    assert response.json["request"]["fold_small_kana"] is True
+    row = response.json["results"][0]
+    assert row["surface"] == "東京"
+    assert row["normalized_reading"] == "とうきょう"
+    assert row["lengths"] == {"kana": 5, "mora": 4, "surface": 2}
+    payload["must_exclude"] = "きよ"
+    assert client.post("/wordquery/api/search", json=payload).json["total"] == 0
+
+
+def test_small_kana_control_is_unchecked_and_uses_current_request(app):
+    from wordquery_jp.query import SEARCH_REQUEST_VERSION
+
+    page = app.test_client().get("/wordquery/").get_data(as_text=True)
+    assert '<input id="fold-small-kana" type="checkbox">' in page
+    assert f'version: {SEARCH_REQUEST_VERSION},' in page
+    assert 'body.fold_small_kana = foldSmallKana.checked;' in page

@@ -95,10 +95,10 @@ class AuxiliaryLexicon:
         if options is not None:
             if not options.include_function:
                 conditions.append("category != 'function'")
-            if options.must_include:
+            if options.must_include and not options.fold_small_kana:
                 conditions.append("instr(normalized_reading, ?) > 0")
                 parameters.append(options.must_include)
-            if options.must_exclude:
+            if options.must_exclude and not options.fold_small_kana:
                 conditions.append("instr(normalized_reading, ?) = 0")
                 parameters.append(options.must_exclude)
             if options.reading_length is not None and options.length_unit == "kana":

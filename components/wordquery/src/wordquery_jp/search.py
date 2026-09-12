@@ -12,9 +12,8 @@ from heapq import heappush, heapreplace
 
 import regex
 
-from .crossword import describe_crossword, fixed_prefix, matches_crossword
+from .comparison import fold_reading, literal_pattern
 from .models import (
-    CrosswordCell,
     MatchType,
     SearchOptions,
     SearchRecord,
@@ -34,11 +33,9 @@ from .search_budget import (
 from .search_hints import SearchHints, regex_hints
 from .sorting import explain_sort, sort_key
 from .units import (
-    GridProfileName,
     ReadingUnit,
     count_normalized_reading_units,
     count_units,
-    resolve_grid_profile,
 )
 
 
@@ -147,7 +144,7 @@ class SearchService:
             include_function=search_request.include_function,
             reading_length=search_request.length,
             length_unit=search_request.length_unit,
-            grid_profile=search_request.grid_profile,
+            fold_small_kana=search_request.fold_small_kana,
             must_include=search_request.must_include,
             must_exclude=search_request.must_exclude,
             limit=search_request.limit,
@@ -161,12 +158,6 @@ class SearchService:
             return self.anagram_search(search_request.query, options)
         if search_request.mode == "pattern":
             return self.pattern_search(search_request.query, options)
-        if search_request.mode == "crossword":
-            return self.crossword_search(
-                search_request.grid_cells,
-                search_request.grid_profile,
-                options,
-            )
         if search_request.mode == "regex":
             return self.regex_search(search_request.query, options)
         return self.reading_search(search_request.query, search_request.match_type, options)
@@ -180,7 +171,7 @@ class SearchService:
         options = options or SearchOptions()
         self._validate_length(pattern)
         try:
-            plan = compile_reading_pattern(pattern)
+            plan = compile_reading_pattern(pattern, fold_small_kana=options.fold_small_kana)
         except PatternSyntaxError as exc:
             raise QueryValidationError(
                 str(exc),
@@ -215,50 +206,6 @@ class SearchService:
         )
 
     @search_budget
-    def crossword_search(
-        self,
-        cells: tuple[CrosswordCell, ...],
-        grid_profile: GridProfileName,
-        options: SearchOptions | None = None,
-    ) -> SearchResponse:
-        if not cells:
-            raise QueryValidationError("クロスワードのマスを1つ以上指定してください。")
-        try:
-            profile = resolve_grid_profile(grid_profile)
-        except ValueError as exc:
-            raise QueryValidationError(str(exc)) from exc
-        options = replace(
-            options or SearchOptions(),
-            reading_length=len(cells),
-            length_unit="grid",
-            grid_profile=grid_profile,
-        )
-        prefilter_query, prefilter_match_type = fixed_prefix(cells)
-        auxiliary_records = self._auxiliary_records(
-            options,
-            normalized_query=prefilter_query,
-            match_type=prefilter_match_type,
-        )
-
-        def matcher(
-            record: SearchRecord,
-            _remaining: float,
-        ) -> tuple[bool, tuple[int, int] | None]:
-            return matches_crossword(
-                record.normalized_reading,
-                cells,
-                profile,
-            ), None
-
-        return self._search_matching(
-            matcher,
-            "",
-            options,
-            auxiliary_records=auxiliary_records,
-            condition_description=describe_crossword(cells),
-        )
-
-    @search_budget
     def regex_search(self, pattern: str, options: SearchOptions | None = None) -> SearchResponse:
         options = options or SearchOptions()
         normalized = normalize_pattern(pattern)
@@ -275,7 +222,9 @@ class SearchService:
             options,
             auxiliary_records=self._auxiliary_records(
                 options, hints=hints,
-                reading_matcher=lambda reading: self._regex_match(compiled, reading) is not None,
+                reading_matcher=(
+                    lambda reading: self._regex_match(compiled, reading) is not None
+                ),
             ),
             core_records=self._hint_candidates(hints),
         )
@@ -299,8 +248,6 @@ class SearchService:
                     match_type=match_type,
                 ),
             )
-        if match_type == "regex":
-            return self.regex_search(text, options)
         if match_type not in {"contains", "prefix", "suffix", "exact"}:
             raise QueryValidationError("一致の指定が正しくありません。")
         try:
@@ -308,6 +255,24 @@ class SearchService:
         except ValueError as exc:
             raise QueryValidationError(str(exc)) from exc
         self._validate_length(normalized)
+        if options.fold_small_kana:
+            expression = literal_pattern(normalized)
+            start = match_type in {"prefix", "exact"}
+            end = match_type in {"suffix", "exact"}
+            hints = regex_hints(("^" if start else "") + expression + ("$" if end else ""))
+            compiled = regex.compile(
+                (r"\A" if start else "") + expression + (r"\Z" if end else ""), regex.VERSION0
+            )
+            return self._search_compiled(
+                compiled, normalized, options,
+                auxiliary_records=self._auxiliary_records(
+                    options, hints=hints,
+                    reading_matcher=(
+                    lambda reading: self._regex_match(compiled, reading) is not None
+                ),
+                ),
+                core_records=self._hint_candidates(hints),
+            )
         def matcher(
             record: SearchRecord, _remaining: float
         ) -> tuple[bool, tuple[int, int] | None]:
@@ -582,6 +547,10 @@ class SearchService:
         length_counter = (
             _length_counter(options) if options.reading_length is not None else None
         )
+        must_include, must_exclude = options.must_include, options.must_exclude
+        if options.fold_small_kana:
+            must_include = fold_reading(must_include) if must_include else None
+            must_exclude = fold_reading(must_exclude) if must_exclude else None
         for index, record in enumerate(records):
             if index % 128 == 0:
                 check_budget()
@@ -598,10 +567,14 @@ class SearchService:
                 continue
             if record.category == "function" and not options.include_function:
                 continue
-            if options.must_include and options.must_include not in record.normalized_reading:
-                continue
-            if options.must_exclude and options.must_exclude in record.normalized_reading:
-                continue
+            if must_include or must_exclude:
+                reading = record.normalized_reading
+                if options.fold_small_kana:
+                    reading = fold_reading(reading)
+                if must_include and must_include not in reading:
+                    continue
+                if must_exclude and must_exclude in reading:
+                    continue
             if (
                 length_counter is not None
                 and length_counter(record) != options.reading_length
@@ -648,11 +621,6 @@ def _deprioritize_reasons(
 def _length_counter(options: SearchOptions) -> Callable[[SearchRecord], int]:
     if options.length_unit == "surface":
         return lambda record: count_units(record.surface, "surface")
-    if options.length_unit == "grid":
-        grid_profile = resolve_grid_profile(options.grid_profile)
-        return lambda record: count_normalized_reading_units(
-            record.normalized_reading, "grid", grid_profile=grid_profile
-        )
     reading_unit: ReadingUnit = options.length_unit
     return lambda record: count_normalized_reading_units(
         record.normalized_reading, reading_unit
