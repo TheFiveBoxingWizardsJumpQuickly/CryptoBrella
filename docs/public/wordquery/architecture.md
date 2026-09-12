@@ -91,6 +91,6 @@ A deployment may explicitly select a pinned reviewed snapshot. Its adjacent
 release manifest must record a passing formal human gate and match the database
 byte hash and input hash. The application verifies these at startup and makes
 search unavailable if verification fails. This mode serves an evaluated version
-without claiming upstream freshness. The default updated-dictionary mode retains
-its existing freshness check. Switching modes is an operator choice; preparing
+without treating human-review evidence as proof of upstream freshness. Both reviewed and updated public modes enforce source freshness on requests.
+Approval of a reviewed snapshot does not exempt it from that check. Switching modes is an operator choice; preparing
 a release bundle does not activate it.

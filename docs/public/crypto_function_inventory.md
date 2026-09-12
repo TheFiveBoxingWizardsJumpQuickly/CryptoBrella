@@ -1,18 +1,18 @@
 # Crypto Function Inventory
 
-Last updated: 2026-08-22
+Last updated: 2026-09-08
 
 ## 1. Management Term
 - This project manages cipher transforms, analysis utilities, and encoding helpers under one term: **Crypto Functions**.
 - Utility pages previously treated as "Other Tools" are included in the same management scope.
 
-## 2. Top-Page Counts
-- Managed pages: 42
-- `gear/<function>` based pages: 38
-- Non-`gear` API page: 1 (`/resize` -> `POST /g/resize/`)
-- Client-only pages: 2 (`/memo`, `/pigpen`)
-- Top-page organization is metadata-driven from `app/tool_catalog.py`.
-- Current top-page groups are: `Cryptography`, `Encoding`, `Utility`, `Remember Ingress`, `Extra`.
+## 2. Scope and catalog
+
+This inventory covers Crypto Functions and their API/core mapping. The live
+catalog is defined in `app/tool_catalog.py`; visibility can depend on application
+configuration. Avoid using a historical page count as an API completeness check.
+Catalog groups are Cryptography, Encoding, Utility, Remember Ingress and Extra.
+WordQuery has a separate Blueprint and [technical documentation](wordquery/README.md).
 
 ## 3. Inventory (Page -> API -> Inputs -> Internal Functions)
 
@@ -66,3 +66,17 @@ Last updated: 2026-08-22
 - The top page also provides in-page search over tool `name`, `aliases`, and `tags`.
 - `pigpen` is a client-only Encoding entry with selectable symbol mappings and image export.
 - `double_columnar` is listed under Cryptography with its dedicated icon.
+
+## Source and test alignment
+
+Tool templates live under `app/templates/Tools/`; their request names must map
+to `app.gear.GEAR_HANDLERS`. `tests/web/test_gear_registry.py` and fixture tests
+check registration and behavior. `app/cipher/fn.py` is a compatibility surface;
+use the owning module when changing algorithms. Client-only Pigpen and Memo,
+image resizing, Passcode, challenge content and imported Wiki pages do not all
+follow the cipher-handler request flow.
+
+The former what3words and LINE integrations are removed. Unpublished prototypes
+are not part of the supported inventory. The function signatures in source code
+are authoritative for internal call details; request behavior is specified in
+[the behavior baseline](spec_baseline.md).

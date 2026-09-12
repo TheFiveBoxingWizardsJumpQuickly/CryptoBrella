@@ -16,8 +16,7 @@ strategy of CryptoBrella.
 
 ## Testing
 
-- [Test design matrix](public/test_design_matrix.md): test-layer responsibilities and goals.
-- [Test coverage audit](public/test_coverage_audit.md): current coverage and identified hardening areas.
+- [Test strategy and coverage boundaries](public/testing.md): test-layer responsibilities, acceptance evidence, and coverage limits.
 
 ## WordQuery: JP
 
