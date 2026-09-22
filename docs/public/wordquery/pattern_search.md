@@ -62,8 +62,9 @@ limits apply.
 
 ## Small kana equivalence
 
-In the Pattern tab, enable `小書きかなを同一視` under `その他の条件` to match
-small kana and their full-size counterparts. The option is off by default.
+In the Pattern tab, enable `小書きかなを同一視` below the match type and length
+controls to match small kana and their full-size counterparts. The option is
+visible without expanding additional conditions and is off by default.
 The JSON field is `fold_small_kana` (boolean, default `false`) for `reading`
 and `pattern` requests.
 
