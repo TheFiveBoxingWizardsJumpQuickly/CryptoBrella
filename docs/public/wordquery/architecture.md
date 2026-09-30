@@ -21,6 +21,12 @@ converts validated tokens into a safe predicate over the complete reading.
 and their evidence remain in SQLite and are attached only to top results after
 searching.
 
+For length-only patterns such as `???`, the auxiliary search index counts all
+matches and ranks the top results in SQLite before creating Python records.
+This optimization preserves the full count and selected ordering; additional
+reading or tag filters use the regular search path. The same search deadline
+covers the SQL work and result processing.
+
 `sorting` implements commonness, dictionary priority, and normalized-reading
 order. Commonness is a provisional signal based only on dictionary priority
 and corroboration across sources; it is neither observed usage frequency nor a

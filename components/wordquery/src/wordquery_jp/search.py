@@ -169,6 +169,7 @@ class SearchService:
         options: SearchOptions | None = None,
     ) -> SearchResponse:
         options = options or SearchOptions()
+        started = time.monotonic()
         self._validate_length(pattern)
         try:
             plan = compile_reading_pattern(pattern, fold_small_kana=options.fold_small_kana)
@@ -187,14 +188,28 @@ class SearchService:
                              lambda reading: self._regex_match(plan.compiled, reading) is not None),
         )
         if length_only:
-            return self._search_matching(
+            omitted_matches = 0
+            auxiliary = self.snapshot.auxiliary
+            if (auxiliary_records is not None and auxiliary is not None
+                    and auxiliary.search_index is not None
+                    and options.reading_length is None
+                    and not options.must_include and not options.must_exclude
+                    and not options.tag_filters and not options.deprioritize_tag_filters):
+                # Every selected row passes the predicate and filters below.
+                # Each vocabulary layer can contribute at most limit final hits.
+                count, rows = auxiliary.top_length_matches(plan.exact_length, options)
+                auxiliary_records = (row for row in rows)
+                omitted_matches = count - len(rows)
+            response = self._search_matching(
                 lambda record, remaining: (
                     len(record.normalized_reading) == plan.exact_length
                     and "\n" not in record.normalized_reading, None),
                 plan.normalized_pattern, options, auxiliary_records=auxiliary_records,
                 condition_description=plan.description,
                 core_records=self._pattern_core_candidates(plan),
+                omitted_matches=omitted_matches,
             )
+            return replace(response, duration_ms=(time.monotonic() - started) * 1000)
         return self._search_compiled(
             plan.compiled,
             plan.normalized_pattern,
@@ -361,10 +376,11 @@ class SearchService:
         auxiliary_records: Iterator[SearchRecord] | None = None,
         condition_description: str | None = None,
         core_records: Iterable[SearchRecord] | None = None,
+        omitted_matches: int = 0,
     ) -> SearchResponse:
         started = time.monotonic()
         heap: list[_WorstFirst] = []
-        total = 0
+        total = omitted_matches
         tagged_core_ids = load_tagged_word_ids(
             self.snapshot.database, options.tag_filters, status="accepted"
         )

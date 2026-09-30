@@ -48,6 +48,51 @@ class AuxiliaryLexicon:
     count: int
     search_index: Path | None = None
 
+    def top_length_matches(
+        self, length: int, options: SearchOptions,
+    ) -> tuple[int, tuple[SearchRecord, ...]]:
+        """Count all length matches but materialize only their top results.
+
+        The caller uses this only with an index and without additional reading
+        or tag filters. Layer deprioritization is constant within this source.
+        """
+        if self.search_index is None:
+            raise ValueError("Length ranking requires a search index")
+        stable = "normalized_reading, surface, reading, id"
+        order = {
+            "kana": stable,
+            "commonness": (
+                "-(priority + CASE WHEN multiple_sources THEN 10 ELSE 0 END), "
+                f"-priority, {stable}"
+            ),
+            "dictionary_priority": (
+                "-priority, CASE category WHEN 'general' THEN 0 "
+                f"WHEN 'proper' THEN 1 ELSE 2 END, {stable}"
+            ),
+        }[options.sort_mode]
+        connection = _open_read_only(self.search_index)
+        try:
+            rows = connection.execute(
+                f"""
+                SELECT id, surface, reading, normalized_reading, signature,
+                       category, pos, priority, status, multiple_sources,
+                       count(*) OVER ()
+                FROM words INDEXED BY auxiliary_length
+                WHERE status = 'candidate' AND reading_length = ?
+                  AND instr(normalized_reading, char(10)) = 0
+                  AND (? OR category != 'function')
+                ORDER BY {order}
+                LIMIT ?
+                """,
+                (length, options.include_function, options.limit),
+            ).fetchall()
+            return (
+                rows[0][10] if rows else 0,
+                tuple(SearchRecord(*row[:9], multiple_sources=bool(row[9])) for row in rows),
+            )
+        finally:
+            connection.close()
+
     def iter_records(
         self,
         *,

@@ -38,7 +38,9 @@ def test_public_freshness_expires_after_31_days():
 
 def test_state_is_written_atomically_and_reported(tmp_path, monkeypatch):
     monkeypatch.delenv("WORDQUERY_SMTP_HOST", raising=False)
-    write_state(tmp_path, {"last_success_at": NOW.isoformat(), "last_status": "activated"})
+    write_state(tmp_path, {
+        "last_success_at": datetime.now(UTC).isoformat(), "last_status": "activated",
+    })
 
     assert read_state(tmp_path)["last_status"] == "activated"
     report = status_report(tmp_path)
